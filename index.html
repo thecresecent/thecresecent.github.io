@@ -177,6 +177,27 @@
       transform: translateY(-50%) scale(1.25);
     }
 
+    /* Water droplets */
+    .droplet {
+      position: absolute;
+      font-size: 1.1rem;
+      pointer-events: none;
+      z-index: 6;
+      opacity: 0;
+      animation: droplet-spray 0.9s ease-out forwards;
+    }
+
+    @keyframes droplet-spray {
+      0% {
+        opacity: 1;
+        transform: translate(0, 0) scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(var(--dx), var(--dy)) scale(0.4);
+      }
+    }
+
     .status-text {
       margin-top: 28px;
       color: #8b949e;
@@ -451,29 +472,26 @@
           <div class="caption">8</div>
         </div>
 
-        <div class="photo-card" onclick="openLightbox('Screenshot%202026-11-16%20064250.png')">
-          <img src="Screenshot%202026-11-16%20064250.png" alt="Screenshot 9">
+        <!-- Screenshot 9 (064250) removed -->
+
+        <div class="photo-card" onclick="openLightbox('Screenshot%202026-11-16%20064259.png')">
+          <img src="Screenshot%202026-11-16%20064259.png" alt="Screenshot 9">
           <div class="caption">9</div>
         </div>
 
-        <div class="photo-card" onclick="openLightbox('Screenshot%202026-11-16%20064259.png')">
-          <img src="Screenshot%202026-11-16%20064259.png" alt="Screenshot 10">
+        <div class="photo-card" onclick="openLightbox('Screenshot%202026-11-16%20064310.png')">
+          <img src="Screenshot%202026-11-16%20064310.png" alt="Screenshot 10">
           <div class="caption">10</div>
         </div>
 
-        <div class="photo-card" onclick="openLightbox('Screenshot%202026-11-16%20064310.png')">
-          <img src="Screenshot%202026-11-16%20064310.png" alt="Screenshot 11">
+        <div class="photo-card" onclick="openLightbox('Screenshot%202026-11-16%20064330.png')">
+          <img src="Screenshot%202026-11-16%20064330.png" alt="Screenshot 11">
           <div class="caption">11</div>
         </div>
 
-        <div class="photo-card" onclick="openLightbox('Screenshot%202026-11-16%20064330.png')">
-          <img src="Screenshot%202026-11-16%20064330.png" alt="Screenshot 12">
-          <div class="caption">12</div>
-        </div>
-
         <div class="photo-card" onclick="openLightbox('Screenshot%202026-11-16%20064411.png')">
-          <img src="Screenshot%202026-11-16%20064411.png" alt="Screenshot 13">
-          <div class="caption">13</div>
+          <img src="Screenshot%202026-11-16%20064411.png" alt="Screenshot 12">
+          <div class="caption">12</div>
         </div>
       </div>
     </div>
@@ -518,6 +536,41 @@
       }
     }
 
+    function spawnDroplets() {
+      const container = document.querySelector('.progress-container');
+      const peachRect = peachTarget.getBoundingClientRect();
+      const containerRect = container.getBoundingClientRect();
+
+      // Origin roughly at the peach
+      const originX = peachRect.left + peachRect.width / 2 - containerRect.left;
+      const originY = peachRect.top + peachRect.height / 2 - containerRect.top;
+
+      const droplets = ['💧', '💦', '💧', '💦', '💧', '💦', '💧', '💦'];
+
+      droplets.forEach((emoji, i) => {
+        const drop = document.createElement('div');
+        drop.className = 'droplet';
+        drop.textContent = emoji;
+
+        // Random spray direction
+        const angle = (Math.random() * 140 - 70) * (Math.PI / 180); // -70° to +70°
+        const distance = 40 + Math.random() * 70;
+        const dx = Math.sin(angle) * distance;
+        const dy = -Math.cos(angle) * distance - 20; // mostly upward + outward
+
+        drop.style.left = originX + 'px';
+        drop.style.top = originY + 'px';
+        drop.style.setProperty('--dx', dx + 'px');
+        drop.style.setProperty('--dy', dy + 'px');
+        drop.style.animationDelay = (i * 0.04) + 's';
+
+        container.appendChild(drop);
+
+        // Clean up after animation
+        setTimeout(() => drop.remove(), 1100);
+      });
+    }
+
     function startLoading() {
       let progress = 0;
       let stutterCount = 0;
@@ -555,6 +608,9 @@
           // Make the eggplant go inside the peach
           eggplantWrapper.classList.add('inside');
           peachTarget.classList.add('react');
+
+          // Spray water droplets
+          spawnDroplets();
 
           // Optional: hide the pfp a bit later so only the eggplant is "entering"
           setTimeout(() => {
