@@ -125,7 +125,7 @@
       width: 0%;
       background: linear-gradient(90deg, #238636, #3fb950);
       border-radius: 20px;
-      transition: width 0.1s linear;
+      transition: width 0.08s linear;
     }
 
     .eggplant-wrapper {
@@ -133,7 +133,7 @@
       top: 50%;
       left: 0%;
       transform: translate(-50%, -50%);
-      transition: left 0.1s linear;
+      transition: left 0.08s linear;
       z-index: 5;
       display: flex;
       align-items: center;
@@ -363,8 +363,9 @@
         <div class="progress-bar" id="progress-bar"></div>
 
         <div class="eggplant-wrapper" id="eggplant-wrapper">
-          <div class="eggplant">🍆</div>
+          <!-- PFP now on the LEFT of the eggplant -->
           <img src="image.jpg" alt="pfp" class="pfp-next-to-eggplant">
+          <div class="eggplant">🍆</div>
         </div>
 
         <div class="peach-target">🍑</div>
@@ -504,9 +505,26 @@
 
     function startLoading() {
       let progress = 0;
+      let stutterCount = 0;
+
       const interval = setInterval(() => {
-        progress += 1.1;
+        // Stutter logic
+        const rand = Math.random();
+
+        if (rand < 0.12 && progress > 8 && progress < 92) {
+          // Occasional small dip (stutter back)
+          progress -= (0.6 + Math.random() * 1.4);
+          stutterCount++;
+        } else if (rand < 0.22 && progress > 5) {
+          // Brief pause (very small or zero advance)
+          progress += Math.random() * 0.25;
+        } else {
+          // Normal uneven advance
+          progress += (0.7 + Math.random() * 1.6);
+        }
+
         if (progress > 100) progress = 100;
+        if (progress < 0) progress = 0;
 
         progressBar.style.width = progress + '%';
         eggplantWrapper.style.left = progress + '%';
@@ -535,7 +553,7 @@
             }, 1200);
           }, 600);
         }
-      }, 38);
+      }, 42);
     }
 
     function createHearts() {
@@ -566,5 +584,4 @@
   </script>
 
 </body>
-</html>
 </html>
