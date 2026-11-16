@@ -13,7 +13,7 @@
 
     body {
       font-family: system-ui, -apple-system, sans-serif;
-      background-color: #0d1117;
+      background-color: #ff9ecb;
       color: #e6edf3;
       min-height: 100vh;
       overflow-x: hidden;
@@ -128,7 +128,6 @@
       transition: width 0.1s linear;
     }
 
-    /* Eggplant + PFP that move together */
     .eggplant-wrapper {
       position: absolute;
       top: 50%;
@@ -138,7 +137,7 @@
       z-index: 5;
       display: flex;
       align-items: center;
-      justify-content: center;
+      gap: 6px;
     }
 
     .eggplant {
@@ -146,16 +145,12 @@
       filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
     }
 
-    .pfp-on-eggplant {
-      position: absolute;
-      width: 32px;
-      height: 32px;
+    .pfp-next-to-eggplant {
+      width: 34px;
+      height: 34px;
       border-radius: 50%;
-      border: 2px solid #ffffff;
+      border: 2.5px solid #ffffff;
       object-fit: cover;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
       box-shadow: 0 2px 6px rgba(0,0,0,0.5);
     }
 
@@ -174,21 +169,18 @@
       font-size: 0.95rem;
     }
 
-    /* ========== PINK MESSAGE SCREEN ========== */
-    #message-screen {
+    /* ========== MAIN CONTENT (pink hearts) ========== */
+    #main-content {
       display: none;
+      position: relative;
       min-height: 100vh;
       background: #ff9ecb;
-      position: relative;
-      overflow: hidden;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 40px 20px;
+      padding-top: 120px;
+      padding-bottom: 40px;
     }
 
     .hearts-bg {
-      position: absolute;
+      position: fixed;
       inset: 0;
       pointer-events: none;
       z-index: 1;
@@ -197,7 +189,7 @@
     .heart {
       position: absolute;
       font-size: 1.8rem;
-      opacity: 0.7;
+      opacity: 0.65;
       animation: float 6s ease-in-out infinite;
     }
 
@@ -206,62 +198,88 @@
       50% { transform: translateY(-18px) rotate(8deg); }
     }
 
-    .final-content {
-      position: relative;
-      z-index: 2;
-      background: rgba(255, 255, 255, 0.88);
-      padding: 40px 50px;
-      border-radius: 24px;
+    /* XOXO box that slides to top */
+    #xoxo-box {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 28px 40px;
+      border-radius: 20px;
       box-shadow: 0 10px 40px rgba(0,0,0,0.15);
-      max-width: 520px;
+      text-align: center;
+      transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    #xoxo-box.slide-up {
+      top: 24px;
+      transform: translate(-50%, 0);
+      padding: 14px 28px;
+      border-radius: 14px;
     }
 
     .final-message {
-      font-size: 1.7rem;
+      font-size: 1.6rem;
       color: #c2255c;
       font-weight: 600;
-      line-height: 1.4;
+      line-height: 1.3;
+      white-space: nowrap;
     }
 
-    /* ========== GALLERY SCREEN ========== */
+    #xoxo-box.slide-up .final-message {
+      font-size: 1.15rem;
+    }
+
+    /* Gallery */
     #gallery-screen {
-      display: none;
+      position: relative;
+      z-index: 5;
       max-width: 1100px;
       margin: 0 auto;
       padding: 24px;
       text-align: center;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+    }
+
+    #gallery-screen.show {
+      opacity: 1;
     }
 
     nav {
       display: flex;
       justify-content: center;
       gap: 20px;
-      margin-bottom: 32px;
+      margin-bottom: 28px;
       padding-bottom: 16px;
-      border-bottom: 1px solid #30363d;
+      border-bottom: 1px solid rgba(0,0,0,0.1);
     }
 
     nav a {
-      color: #8b949e;
+      color: #9b2c5a;
       text-decoration: none;
       font-weight: 600;
       padding: 8px 16px;
       border-radius: 8px;
+      background: rgba(255,255,255,0.4);
     }
 
     nav a.active, nav a:hover {
       color: #ffffff;
-      background-color: #161b22;
+      background-color: #d63384;
     }
 
     #gallery-screen h1 {
-      color: #58a6ff;
+      color: #c2255c;
       margin-bottom: 8px;
+      font-size: 2rem;
     }
 
     p.hint {
-      color: #8b949e;
-      font-size: 0.9rem;
+      color: #9b2c5a;
+      font-size: 0.95rem;
       margin-bottom: 32px;
     }
 
@@ -272,17 +290,17 @@
     }
 
     .photo-card {
-      background-color: #161b22;
-      border: 1px solid #30363d;
+      background-color: rgba(255, 255, 255, 0.85);
+      border: 1px solid rgba(0,0,0,0.08);
       border-radius: 12px;
       overflow: hidden;
       cursor: pointer;
-      transition: transform 0.2s, border-color 0.2s;
+      transition: transform 0.2s, box-shadow 0.2s;
     }
 
     .photo-card:hover {
       transform: translateY(-4px);
-      border-color: #58a6ff;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.12);
     }
 
     .photo-card img {
@@ -296,8 +314,8 @@
     .caption {
       padding: 12px;
       font-size: 0.9rem;
-      color: #8b949e;
-      border-top: 1px solid #30363d;
+      color: #9b2c5a;
+      border-top: 1px solid rgba(0,0,0,0.06);
     }
 
     .lightbox {
@@ -344,10 +362,9 @@
       <div class="progress-container">
         <div class="progress-bar" id="progress-bar"></div>
 
-        <!-- Eggplant + PFP moving together -->
         <div class="eggplant-wrapper" id="eggplant-wrapper">
           <div class="eggplant">🍆</div>
-          <img src="image.jpg" alt="pfp" class="pfp-on-eggplant">
+          <img src="image.jpg" alt="pfp" class="pfp-next-to-eggplant">
         </div>
 
         <div class="peach-target">🍑</div>
@@ -357,90 +374,92 @@
     </div>
   </div>
 
-  <!-- PINK MESSAGE SCREEN (shows for 2 seconds) -->
-  <div id="message-screen">
+  <!-- MAIN CONTENT (hearts background + xoxo + gallery) -->
+  <div id="main-content">
     <div class="hearts-bg" id="hearts-bg"></div>
-    <div class="final-content">
+
+    <!-- XOXO box -->
+    <div id="xoxo-box">
       <div class="final-message">
         xoxo from jay-z and hashir 😘🥵🥵
       </div>
     </div>
-  </div>
 
-  <!-- GALLERY SCREEN -->
-  <div id="gallery-screen">
-    <nav>
-      <a href="#" class="active">Screenshots</a>
-      <a href="about.html">About Me</a>
-    </nav>
+    <!-- Gallery -->
+    <div id="gallery-screen">
+      <nav>
+        <a href="#" class="active">Screenshots</a>
+        <a href="about.html">About Me</a>
+      </nav>
 
-    <h1>Screenshots</h1>
-    <p class="hint">Click any screenshot to view the full uncropped image</p>
+      <h1>Screenshots</h1>
+      <p class="hint">Click any screenshot to view the full uncropped image</p>
 
-    <div class="gallery">
-      <div class="photo-card" onclick="openLightbox('Screenshot%202026-11-16%20064113.png')">
-        <img src="Screenshot%202026-11-16%20064113.png" alt="Screenshot 1">
-        <div class="caption">1</div>
-      </div>
+      <div class="gallery">
+        <div class="photo-card" onclick="openLightbox('Screenshot%202026-11-16%20064113.png')">
+          <img src="Screenshot%202026-11-16%20064113.png" alt="Screenshot 1">
+          <div class="caption">1</div>
+        </div>
 
-      <div class="photo-card" onclick="openLightbox('Screenshot%202026-11-16%20064121.png')">
-        <img src="Screenshot%202026-11-16%20064121.png" alt="Screenshot 2">
-        <div class="caption">2</div>
-      </div>
+        <div class="photo-card" onclick="openLightbox('Screenshot%202026-11-16%20064121.png')">
+          <img src="Screenshot%202026-11-16%20064121.png" alt="Screenshot 2">
+          <div class="caption">2</div>
+        </div>
 
-      <div class="photo-card" onclick="openLightbox('Screenshot%202026-11-16%20064134.png')">
-        <img src="Screenshot%202026-11-16%20064134.png" alt="Screenshot 3">
-        <div class="caption">3</div>
-      </div>
+        <div class="photo-card" onclick="openLightbox('Screenshot%202026-11-16%20064134.png')">
+          <img src="Screenshot%202026-11-16%20064134.png" alt="Screenshot 3">
+          <div class="caption">3</div>
+        </div>
 
-      <div class="photo-card" onclick="openLightbox('Screenshot%202026-11-16%20064158.png')">
-        <img src="Screenshot%202026-11-16%20064158.png" alt="Screenshot 4">
-        <div class="caption">4</div>
-      </div>
+        <div class="photo-card" onclick="openLightbox('Screenshot%202026-11-16%20064158.png')">
+          <img src="Screenshot%202026-11-16%20064158.png" alt="Screenshot 4">
+          <div class="caption">4</div>
+        </div>
 
-      <div class="photo-card" onclick="openLightbox('Screenshot%202026-11-16%20064206.png')">
-        <img src="Screenshot%202026-11-16%20064206.png" alt="Screenshot 5">
-        <div class="caption">5</div>
-      </div>
+        <div class="photo-card" onclick="openLightbox('Screenshot%202026-11-16%20064206.png')">
+          <img src="Screenshot%202026-11-16%20064206.png" alt="Screenshot 5">
+          <div class="caption">5</div>
+        </div>
 
-      <div class="photo-card" onclick="openLightbox('Screenshot%202026-11-16%20064215.png')">
-        <img src="Screenshot%202026-11-16%20064215.png" alt="Screenshot 6">
-        <div class="caption">6</div>
-      </div>
+        <div class="photo-card" onclick="openLightbox('Screenshot%202026-11-16%20064215.png')">
+          <img src="Screenshot%202026-11-16%20064215.png" alt="Screenshot 6">
+          <div class="caption">6</div>
+        </div>
 
-      <div class="photo-card" onclick="openLightbox('Screenshot%202026-11-16%20064224.png')">
-        <img src="Screenshot%202026-11-16%20064224.png" alt="Screenshot 7">
-        <div class="caption">7</div>
-      </div>
+        <div class="photo-card" onclick="openLightbox('Screenshot%202026-11-16%20064224.png')">
+          <img src="Screenshot%202026-11-16%20064224.png" alt="Screenshot 7">
+          <div class="caption">7</div>
+        </div>
 
-      <div class="photo-card" onclick="openLightbox('Screenshot%202026-11-16%20064236.png')">
-        <img src="Screenshot%202026-11-16%20064236.png" alt="Screenshot 8">
-        <div class="caption">8</div>
-      </div>
+        <div class="photo-card" onclick="openLightbox('Screenshot%202026-11-16%20064236.png')">
+          <img src="Screenshot%202026-11-16%20064236.png" alt="Screenshot 8">
+          <div class="caption">8</div>
+        </div>
 
-      <div class="photo-card" onclick="openLightbox('Screenshot%202026-11-16%20064250.png')">
-        <img src="Screenshot%202026-11-16%20064250.png" alt="Screenshot 9">
-        <div class="caption">9</div>
-      </div>
+        <div class="photo-card" onclick="openLightbox('Screenshot%202026-11-16%20064250.png')">
+          <img src="Screenshot%202026-11-16%20064250.png" alt="Screenshot 9">
+          <div class="caption">9</div>
+        </div>
 
-      <div class="photo-card" onclick="openLightbox('Screenshot%202026-11-16%20064259.png')">
-        <img src="Screenshot%202026-11-16%20064259.png" alt="Screenshot 10">
-        <div class="caption">10</div>
-      </div>
+        <div class="photo-card" onclick="openLightbox('Screenshot%202026-11-16%20064259.png')">
+          <img src="Screenshot%202026-11-16%20064259.png" alt="Screenshot 10">
+          <div class="caption">10</div>
+        </div>
 
-      <div class="photo-card" onclick="openLightbox('Screenshot%202026-11-16%20064310.png')">
-        <img src="Screenshot%202026-11-16%20064310.png" alt="Screenshot 11">
-        <div class="caption">11</div>
-      </div>
+        <div class="photo-card" onclick="openLightbox('Screenshot%202026-11-16%20064310.png')">
+          <img src="Screenshot%202026-11-16%20064310.png" alt="Screenshot 11">
+          <div class="caption">11</div>
+        </div>
 
-      <div class="photo-card" onclick="openLightbox('Screenshot%202026-11-16%20064330.png')">
-        <img src="Screenshot%202026-11-16%20064330.png" alt="Screenshot 12">
-        <div class="caption">12</div>
-      </div>
+        <div class="photo-card" onclick="openLightbox('Screenshot%202026-11-16%20064330.png')">
+          <img src="Screenshot%202026-11-16%20064330.png" alt="Screenshot 12">
+          <div class="caption">12</div>
+        </div>
 
-      <div class="photo-card" onclick="openLightbox('Screenshot%202026-11-16%20064411.png')">
-        <img src="Screenshot%202026-11-16%20064411.png" alt="Screenshot 13">
-        <div class="caption">13</div>
+        <div class="photo-card" onclick="openLightbox('Screenshot%202026-11-16%20064411.png')">
+          <img src="Screenshot%202026-11-16%20064411.png" alt="Screenshot 13">
+          <div class="caption">13</div>
+        </div>
       </div>
     </div>
   </div>
@@ -453,7 +472,8 @@
   <script>
     const passwordScreen = document.getElementById('password-screen');
     const loadingScreen = document.getElementById('loading-screen');
-    const messageScreen = document.getElementById('message-screen');
+    const mainContent = document.getElementById('main-content');
+    const xoxoBox = document.getElementById('xoxo-box');
     const galleryScreen = document.getElementById('gallery-screen');
     const enterBtn = document.getElementById('enter-btn');
     const passwordInput = document.getElementById('password-input');
@@ -499,17 +519,20 @@
           statusText.textContent = "Done 🍑";
           clearInterval(interval);
 
-          // Show pink message for 2 seconds, then gallery
           setTimeout(() => {
             loadingScreen.style.display = 'none';
-            messageScreen.style.display = 'flex';
+            mainContent.style.display = 'block';
             createHearts();
 
-            // After 2 seconds go to gallery
+            // Wait a moment then slide the box up
             setTimeout(() => {
-              messageScreen.style.display = 'none';
-              galleryScreen.style.display = 'block';
-            }, 2000);
+              xoxoBox.classList.add('slide-up');
+
+              // After the slide animation, show the gallery
+              setTimeout(() => {
+                galleryScreen.classList.add('show');
+              }, 850);
+            }, 1200);
           }, 600);
         }
       }, 38);
@@ -519,7 +542,7 @@
       const container = document.getElementById('hearts-bg');
       const heartEmojis = ['💖', '💗', '💓', '💕', '❤️', '💘', '💝'];
 
-      for (let i = 0; i < 45; i++) {
+      for (let i = 0; i < 50; i++) {
         const heart = document.createElement('div');
         heart.className = 'heart';
         heart.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
@@ -532,7 +555,6 @@
       }
     }
 
-    // Lightbox
     function openLightbox(imageSrc) {
       document.getElementById('lightbox-img').src = imageSrc;
       document.getElementById('lightbox').style.display = 'flex';
@@ -544,4 +566,5 @@
   </script>
 
 </body>
+</html>
 </html>
