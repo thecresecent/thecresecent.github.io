@@ -88,7 +88,7 @@
       display: none;
     }
 
-    /* ========== LOADING SCREEN (redesigned) ========== */
+    /* ========== LOADING SCREEN ========== */
     #loading-screen {
       display: none;
       height: 100vh;
@@ -433,7 +433,8 @@
       cursor: zoom-out;
     }
 
-    .lightbox img {
+    .lightbox img,
+    .lightbox video {
       max-width: 92%;
       max-height: 90%;
       border-radius: 8px;
@@ -534,19 +535,19 @@
       <p class="hint">Click any screenshot to view the full uncropped image • Use ← → arrow keys to navigate</p>
 
       <div class="gallery">
-        <!-- 1. 064113 -->
+        <!-- 1 -->
         <div class="photo-card" onclick="openLightbox(0)">
           <img src="Screenshot%202026-11-16%20064113.png" alt="Screenshot 1">
           <div class="caption"><span class="number">1.</span> anything for his sweet jay-z 🥰😉</div>
         </div>
 
-        <!-- 2. 064134 (064121 deleted) -->
+        <!-- 2 -->
         <div class="photo-card" onclick="openLightbox(1)">
           <img src="Screenshot%202026-11-16%20064134.png" alt="Screenshot 2">
           <div class="caption"><span class="number">2.</span> oh ho hashir already planning 🩷🫦</div>
         </div>
 
-        <!-- 3. 064158 (two captions) -->
+        <!-- 3 -->
         <div class="photo-card" onclick="openLightbox(2)">
           <img src="Screenshot%202026-11-16%20064158.png" alt="Screenshot 3">
           <div class="caption">
@@ -555,52 +556,46 @@
           </div>
         </div>
 
-        <!-- 4. 064206 -->
+        <!-- 4 -->
         <div class="photo-card" onclick="openLightbox(3)">
           <img src="Screenshot%202026-11-16%20064206.png" alt="Screenshot 4">
           <div class="caption"><span class="number">4.</span> go back to warming up kababs gng 🥀🙏😞</div>
         </div>
 
-        <!-- 5. 064215 -->
+        <!-- 5 -->
         <div class="photo-card" onclick="openLightbox(4)">
           <img src="Screenshot%202026-11-16%20064215.png" alt="Screenshot 5">
           <div class="caption"><span class="number">5.</span> atp sleep with her 🛏️🥀</div>
         </div>
 
-        <!-- 6. 064224 -->
+        <!-- 6 -->
         <div class="photo-card" onclick="openLightbox(5)">
           <img src="Screenshot%202026-11-16%20064224.png" alt="Screenshot 6">
           <div class="caption"><span class="number">6.</span> gonna put the paki inside of jay z 🥰🥰🥰🥵💦</div>
         </div>
 
-        <!-- 7. 064236 -->
+        <!-- 7 -->
         <div class="photo-card" onclick="openLightbox(6)">
           <img src="Screenshot%202026-11-16%20064236.png" alt="Screenshot 7">
-          <div class="caption"><span class="number">7.</span></div>
+          <div class="caption"><span class="number">7.</span> inner paki incoming ?? 🥵🥵🍆💦🌊</div>
         </div>
 
-        <!-- 8. 064259 -->
+        <!-- 8 -->
         <div class="photo-card" onclick="openLightbox(7)">
           <img src="Screenshot%202026-11-16%20064259.png" alt="Screenshot 8">
-          <div class="caption"><span class="number">8.</span></div>
+          <div class="caption"><span class="number">8.</span> son gonna eat her alive 😭🙏</div>
         </div>
 
-        <!-- 9. 064310 -->
+        <!-- 9 -->
         <div class="photo-card" onclick="openLightbox(8)">
           <img src="Screenshot%202026-11-16%20064310.png" alt="Screenshot 9">
-          <div class="caption"><span class="number">9.</span></div>
+          <div class="caption"><span class="number">9.</span> nigga fym romantically excited 🥀🥀🥀🥀🥀</div>
         </div>
 
-        <!-- 10. 064330 -->
+        <!-- 10 (last) - opens video -->
         <div class="photo-card" onclick="openLightbox(9)">
-          <img src="Screenshot%202026-11-16%20064330.png" alt="Screenshot 10">
-          <div class="caption"><span class="number">10.</span></div>
-        </div>
-
-        <!-- 11. 064411 -->
-        <div class="photo-card" onclick="openLightbox(10)">
-          <img src="Screenshot%202026-11-16%20064411.png" alt="Screenshot 11">
-          <div class="caption"><span class="number">11.</span></div>
+          <img src="Screenshot%202026-11-17%20184602.png" alt="Screenshot 10">
+          <div class="caption"><span class="number">10.</span> dayyum mastermind hashir 👽👽🧠</div>
         </div>
       </div>
     </div>
@@ -647,8 +642,7 @@
       "Screenshot%202026-11-16%20064236.png",
       "Screenshot%202026-11-16%20064259.png",
       "Screenshot%202026-11-16%20064310.png",
-      "Screenshot%202026-11-16%20064330.png",
-      "Screenshot%202026-11-16%20064411.png"
+      "Screenshot%202026-11-17%20184602.png"
     ];
 
     let currentIndex = 0;
@@ -661,7 +655,7 @@
     function checkPassword() {
       if (passwordInput.value === correctPassword) {
         errorMsg.style.display = 'none';
-        localStorage.setItem('authenticated', 'true'); // remember login
+        localStorage.setItem('authenticated', 'true');
         passwordScreen.style.display = 'none';
         loadingScreen.style.display = 'flex';
         startLoading();
@@ -722,7 +716,7 @@
       spawnParticles(peachTarget, ['💖', '💗', '💕', '❤️', '💘', '💝', '💧', '💦'], 12);
     }
 
-    // ===== SLOWER LOADING WITH LONGER RANDOM STUTTERS =====
+    // ===== SLOWER LOADING + RANDOM LONG STUTTERS =====
     function startLoading() {
       let progress = 0;
       let isStuttering = false;
@@ -731,21 +725,18 @@
       const interval = setInterval(() => {
         const now = Date.now();
 
-        // Random long stutters
         if (!isStuttering && Math.random() < 0.045 && progress > 10 && progress < 88) {
           isStuttering = true;
-          stutterEnd = now + (400 + Math.random() * 900); // 0.4s – 1.3s stutter
+          stutterEnd = now + (400 + Math.random() * 900);
         }
 
         if (isStuttering) {
           if (now > stutterEnd) {
             isStuttering = false;
           } else {
-            // during stutter: tiny movement or slight reverse
             progress += (Math.random() * 0.15 - 0.08);
           }
         } else {
-          // normal progress
           const rand = Math.random();
           if (rand < 0.1 && progress > 8) {
             progress -= (0.2 + Math.random() * 0.5);
@@ -810,7 +801,7 @@
       }
     }
 
-    // ===== Lightbox =====
+    // ===== LIGHTBOX (last item plays video) =====
     function openLightbox(index) {
       currentIndex = index;
       updateLightbox();
@@ -818,9 +809,37 @@
     }
 
     function updateLightbox() {
-      document.getElementById('lightbox-img').src = images[currentIndex];
-      document.getElementById('lightbox-counter').textContent = 
-        `${currentIndex + 1} / ${images.length}`;
+      const lightbox = document.getElementById('lightbox');
+      const img = document.getElementById('lightbox-img');
+      const counter = document.getElementById('lightbox-counter');
+
+      // Remove old video if exists
+      const oldVideo = document.getElementById('lightbox-video');
+      if (oldVideo) oldVideo.remove();
+
+      if (currentIndex === 9) {
+        // Last item → play video
+        img.style.display = 'none';
+
+        const video = document.createElement('video');
+        video.id = 'lightbox-video';
+        video.src = '1117(1)%20(1).mp4';
+        video.controls = true;
+        video.autoplay = true;
+        video.loop = true;
+        video.style.maxWidth = '92%';
+        video.style.maxHeight = '90%';
+        video.style.borderRadius = '8px';
+        video.style.objectFit = 'cover';
+        video.style.objectPosition = 'center 35%';
+
+        lightbox.insertBefore(video, img);
+      } else {
+        img.style.display = 'block';
+        img.src = images[currentIndex];
+      }
+
+      counter.textContent = `${currentIndex + 1} / ${images.length}`;
     }
 
     function changeImage(dir) {
@@ -830,6 +849,12 @@
 
     function closeLightbox(e) {
       if (e.target.id === 'lightbox' || e.target.classList.contains('lightbox')) {
+        // Stop video if playing
+        const video = document.getElementById('lightbox-video');
+        if (video) {
+          video.pause();
+          video.remove();
+        }
         document.getElementById('lightbox').style.display = 'none';
       }
     }
@@ -840,7 +865,14 @@
 
       if (e.key === 'ArrowLeft') changeImage(-1);
       else if (e.key === 'ArrowRight') changeImage(1);
-      else if (e.key === 'Escape') lightbox.style.display = 'none';
+      else if (e.key === 'Escape') {
+        const video = document.getElementById('lightbox-video');
+        if (video) {
+          video.pause();
+          video.remove();
+        }
+        lightbox.style.display = 'none';
+      }
     });
   </script>
 
