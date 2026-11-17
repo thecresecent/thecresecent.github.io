@@ -88,7 +88,7 @@
       display: none;
     }
 
-    /* ========== LOADING SCREEN ========== */
+    /* ========== LOADING SCREEN (redesigned) ========== */
     #loading-screen {
       display: none;
       height: 100vh;
@@ -96,36 +96,62 @@
       align-items: center;
       text-align: center;
       padding: 24px;
-      background: #0d1117;
+      background: radial-gradient(ellipse at center, #161b22 0%, #0d1117 70%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    #loading-screen::before {
+      content: "";
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(88, 166, 255, 0.08) 0%, transparent 70%);
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      pointer-events: none;
     }
 
     #loading-screen .box {
       width: 100%;
-      max-width: 480px;
+      max-width: 520px;
+      position: relative;
+      z-index: 2;
     }
 
     #loading-screen h2 {
       color: #58a6ff;
-      margin-bottom: 40px;
-      font-size: 1.4rem;
+      margin-bottom: 12px;
+      font-size: 1.6rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .loading-sub {
+      color: #8b949e;
+      font-size: 0.9rem;
+      margin-bottom: 48px;
     }
 
     .progress-container {
       position: relative;
       width: 100%;
-      height: 28px;
-      background: #161b22;
+      height: 32px;
+      background: #21262d;
       border-radius: 20px;
       border: 1px solid #30363d;
       overflow: visible;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.4);
     }
 
     .progress-bar {
       height: 100%;
       width: 0%;
-      background: linear-gradient(90deg, #238636, #3fb950);
+      background: linear-gradient(90deg, #238636, #3fb950, #56d364);
       border-radius: 20px;
-      transition: width 0.08s linear;
+      transition: width 0.1s linear;
+      box-shadow: 0 0 12px rgba(63, 185, 80, 0.4);
     }
 
     .eggplant-wrapper {
@@ -133,55 +159,76 @@
       top: 50%;
       left: 0%;
       transform: translate(-50%, -50%);
-      transition: left 0.08s linear;
+      transition: left 0.1s linear;
       z-index: 5;
       display: flex;
       align-items: center;
       gap: 6px;
       will-change: left, transform, opacity;
+      cursor: pointer;
     }
 
-    /* Clean dive into the peach */
     .eggplant-wrapper.inside {
-      left: calc(100% + 14px) !important;   /* matches the new peach position */
+      left: calc(100% + 14px) !important;
       transform: translate(-50%, -50%) scale(0.2);
       opacity: 0;
       transition: left 0.38s cubic-bezier(0.34, 1.45, 0.64, 1),
                   transform 0.38s cubic-bezier(0.34, 1.45, 0.64, 1),
                   opacity 0.22s ease 0.12s;
+      pointer-events: none;
     }
 
     .eggplant {
-      font-size: 2.2rem;
+      font-size: 2.3rem;
       filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+      transition: transform 0.15s ease;
+    }
+
+    .eggplant-wrapper:active .eggplant {
+      transform: scale(0.85);
     }
 
     .pfp-next-to-eggplant {
-      width: 34px;
-      height: 34px;
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
       border: 2.5px solid #ffffff;
       object-fit: cover;
       box-shadow: 0 2px 6px rgba(0,0,0,0.5);
       transition: opacity 0.2s ease;
+      pointer-events: none;
     }
 
-    /* Peach moved further right */
     .peach-target {
       position: absolute;
       top: 50%;
-      right: -22px;          /* was -10px → moved right */
+      right: -22px;
       transform: translateY(-50%);
-      font-size: 2.8rem;
+      font-size: 2.9rem;
       z-index: 4;
       transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      cursor: pointer;
+      user-select: none;
     }
 
     .peach-target.react {
       transform: translateY(-50%) scale(1.3);
     }
 
-    /* Burst particles (hearts + droplets) */
+    .peach-target.jiggle {
+      animation: peach-jiggle 0.55s ease;
+    }
+
+    @keyframes peach-jiggle {
+      0%   { transform: translateY(-50%) scale(1) rotate(0deg); }
+      15%  { transform: translateY(-50%) scale(1.25) rotate(-12deg); }
+      30%  { transform: translateY(-50%) scale(1.15) rotate(10deg); }
+      45%  { transform: translateY(-50%) scale(1.28) rotate(-8deg); }
+      60%  { transform: translateY(-50%) scale(1.1) rotate(6deg); }
+      75%  { transform: translateY(-50%) scale(1.2) rotate(-4deg); }
+      100% { transform: translateY(-50%) scale(1) rotate(0deg); }
+    }
+
     .particle {
       position: absolute;
       pointer-events: none;
@@ -203,9 +250,11 @@
     }
 
     .status-text {
-      margin-top: 28px;
+      margin-top: 32px;
       color: #8b949e;
-      font-size: 0.95rem;
+      font-size: 1rem;
+      font-weight: 500;
+      min-height: 24px;
     }
 
     /* ========== MAIN CONTENT ========== */
@@ -350,10 +399,22 @@
     }
 
     .caption {
-      padding: 12px;
+      padding: 12px 14px;
       font-size: 0.9rem;
       color: #9b2c5a;
       border-top: 1px solid rgba(0,0,0,0.06);
+      line-height: 1.4;
+    }
+
+    .caption .number {
+      font-weight: 700;
+      margin-right: 6px;
+      color: #c2255c;
+    }
+
+    .caption .multi {
+      display: block;
+      margin-top: 4px;
     }
 
     /* Lightbox */
@@ -403,13 +464,8 @@
       background: rgba(255,255,255,0.3);
     }
 
-    .lightbox-nav.prev {
-      left: 24px;
-    }
-
-    .lightbox-nav.next {
-      right: 24px;
-    }
+    .lightbox-nav.prev { left: 24px; }
+    .lightbox-nav.next { right: 24px; }
 
     .lightbox-counter {
       position: absolute;
@@ -440,7 +496,8 @@
   <!-- LOADING SCREEN -->
   <div id="loading-screen">
     <div class="box">
-      <h2>Loading...</h2>
+      <h2>Loading the goods...</h2>
+      <p class="loading-sub">just a sec bestie</p>
       
       <div class="progress-container">
         <div class="progress-bar" id="progress-bar"></div>
@@ -477,64 +534,73 @@
       <p class="hint">Click any screenshot to view the full uncropped image • Use ← → arrow keys to navigate</p>
 
       <div class="gallery">
+        <!-- 1. 064113 -->
         <div class="photo-card" onclick="openLightbox(0)">
           <img src="Screenshot%202026-11-16%20064113.png" alt="Screenshot 1">
-          <div class="caption">1</div>
+          <div class="caption"><span class="number">1.</span> anything for his sweet jay-z 🥰😉</div>
         </div>
 
+        <!-- 2. 064134 (064121 deleted) -->
         <div class="photo-card" onclick="openLightbox(1)">
-          <img src="Screenshot%202026-11-16%20064121.png" alt="Screenshot 2">
-          <div class="caption">2</div>
+          <img src="Screenshot%202026-11-16%20064134.png" alt="Screenshot 2">
+          <div class="caption"><span class="number">2.</span> oh ho hashir already planning 🩷🫦</div>
         </div>
 
+        <!-- 3. 064158 (two captions) -->
         <div class="photo-card" onclick="openLightbox(2)">
-          <img src="Screenshot%202026-11-16%20064134.png" alt="Screenshot 3">
-          <div class="caption">3</div>
+          <img src="Screenshot%202026-11-16%20064158.png" alt="Screenshot 3">
+          <div class="caption">
+            <span class="number">3.</span> son we know YOU need a diet if anything
+            <span class="multi">oooo i know hashirs children finna be sweet too 🥹🥹</span>
+          </div>
         </div>
 
+        <!-- 4. 064206 -->
         <div class="photo-card" onclick="openLightbox(3)">
-          <img src="Screenshot%202026-11-16%20064158.png" alt="Screenshot 4">
-          <div class="caption">4</div>
+          <img src="Screenshot%202026-11-16%20064206.png" alt="Screenshot 4">
+          <div class="caption"><span class="number">4.</span> go back to warming up kababs gng 🥀🙏😞</div>
         </div>
 
+        <!-- 5. 064215 -->
         <div class="photo-card" onclick="openLightbox(4)">
-          <img src="Screenshot%202026-11-16%20064206.png" alt="Screenshot 5">
-          <div class="caption">5</div>
+          <img src="Screenshot%202026-11-16%20064215.png" alt="Screenshot 5">
+          <div class="caption"><span class="number">5.</span> atp sleep with her 🛏️🥀</div>
         </div>
 
+        <!-- 6. 064224 -->
         <div class="photo-card" onclick="openLightbox(5)">
-          <img src="Screenshot%202026-11-16%20064215.png" alt="Screenshot 6">
-          <div class="caption">6</div>
+          <img src="Screenshot%202026-11-16%20064224.png" alt="Screenshot 6">
+          <div class="caption"><span class="number">6.</span> gonna put the paki inside of jay z 🥰🥰🥰🥵💦</div>
         </div>
 
+        <!-- 7. 064236 -->
         <div class="photo-card" onclick="openLightbox(6)">
-          <img src="Screenshot%202026-11-16%20064224.png" alt="Screenshot 7">
-          <div class="caption">7</div>
+          <img src="Screenshot%202026-11-16%20064236.png" alt="Screenshot 7">
+          <div class="caption"><span class="number">7.</span></div>
         </div>
 
+        <!-- 8. 064259 -->
         <div class="photo-card" onclick="openLightbox(7)">
-          <img src="Screenshot%202026-11-16%20064236.png" alt="Screenshot 8">
-          <div class="caption">8</div>
+          <img src="Screenshot%202026-11-16%20064259.png" alt="Screenshot 8">
+          <div class="caption"><span class="number">8.</span></div>
         </div>
 
+        <!-- 9. 064310 -->
         <div class="photo-card" onclick="openLightbox(8)">
-          <img src="Screenshot%202026-11-16%20064259.png" alt="Screenshot 9">
-          <div class="caption">9</div>
+          <img src="Screenshot%202026-11-16%20064310.png" alt="Screenshot 9">
+          <div class="caption"><span class="number">9.</span></div>
         </div>
 
+        <!-- 10. 064330 -->
         <div class="photo-card" onclick="openLightbox(9)">
-          <img src="Screenshot%202026-11-16%20064310.png" alt="Screenshot 10">
-          <div class="caption">10</div>
+          <img src="Screenshot%202026-11-16%20064330.png" alt="Screenshot 10">
+          <div class="caption"><span class="number">10.</span></div>
         </div>
 
+        <!-- 11. 064411 -->
         <div class="photo-card" onclick="openLightbox(10)">
-          <img src="Screenshot%202026-11-16%20064330.png" alt="Screenshot 11">
-          <div class="caption">11</div>
-        </div>
-
-        <div class="photo-card" onclick="openLightbox(11)">
-          <img src="Screenshot%202026-11-16%20064411.png" alt="Screenshot 12">
-          <div class="caption">12</div>
+          <img src="Screenshot%202026-11-16%20064411.png" alt="Screenshot 11">
+          <div class="caption"><span class="number">11.</span></div>
         </div>
       </div>
     </div>
@@ -564,9 +630,15 @@
 
     const correctPassword = "h@$h!r_69";
 
+    // Remember login
+    if (localStorage.getItem('authenticated') === 'true') {
+      passwordScreen.style.display = 'none';
+      loadingScreen.style.display = 'flex';
+      startLoading();
+    }
+
     const images = [
       "Screenshot%202026-11-16%20064113.png",
-      "Screenshot%202026-11-16%20064121.png",
       "Screenshot%202026-11-16%20064134.png",
       "Screenshot%202026-11-16%20064158.png",
       "Screenshot%202026-11-16%20064206.png",
@@ -589,6 +661,7 @@
     function checkPassword() {
       if (passwordInput.value === correctPassword) {
         errorMsg.style.display = 'none';
+        localStorage.setItem('authenticated', 'true'); // remember login
         passwordScreen.style.display = 'none';
         loadingScreen.style.display = 'flex';
         startLoading();
@@ -599,51 +672,86 @@
       }
     }
 
-    function spawnBurst() {
+    // ===== EASTER EGGS =====
+    function spawnParticles(originEl, emojis, count = 10) {
       const container = document.querySelector('.progress-container');
-      const peachRect = peachTarget.getBoundingClientRect();
+      const rect = originEl.getBoundingClientRect();
       const containerRect = container.getBoundingClientRect();
 
-      const originX = peachRect.left + peachRect.width / 2 - containerRect.left;
-      const originY = peachRect.top + peachRect.height / 2 - containerRect.top;
+      const originX = rect.left + rect.width / 2 - containerRect.left;
+      const originY = rect.top + rect.height / 2 - containerRect.top;
 
-      const particles = ['💖', '💗', '💕', '❤️', '💘', '💝', '💧', '💦', '💖', '💗', '💕', '❤️'];
-
-      particles.forEach((emoji, i) => {
+      for (let i = 0; i < count; i++) {
         const p = document.createElement('div');
         p.className = 'particle';
-        p.textContent = emoji;
+        p.textContent = emojis[Math.floor(Math.random() * emojis.length)];
 
         const angle = (Math.random() * 160 - 80) * (Math.PI / 180);
-        const distance = 35 + Math.random() * 85;
+        const distance = 30 + Math.random() * 90;
         const dx = Math.sin(angle) * distance;
-        const dy = -Math.cos(angle) * distance - 15;
-        const rot = (Math.random() * 60 - 30) + 'deg';
+        const dy = -Math.cos(angle) * distance - 10;
+        const rot = (Math.random() * 70 - 35) + 'deg';
 
         p.style.left = originX + 'px';
         p.style.top = originY + 'px';
         p.style.setProperty('--dx', dx + 'px');
         p.style.setProperty('--dy', dy + 'px');
         p.style.setProperty('--rot', rot);
-        p.style.animationDelay = (i * 0.03) + 's';
+        p.style.animationDelay = (i * 0.025) + 's';
 
         container.appendChild(p);
         setTimeout(() => p.remove(), 1100);
-      });
+      }
     }
 
+    eggplantWrapper.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (eggplantWrapper.classList.contains('inside')) return;
+      spawnParticles(eggplantWrapper, ['💧', '💦', '💧', '💦'], 12);
+    });
+
+    peachTarget.addEventListener('click', (e) => {
+      e.stopPropagation();
+      peachTarget.classList.remove('jiggle');
+      void peachTarget.offsetWidth;
+      peachTarget.classList.add('jiggle');
+      spawnParticles(peachTarget, ['💖', '💗', '💕', '❤️', '💘', '💝', '😘'], 14);
+    });
+
+    function spawnBurst() {
+      spawnParticles(peachTarget, ['💖', '💗', '💕', '❤️', '💘', '💝', '💧', '💦'], 12);
+    }
+
+    // ===== SLOWER LOADING WITH LONGER RANDOM STUTTERS =====
     function startLoading() {
       let progress = 0;
+      let isStuttering = false;
+      let stutterEnd = 0;
 
       const interval = setInterval(() => {
-        const rand = Math.random();
+        const now = Date.now();
 
-        if (rand < 0.12 && progress > 8 && progress < 90) {
-          progress -= (0.5 + Math.random() * 1.2);
-        } else if (rand < 0.22 && progress > 5) {
-          progress += Math.random() * 0.2;
+        // Random long stutters
+        if (!isStuttering && Math.random() < 0.045 && progress > 10 && progress < 88) {
+          isStuttering = true;
+          stutterEnd = now + (400 + Math.random() * 900); // 0.4s – 1.3s stutter
+        }
+
+        if (isStuttering) {
+          if (now > stutterEnd) {
+            isStuttering = false;
+          } else {
+            // during stutter: tiny movement or slight reverse
+            progress += (Math.random() * 0.15 - 0.08);
+          }
         } else {
-          progress += (0.75 + Math.random() * 1.5);
+          // normal progress
+          const rand = Math.random();
+          if (rand < 0.1 && progress > 8) {
+            progress -= (0.2 + Math.random() * 0.5);
+          } else {
+            progress += (0.28 + Math.random() * 0.55);
+          }
         }
 
         if (progress > 100) progress = 100;
@@ -652,19 +760,17 @@
         progressBar.style.width = progress + '%';
         eggplantWrapper.style.left = progress + '%';
 
-        if (progress < 25) statusText.textContent = "Warming up...";
-        else if (progress < 50) statusText.textContent = "Almost there...";
-        else if (progress < 80) statusText.textContent = "Getting closer...";
+        if (progress < 22) statusText.textContent = "Warming up...";
+        else if (progress < 48) statusText.textContent = "Almost there...";
+        else if (progress < 75) statusText.textContent = "Getting closer...";
         else if (progress < 100) statusText.textContent = "Final approach...";
         else {
           statusText.textContent = "Done 🍑";
           clearInterval(interval);
 
-          // Hide the profile pic first
           const pfp = eggplantWrapper.querySelector('.pfp-next-to-eggplant');
           if (pfp) pfp.style.opacity = '0';
 
-          // Dive cleanly into the peach
           setTimeout(() => {
             eggplantWrapper.classList.add('inside');
             peachTarget.classList.add('react');
@@ -684,7 +790,7 @@
             }, 1100);
           }, 900);
         }
-      }, 42);
+      }, 65);
     }
 
     function createHearts() {
@@ -712,8 +818,7 @@
     }
 
     function updateLightbox() {
-      const img = document.getElementById('lightbox-img');
-      img.src = images[currentIndex];
+      document.getElementById('lightbox-img').src = images[currentIndex];
       document.getElementById('lightbox-counter').textContent = 
         `${currentIndex + 1} / ${images.length}`;
     }
