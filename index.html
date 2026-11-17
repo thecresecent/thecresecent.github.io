@@ -141,14 +141,14 @@
       will-change: left, transform, opacity;
     }
 
-    /* Clean "go inside" state */
+    /* Clean dive into the peach */
     .eggplant-wrapper.inside {
-      left: calc(100% - 6px) !important;
-      transform: translate(-50%, -50%) scale(0.25);
+      left: calc(100% + 14px) !important;   /* matches the new peach position */
+      transform: translate(-50%, -50%) scale(0.2);
       opacity: 0;
-      transition: left 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
-                  transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
-                  opacity 0.25s ease 0.1s;
+      transition: left 0.38s cubic-bezier(0.34, 1.45, 0.64, 1),
+                  transform 0.38s cubic-bezier(0.34, 1.45, 0.64, 1),
+                  opacity 0.22s ease 0.12s;
     }
 
     .eggplant {
@@ -166,10 +166,11 @@
       transition: opacity 0.2s ease;
     }
 
+    /* Peach moved further right */
     .peach-target {
       position: absolute;
       top: 50%;
-      right: -10px;
+      right: -22px;          /* was -10px → moved right */
       transform: translateY(-50%);
       font-size: 2.8rem;
       z-index: 4;
@@ -177,7 +178,7 @@
     }
 
     .peach-target.react {
-      transform: translateY(-50%) scale(1.28);
+      transform: translateY(-50%) scale(1.3);
     }
 
     /* Burst particles (hearts + droplets) */
@@ -563,7 +564,6 @@
 
     const correctPassword = "h@$h!r_69";
 
-    // Image list for lightbox navigation
     const images = [
       "Screenshot%202026-11-16%20064113.png",
       "Screenshot%202026-11-16%20064121.png",
@@ -607,7 +607,6 @@
       const originX = peachRect.left + peachRect.width / 2 - containerRect.left;
       const originY = peachRect.top + peachRect.height / 2 - containerRect.top;
 
-      // Mostly hearts + a few droplets
       const particles = ['💖', '💗', '💕', '❤️', '💘', '💝', '💧', '💦', '💖', '💗', '💕', '❤️'];
 
       particles.forEach((emoji, i) => {
@@ -665,12 +664,12 @@
           const pfp = eggplantWrapper.querySelector('.pfp-next-to-eggplant');
           if (pfp) pfp.style.opacity = '0';
 
-          // Then send the eggplant cleanly into the peach
+          // Dive cleanly into the peach
           setTimeout(() => {
             eggplantWrapper.classList.add('inside');
             peachTarget.classList.add('react');
             spawnBurst();
-          }, 80);
+          }, 60);
 
           setTimeout(() => {
             loadingScreen.style.display = 'none';
@@ -683,7 +682,7 @@
                 galleryScreen.classList.add('show');
               }, 850);
             }, 1100);
-          }, 950);
+          }, 900);
         }
       }, 42);
     }
@@ -705,7 +704,7 @@
       }
     }
 
-    // ===== Lightbox with arrow keys =====
+    // ===== Lightbox =====
     function openLightbox(index) {
       currentIndex = index;
       updateLightbox();
@@ -725,24 +724,18 @@
     }
 
     function closeLightbox(e) {
-      // Only close if clicking the background, not the image or buttons
       if (e.target.id === 'lightbox' || e.target.classList.contains('lightbox')) {
         document.getElementById('lightbox').style.display = 'none';
       }
     }
 
-    // Keyboard support
     document.addEventListener('keydown', (e) => {
       const lightbox = document.getElementById('lightbox');
       if (lightbox.style.display !== 'flex') return;
 
-      if (e.key === 'ArrowLeft') {
-        changeImage(-1);
-      } else if (e.key === 'ArrowRight') {
-        changeImage(1);
-      } else if (e.key === 'Escape') {
-        lightbox.style.display = 'none';
-      }
+      if (e.key === 'ArrowLeft') changeImage(-1);
+      else if (e.key === 'ArrowRight') changeImage(1);
+      else if (e.key === 'Escape') lightbox.style.display = 'none';
     });
   </script>
 
