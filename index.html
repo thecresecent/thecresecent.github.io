@@ -88,7 +88,7 @@
       display: none;
     }
 
-    /* ========== LOADING SCREEN ========== */
+    /* ========== LOADING SCREEN (PINK + WHITE) ========== */
     #loading-screen {
       display: none;
       height: 100vh;
@@ -96,21 +96,9 @@
       align-items: center;
       text-align: center;
       padding: 24px;
-      background: radial-gradient(ellipse at center, #161b22 0%, #0d1117 70%);
+      background: #ff9ecb;
       position: relative;
       overflow: hidden;
-    }
-
-    #loading-screen::before {
-      content: "";
-      position: absolute;
-      width: 300px;
-      height: 300px;
-      background: radial-gradient(circle, rgba(88, 166, 255, 0.08) 0%, transparent 70%);
-      top: 20%;
-      left: 50%;
-      transform: translateX(-50%);
-      pointer-events: none;
     }
 
     #loading-screen .box {
@@ -121,16 +109,16 @@
     }
 
     #loading-screen h2 {
-      color: #58a6ff;
+      color: #ffffff;
       margin-bottom: 12px;
-      font-size: 1.6rem;
-      font-weight: 600;
-      letter-spacing: 0.5px;
+      font-size: 1.8rem;
+      font-weight: 700;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.15);
     }
 
     .loading-sub {
-      color: #8b949e;
-      font-size: 0.9rem;
+      color: rgba(255,255,255,0.9);
+      font-size: 1rem;
       margin-bottom: 48px;
     }
 
@@ -138,20 +126,20 @@
       position: relative;
       width: 100%;
       height: 32px;
-      background: #21262d;
+      background: rgba(255,255,255,0.35);
       border-radius: 20px;
-      border: 1px solid #30363d;
+      border: 2px solid rgba(255,255,255,0.6);
       overflow: visible;
-      box-shadow: inset 0 1px 3px rgba(0,0,0,0.4);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
 
     .progress-bar {
       height: 100%;
       width: 0%;
-      background: linear-gradient(90deg, #238636, #3fb950, #56d364);
+      background: linear-gradient(90deg, #ff6b9d, #ff8fab, #ffffff);
       border-radius: 20px;
       transition: width 0.1s linear;
-      box-shadow: 0 0 12px rgba(63, 185, 80, 0.4);
+      box-shadow: 0 0 15px rgba(255,255,255,0.5);
     }
 
     .eggplant-wrapper {
@@ -180,7 +168,7 @@
 
     .eggplant {
       font-size: 2.3rem;
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
       transition: transform 0.15s ease;
     }
 
@@ -194,7 +182,7 @@
       border-radius: 50%;
       border: 2.5px solid #ffffff;
       object-fit: cover;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
       transition: opacity 0.2s ease;
       pointer-events: none;
     }
@@ -209,6 +197,7 @@
       transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
       cursor: pointer;
       user-select: none;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
     }
 
     .peach-target.react {
@@ -251,10 +240,11 @@
 
     .status-text {
       margin-top: 32px;
-      color: #8b949e;
-      font-size: 1rem;
-      font-weight: 500;
+      color: #ffffff;
+      font-size: 1.1rem;
+      font-weight: 600;
       min-height: 24px;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.15);
     }
 
     /* ========== MAIN CONTENT ========== */
@@ -647,6 +637,26 @@
 
     let currentIndex = 0;
 
+    // ===== SOUND EFFECTS =====
+    const peachSounds = [
+      "sus-clapping-vww6zEH.mp3",
+      "sus-clap.mp3",
+      "sus-clap-3-0-make-it-to-end-hear.mp3",
+      "clapping-not-sus.mp3"
+    ];
+
+    const eggplantSounds = [
+      "fapping-masturbating-fapping-meat-your-jerking-therorshach27.mp3",
+      "asmr-hawk-tuah-longer.mp3"
+    ];
+
+    function playRandomSound(soundList) {
+      const file = soundList[Math.floor(Math.random() * soundList.length)];
+      const audio = new Audio(file);
+      audio.volume = 0.7;
+      audio.play().catch(e => console.log("Audio play failed:", e));
+    }
+
     enterBtn.addEventListener('click', checkPassword);
     passwordInput.addEventListener('keypress', (e) => {
       if (e.key === 'Enter') checkPassword();
@@ -666,7 +676,7 @@
       }
     }
 
-    // ===== EASTER EGGS =====
+    // ===== EASTER EGGS + SOUNDS =====
     function spawnParticles(originEl, emojis, count = 10) {
       const container = document.querySelector('.progress-container');
       const rect = originEl.getBoundingClientRect();
@@ -698,14 +708,18 @@
       }
     }
 
+    // Eggplant click → fapping or hawk tuah (random)
     eggplantWrapper.addEventListener('click', (e) => {
       e.stopPropagation();
       if (eggplantWrapper.classList.contains('inside')) return;
+      playRandomSound(eggplantSounds);
       spawnParticles(eggplantWrapper, ['💧', '💦', '💧', '💦'], 12);
     });
 
+    // Peach click → random clapping
     peachTarget.addEventListener('click', (e) => {
       e.stopPropagation();
+      playRandomSound(peachSounds);
       peachTarget.classList.remove('jiggle');
       void peachTarget.offsetWidth;
       peachTarget.classList.add('jiggle');
@@ -813,14 +827,12 @@
       const img = document.getElementById('lightbox-img');
       const counter = document.getElementById('lightbox-counter');
 
-      // Clean up previous side-by-side / video
       const oldVideo = document.getElementById('lightbox-video');
       if (oldVideo) oldVideo.remove();
       const oldContainer = document.getElementById('side-by-side');
       if (oldContainer) oldContainer.remove();
 
       if (currentIndex === 9) {
-        // Last item → show image + video side by side
         img.style.display = 'none';
 
         const container = document.createElement('div');
@@ -834,7 +846,6 @@
           max-height: 90%;
         `;
 
-        // Title
         const title = document.createElement('div');
         title.textContent = 'how hashir feels:';
         title.style.cssText = `
@@ -846,7 +857,6 @@
         `;
         container.appendChild(title);
 
-        // Row
         const row = document.createElement('div');
         row.style.cssText = `
           display: flex;
@@ -856,7 +866,6 @@
           flex-wrap: wrap;
         `;
 
-        // Static image
         const staticImg = document.createElement('img');
         staticImg.src = images[9];
         staticImg.style.cssText = `
@@ -868,7 +877,6 @@
         `;
         row.appendChild(staticImg);
 
-        // Video
         const video = document.createElement('video');
         video.id = 'lightbox-video';
         video.src = '1117(1)%20(1).mp4';
@@ -889,7 +897,6 @@
         lightbox.insertBefore(container, img);
 
       } else {
-        // Normal single image
         img.style.display = 'block';
         img.src = images[currentIndex];
       }
