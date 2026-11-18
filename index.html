@@ -592,7 +592,7 @@
           <div class="caption"><span class="number">9.</span> nigga fym romantically excited 🥀🥀🥀🥀🥀</div>
         </div>
 
-        <!-- 10 (last) - opens video -->
+        <!-- 10 (last) -->
         <div class="photo-card" onclick="openLightbox(9)">
           <img src="Screenshot%202026-11-17%20184602.png" alt="Screenshot 10">
           <div class="caption"><span class="number">10.</span> dayyum mastermind hashir 👽👽🧠</div>
@@ -801,7 +801,7 @@
       }
     }
 
-    // ===== LIGHTBOX (last item plays video) =====
+    // ===== LIGHTBOX =====
     function openLightbox(index) {
       currentIndex = index;
       updateLightbox();
@@ -813,28 +813,83 @@
       const img = document.getElementById('lightbox-img');
       const counter = document.getElementById('lightbox-counter');
 
-      // Remove old video if exists
+      // Clean up previous side-by-side / video
       const oldVideo = document.getElementById('lightbox-video');
       if (oldVideo) oldVideo.remove();
+      const oldContainer = document.getElementById('side-by-side');
+      if (oldContainer) oldContainer.remove();
 
       if (currentIndex === 9) {
-        // Last item → play video
+        // Last item → show image + video side by side
         img.style.display = 'none';
 
+        const container = document.createElement('div');
+        container.id = 'side-by-side';
+        container.style.cssText = `
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 16px;
+          max-width: 95%;
+          max-height: 90%;
+        `;
+
+        // Title
+        const title = document.createElement('div');
+        title.textContent = 'how hashir feels:';
+        title.style.cssText = `
+          color: #ff9ecb;
+          font-size: 1.5rem;
+          font-weight: 600;
+          margin-bottom: 10px;
+          text-shadow: 0 2px 10px rgba(0,0,0,0.7);
+        `;
+        container.appendChild(title);
+
+        // Row
+        const row = document.createElement('div');
+        row.style.cssText = `
+          display: flex;
+          gap: 24px;
+          align-items: center;
+          justify-content: center;
+          flex-wrap: wrap;
+        `;
+
+        // Static image
+        const staticImg = document.createElement('img');
+        staticImg.src = images[9];
+        staticImg.style.cssText = `
+          max-width: 420px;
+          max-height: 70vh;
+          border-radius: 10px;
+          box-shadow: 0 0 30px rgba(0,0,0,0.6);
+          object-fit: contain;
+        `;
+        row.appendChild(staticImg);
+
+        // Video
         const video = document.createElement('video');
         video.id = 'lightbox-video';
         video.src = '1117(1)%20(1).mp4';
         video.controls = true;
         video.autoplay = true;
         video.loop = true;
-        video.style.maxWidth = '92%';
-        video.style.maxHeight = '90%';
-        video.style.borderRadius = '8px';
-        video.style.objectFit = 'cover';
-        video.style.objectPosition = 'center 35%';
+        video.style.cssText = `
+          max-width: 420px;
+          max-height: 70vh;
+          border-radius: 10px;
+          box-shadow: 0 0 30px rgba(0,0,0,0.6);
+          object-fit: cover;
+          object-position: center 35%;
+        `;
+        row.appendChild(video);
 
-        lightbox.insertBefore(video, img);
+        container.appendChild(row);
+        lightbox.insertBefore(container, img);
+
       } else {
+        // Normal single image
         img.style.display = 'block';
         img.src = images[currentIndex];
       }
@@ -849,12 +904,13 @@
 
     function closeLightbox(e) {
       if (e.target.id === 'lightbox' || e.target.classList.contains('lightbox')) {
-        // Stop video if playing
         const video = document.getElementById('lightbox-video');
         if (video) {
           video.pause();
           video.remove();
         }
+        const container = document.getElementById('side-by-side');
+        if (container) container.remove();
         document.getElementById('lightbox').style.display = 'none';
       }
     }
@@ -871,6 +927,8 @@
           video.pause();
           video.remove();
         }
+        const container = document.getElementById('side-by-side');
+        if (container) container.remove();
         lightbox.style.display = 'none';
       }
     });
