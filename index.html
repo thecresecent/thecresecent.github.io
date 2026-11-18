@@ -469,6 +469,23 @@
       padding: 6px 14px;
       border-radius: 20px;
     }
+
+    /* ========== JUMPSCARE ========== */
+    #jumpscare {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: #000;
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #jumpscare img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
   </style>
 </head>
 <body>
@@ -526,19 +543,19 @@
 
       <div class="gallery">
         <!-- 1 -->
-        <div class="photo-card" onclick="openLightbox(0)">
+        <div class="photo-card" onclick="handleImageClick(0)">
           <img src="Screenshot%202026-11-16%20064113.png" alt="Screenshot 1">
           <div class="caption"><span class="number">1.</span> anything for his sweet jay-z 🥰😉</div>
         </div>
 
         <!-- 2 -->
-        <div class="photo-card" onclick="openLightbox(1)">
+        <div class="photo-card" onclick="handleImageClick(1)">
           <img src="Screenshot%202026-11-16%20064134.png" alt="Screenshot 2">
           <div class="caption"><span class="number">2.</span> oh ho hashir already planning 🩷🫦</div>
         </div>
 
         <!-- 3 -->
-        <div class="photo-card" onclick="openLightbox(2)">
+        <div class="photo-card" onclick="handleImageClick(2)">
           <img src="Screenshot%202026-11-16%20064158.png" alt="Screenshot 3">
           <div class="caption">
             <span class="number">3.</span> son we know YOU need a diet if anything
@@ -547,43 +564,43 @@
         </div>
 
         <!-- 4 -->
-        <div class="photo-card" onclick="openLightbox(3)">
+        <div class="photo-card" onclick="handleImageClick(3)">
           <img src="Screenshot%202026-11-16%20064206.png" alt="Screenshot 4">
           <div class="caption"><span class="number">4.</span> go back to warming up kababs gng 🥀🙏😞</div>
         </div>
 
         <!-- 5 -->
-        <div class="photo-card" onclick="openLightbox(4)">
+        <div class="photo-card" onclick="handleImageClick(4)">
           <img src="Screenshot%202026-11-16%20064215.png" alt="Screenshot 5">
           <div class="caption"><span class="number">5.</span> atp sleep with her 🛏️🥀</div>
         </div>
 
         <!-- 6 -->
-        <div class="photo-card" onclick="openLightbox(5)">
+        <div class="photo-card" onclick="handleImageClick(5)">
           <img src="Screenshot%202026-11-16%20064224.png" alt="Screenshot 6">
           <div class="caption"><span class="number">6.</span> gonna put the paki inside of jay z 🥰🥰🥰🥵💦</div>
         </div>
 
         <!-- 7 -->
-        <div class="photo-card" onclick="openLightbox(6)">
+        <div class="photo-card" onclick="handleImageClick(6)">
           <img src="Screenshot%202026-11-16%20064236.png" alt="Screenshot 7">
           <div class="caption"><span class="number">7.</span> inner paki incoming ?? 🥵🥵🍆💦🌊</div>
         </div>
 
         <!-- 8 -->
-        <div class="photo-card" onclick="openLightbox(7)">
+        <div class="photo-card" onclick="handleImageClick(7)">
           <img src="Screenshot%202026-11-16%20064259.png" alt="Screenshot 8">
           <div class="caption"><span class="number">8.</span> son gonna eat her alive 😭🙏</div>
         </div>
 
         <!-- 9 -->
-        <div class="photo-card" onclick="openLightbox(8)">
+        <div class="photo-card" onclick="handleImageClick(8)">
           <img src="Screenshot%202026-11-16%20064310.png" alt="Screenshot 9">
           <div class="caption"><span class="number">9.</span> nigga fym romantically excited 🥀🥀🥀🥀🥀</div>
         </div>
 
         <!-- 10 (last) -->
-        <div class="photo-card" onclick="openLightbox(9)">
+        <div class="photo-card" onclick="handleImageClick(9)">
           <img src="Screenshot%202026-11-17%20184602.png" alt="Screenshot 10">
           <div class="caption"><span class="number">10.</span> dayyum mastermind hashir 👽👽🧠</div>
         </div>
@@ -597,6 +614,11 @@
     <img id="lightbox-img" src="" alt="Full Size Screenshot">
     <button class="lightbox-nav next" onclick="event.stopPropagation(); changeImage(1)">›</button>
     <div class="lightbox-counter" id="lightbox-counter"></div>
+  </div>
+
+  <!-- JUMPSCARE -->
+  <div id="jumpscare">
+    <img id="jumpscare-img" src="" alt="jumpscare">
   </div>
 
   <script>
@@ -638,11 +660,11 @@
     let currentIndex = 0;
 
     // ===== SOUND EFFECTS =====
-const peachSounds = [
-  "sus-clapping_vww6zEH.mp3",
-  "sus-clap.mp3",
-  "sus-clap-3-0-make-it-to-end-hear.mp3",
-  "clapping-not-sus.mp3"
+    const peachSounds = [
+      "sus-clapping_vww6zEH.mp3",
+      "sus-clap.mp3",
+      "sus-clap-3-0-make-it-to-end-hear.mp3",
+      "clapping-not-sus.mp3"
     ];
 
     const eggplantSounds = [
@@ -708,7 +730,6 @@ const peachSounds = [
       }
     }
 
-    // Eggplant click → fapping or hawk tuah (random)
     eggplantWrapper.addEventListener('click', (e) => {
       e.stopPropagation();
       if (eggplantWrapper.classList.contains('inside')) return;
@@ -716,7 +737,6 @@ const peachSounds = [
       spawnParticles(eggplantWrapper, ['💧', '💦', '💧', '💦'], 12);
     });
 
-    // Peach click → random clapping
     peachTarget.addEventListener('click', (e) => {
       e.stopPropagation();
       playRandomSound(peachSounds);
@@ -728,6 +748,40 @@ const peachSounds = [
 
     function spawnBurst() {
       spawnParticles(peachTarget, ['💖', '💗', '💕', '❤️', '💘', '💝', '💧', '💦'], 12);
+    }
+
+    // ===== JUMPSCARE =====
+    function triggerJumpscare() {
+      const jumpscare = document.getElementById('jumpscare');
+      const img = document.getElementById('jumpscare-img');
+
+      // 50% chance between the two images
+      const scareImage = Math.random() < 0.5 ? "hohoho.png" : "hohoho2.png";
+      img.src = scareImage;
+
+      jumpscare.style.display = 'flex';
+
+      // Play vine boom
+      const boom = new Audio("vine-boom.mp3");
+      boom.volume = 1.0;
+      boom.play().catch(e => console.log("Boom failed:", e));
+
+      // Hide after 1.3 seconds
+      setTimeout(() => {
+        jumpscare.style.display = 'none';
+      }, 1300);
+    }
+
+    // Called when clicking any gallery image
+    function handleImageClick(index) {
+      // 15% chance of jumpscare
+      if (Math.random() < 0.15) {
+        triggerJumpscare();
+        // Still open the lightbox after a short delay
+        setTimeout(() => openLightbox(index), 1400);
+      } else {
+        openLightbox(index);
+      }
     }
 
     // ===== SLOWER LOADING + RANDOM LONG STUTTERS =====
