@@ -479,12 +479,23 @@
       z-index: 9999;
       justify-content: center;
       align-items: center;
+      flex-direction: column;
     }
 
     #jumpscare img {
-      max-width: 100%;
-      max-height: 100%;
+      max-width: 95%;
+      max-height: 85%;
       object-fit: contain;
+    }
+
+    #jumpscare-caption {
+      color: #ff9ecb;
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-top: 18px;
+      text-align: center;
+      text-shadow: 0 0 12px rgba(255, 158, 203, 0.8);
+      padding: 0 20px;
     }
   </style>
 </head>
@@ -619,6 +630,7 @@
   <!-- JUMPSCARE -->
   <div id="jumpscare">
     <img id="jumpscare-img" src="" alt="jumpscare">
+    <div id="jumpscare-caption"></div>
   </div>
 
   <script>
@@ -750,33 +762,68 @@
       spawnParticles(peachTarget, ['💖', '💗', '💕', '❤️', '💘', '💝', '💧', '💦'], 12);
     }
 
-    // ===== JUMPSCARE (4 images, 25% each) =====
-    const jumpscareImages = [
-      "hohoho.png",
-      "hohoho2.png",
-      "Screenshot%202026-11-18%20174153.png",   // easy licks
-      "Screenshot%202026-11-18%20175026.png"    // so jolly
+    // ===== JUMPSCARE SYSTEM =====
+    // Normal jumpscares (weight 4.75 each) + special one (weight 1) = total 20
+    const jumpscarePool = [
+      { src: "hohoho.png", special: false },
+      { src: "hohoho2.png", special: false },
+      { src: "Screenshot%202026-11-18%20174153.png", special: false },
+      { src: "Screenshot%202026-11-18%20175026.png", special: false },
+      { src: "Screenshot%202026-11-18%20184313.png", special: true }  // 1/20 chance
     ];
+
+    let currentJumpscareAudio = null;
 
     function triggerJumpscare() {
       const jumpscare = document.getElementById('jumpscare');
       const img = document.getElementById('jumpscare-img');
+      const caption = document.getElementById('jumpscare-caption');
 
-      // Randomly pick 1 of the 4 images (25% each)
-      const scareImage = jumpscareImages[Math.floor(Math.random() * jumpscareImages.length)];
-      img.src = scareImage;
+      // Weighted random (special one is 1/20)
+      const rand = Math.random() * 20;
+      let selected;
+      if (rand < 1) {
+        selected = jumpscarePool[4]; // special
+      } else {
+        selected = jumpscarePool[Math.floor((rand - 1) / 4.75)];
+      }
 
+      img.src = selected.src;
       jumpscare.style.display = 'flex';
 
-      // Play vine boom
-      const boom = new Audio("vine-boom.mp3");
-      boom.volume = 1.0;
-      boom.play().catch(e => console.log("Boom failed:", e));
+      // Stop any previous jumpscare audio
+      if (currentJumpscareAudio) {
+        currentJumpscareAudio.pause();
+        currentJumpscareAudio = null;
+      }
 
-      // Hide after 1.3 seconds
-      setTimeout(() => {
-        jumpscare.style.display = 'none';
-      }, 1300);
+      if (selected.special) {
+        // Special Quintuplets jumpscare
+        caption.textContent = "get bombarded by curvy mommies 🥵🥵🥵🥵🥵🥵🥵";
+        caption.style.display = 'block';
+
+        currentJumpscareAudio = new Audio("my-mommy-said-no-more-skibidi-toilet.mp3");
+        currentJumpscareAudio.volume = 0.9;
+        currentJumpscareAudio.play().catch(e => console.log("Special audio failed:", e));
+
+        // Stay until the audio ends
+        currentJumpscareAudio.addEventListener('ended', () => {
+          jumpscare.style.display = 'none';
+          caption.style.display = 'none';
+          currentJumpscareAudio = null;
+        });
+      } else {
+        // Normal short jumpscare
+        caption.style.display = 'none';
+
+        const boom = new Audio("vine-boom.mp3");
+        boom.volume = 1.0;
+        boom.play().catch(e => console.log("Boom failed:", e));
+
+        setTimeout(() => {
+          jumpscare.style.display = 'none';
+        }, 1300);
+      }
     }
 
     // Called when clicking any gallery image
@@ -784,8 +831,8 @@
       // 15% chance of jumpscare
       if (Math.random() < 0.15) {
         triggerJumpscare();
-        // Still open the lightbox after a short delay
-        setTimeout(() => openLightbox(index), 1400);
+        // Open lightbox after a short delay (only if not the long special one)
+        setTimeout(() => openLightbox(index), 1500);
       } else {
         openLightbox(index);
       }
