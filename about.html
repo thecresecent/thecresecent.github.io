@@ -307,7 +307,7 @@
 
     <!-- Entry 7 -->
     <div class="profile-card">
-      <img src="people-removed.jpg" alt="Archive Entry 7" onclick="openLightbox('people-removed.jpg')">
+      <img id="target-img" src="people-removed.jpg" alt="Archive Entry 7">
       <p> son devoured it just like how he did it to jay z 🥵</p>
     </div>
 
@@ -326,7 +326,7 @@
     <img id="lightbox-img" src="" alt="Full Size Photo">
   </div>
 
-  <script>
+<script>
     const SITE_PASSWORD = "hashir123"; // Match your password here
 
     window.addEventListener("load", () => {
@@ -363,7 +363,38 @@
     function closeLightbox() {
       document.getElementById("lightbox").style.display = "none";
     }
-  </script>
 
-</body>
-</html>
+    // Hold-to-redirect logic for Entry 7
+    const targetImg = document.getElementById("target-img");
+    const redirectUrl = "https://www.google.com/maps/search/?api=1&query=BBQ+Village+181-12+Hillside+Ave+Jamaica+NY+11432";
+    let holdTimer;
+    let isHoldTriggered = false;
+
+    function startHold() {
+      isHoldTriggered = false;
+      holdTimer = setTimeout(() => {
+        isHoldTriggered = true;
+        window.location.href = redirectUrl;
+      }, 800);
+    }
+
+    function cancelHold() {
+      clearTimeout(holdTimer);
+    }
+
+    targetImg.addEventListener("mousedown", startHold);
+    targetImg.addEventListener("mouseup", cancelHold);
+    targetImg.addEventListener("mouseleave", cancelHold);
+
+    targetImg.addEventListener("touchstart", startHold, { passive: true });
+    targetImg.addEventListener("touchend", cancelHold);
+    targetImg.addEventListener("touchmove", cancelHold);
+
+    targetImg.addEventListener("click", () => {
+      if (!isHoldTriggered) {
+        openLightbox("people-removed.jpg");
+      }
+    });
+
+    targetImg.addEventListener("contextmenu", (e) => e.preventDefault());
+  </script>
