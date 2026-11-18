@@ -750,13 +750,20 @@
       spawnParticles(peachTarget, ['💖', '💗', '💕', '❤️', '💘', '💝', '💧', '💦'], 12);
     }
 
-    // ===== JUMPSCARE =====
+    // ===== JUMPSCARE (4 images, 25% each) =====
+    const jumpscareImages = [
+      "hohoho.png",
+      "hohoho2.png",
+      "Screenshot%202026-11-18%20174153.png",   // easy licks
+      "Screenshot%202026-11-18%20175026.png"    // so jolly
+    ];
+
     function triggerJumpscare() {
       const jumpscare = document.getElementById('jumpscare');
       const img = document.getElementById('jumpscare-img');
 
-      // 50% chance between the two images
-      const scareImage = Math.random() < 0.5 ? "hohoho.png" : "hohoho2.png";
+      // Randomly pick 1 of the 4 images (25% each)
+      const scareImage = jumpscareImages[Math.floor(Math.random() * jumpscareImages.length)];
       img.src = scareImage;
 
       jumpscare.style.display = 'flex';
