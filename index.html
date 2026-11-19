@@ -699,7 +699,7 @@
       <h1>Enter Password</h1>
       <p>Access required</p>
       <input type="password" id="password-input" placeholder="Password" autocomplete="off">
-      <button id="enter-btn">Enter</button>
+      <button type="button" id="enter-btn">Enter</button>
       <div class="error-msg" id="error-msg">Wrong password</div>
     </div>
   </div>
@@ -801,7 +801,7 @@
     </div>
   </div>
 
-  <!-- ========== SECRET PAGE ========== -->
+  <!-- SECRET PAGE -->
   <div id="secret-page">
     <div class="secret-header">
       <div class="secret-logo">private.anas</div>
@@ -824,7 +824,6 @@
       </p>
 
       <div class="secret-grid">
-        <!-- Left card -->
         <div class="secret-card">
           <h3>Session Info</h3>
           <p>
@@ -838,7 +837,6 @@
           </div>
         </div>
 
-        <!-- Right card -->
         <div class="secret-card">
           <h3>Quick Actions</h3>
           <div class="secret-actions" style="flex-direction: column; align-items: flex-start;">
@@ -849,7 +847,6 @@
         </div>
       </div>
 
-      <!-- Activity log -->
       <div class="secret-card">
         <h3>Recent Activity</h3>
         <div id="activity-log">
@@ -868,7 +865,6 @@
         </div>
       </div>
 
-      <!-- Notes -->
       <div class="secret-card" style="margin-top: 20px;">
         <h3>System Notes</h3>
         <p>
@@ -898,6 +894,7 @@
   </div>
 
   <script>
+    // Get elements
     const passwordScreen = document.getElementById('password-screen');
     const loadingScreen = document.getElementById('loading-screen');
     const mainContent = document.getElementById('main-content');
@@ -915,51 +912,9 @@
     const correctPassword = "h@$h!r_69";
     const secretPassword = "anas123";
 
-    // NO localStorage — every time you open the tab you must log in again
-
-    const images = [
-      "Screenshot%202026-11-16%20064113.png",
-      "Screenshot%202026-11-16%20064134.png",
-      "Screenshot%202026-11-16%20064158.png",
-      "Screenshot%202026-11-16%20064206.png",
-      "Screenshot%202026-11-16%20064215.png",
-      "Screenshot%202026-11-16%20064224.png",
-      "Screenshot%202026-11-16%20064236.png",
-      "Screenshot%202026-11-16%20064259.png",
-      "Screenshot%202026-11-16%20064310.png",
-      "Screenshot%202026-11-17%20184602.png"
-    ];
-
-    let currentIndex = 0;
-
-    // ===== SOUND EFFECTS =====
-    const peachSounds = [
-      "sus-clapping_vww6zEH.mp3",
-      "sus-clap.mp3",
-      "sus-clap-3-0-make-it-to-end-hear.mp3",
-      "clapping-not-sus.mp3",
-      "alvin-and-the-chimpunks-backshots.mp3"
-    ];
-
-    const eggplantSounds = [
-      "fapping-masturbating-fapping-meat-your-jerking-therorshach27.mp3",
-      "asmr-hawk-tuah-longer.mp3"
-    ];
-
-    function playRandomSound(soundList) {
-      const file = soundList[Math.floor(Math.random() * soundList.length)];
-      const audio = new Audio(file);
-      audio.volume = 0.7;
-      audio.play().catch(e => console.log("Audio play failed:", e));
-    }
-
-    enterBtn.addEventListener('click', checkPassword);
-    passwordInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') checkPassword();
-    });
-
+    // ===== PASSWORD CHECK =====
     function checkPassword() {
-      const value = passwordInput.value;
+      const value = passwordInput.value.trim();
 
       if (value === correctPassword) {
         errorMsg.style.display = 'none';
@@ -979,6 +934,16 @@
         passwordInput.focus();
       }
     }
+
+    // Attach events (fixed)
+    enterBtn.addEventListener('click', checkPassword);
+    
+    passwordInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        checkPassword();
+      }
+    });
 
     // ===== SECRET PAGE FUNCTIONS =====
     function startSecretSession() {
@@ -1019,13 +984,34 @@
       setTimeout(() => toast.remove(), 2200);
     }
 
+    // ===== SOUNDS =====
+    const peachSounds = [
+      "sus-clapping_vww6zEH.mp3",
+      "sus-clap.mp3",
+      "sus-clap-3-0-make-it-to-end-hear.mp3",
+      "clapping-not-sus.mp3",
+      "alvin-and-the-chimpunks-backshots.mp3"
+    ];
+
+    const eggplantSounds = [
+      "fapping-masturbating-fapping-meat-your-jerking-therorshach27.mp3",
+      "asmr-hawk-tuah-longer.mp3"
+    ];
+
+    function playRandomSound(soundList) {
+      const file = soundList[Math.floor(Math.random() * soundList.length)];
+      const audio = new Audio(file);
+      audio.volume = 0.7;
+      audio.play().catch(() => {});
+    }
+
     // ===== EASTER EGGS =====
     function spawnParticles(originEl, emojis, count = 10) {
       const container = document.querySelector('.progress-container');
       if (!container) return;
+
       const rect = originEl.getBoundingClientRect();
       const containerRect = container.getBoundingClientRect();
-
       const originX = rect.left + rect.width / 2 - containerRect.left;
       const originY = rect.top + rect.height / 2 - containerRect.top;
 
@@ -1110,7 +1096,7 @@
 
         currentJumpscareAudio = new Audio("my-mommy-said-no-more-skibidi-toilet.mp3");
         currentJumpscareAudio.volume = 0.9;
-        currentJumpscareAudio.play().catch(e => {});
+        currentJumpscareAudio.play().catch(() => {});
 
         currentJumpscareAudio.addEventListener('ended', () => {
           jumpscare.style.display = 'none';
@@ -1121,7 +1107,7 @@
         caption.style.display = 'none';
         const boom = new Audio("vine-boom.mp3");
         boom.volume = 1.0;
-        boom.play().catch(e => {});
+        boom.play().catch(() => {});
         setTimeout(() => {
           jumpscare.style.display = 'none';
         }, 1300);
@@ -1223,6 +1209,21 @@
     }
 
     // ===== LIGHTBOX =====
+    const images = [
+      "Screenshot%202026-11-16%20064113.png",
+      "Screenshot%202026-11-16%20064134.png",
+      "Screenshot%202026-11-16%20064158.png",
+      "Screenshot%202026-11-16%20064206.png",
+      "Screenshot%202026-11-16%20064215.png",
+      "Screenshot%202026-11-16%20064224.png",
+      "Screenshot%202026-11-16%20064236.png",
+      "Screenshot%202026-11-16%20064259.png",
+      "Screenshot%202026-11-16%20064310.png",
+      "Screenshot%202026-11-17%20184602.png"
+    ];
+
+    let currentIndex = 0;
+
     function openLightbox(index) {
       currentIndex = index;
       updateLightbox();
@@ -1317,4 +1318,36 @@
     }
 
     function closeLightbox(e) {
-      if (e.target.id === 'lightbox' || 
+      if (e.target.id === 'lightbox' || e.target.classList.contains('lightbox')) {
+        const video = document.getElementById('lightbox-video');
+        if (video) {
+          video.pause();
+          video.remove();
+        }
+        const container = document.getElementById('side-by-side');
+        if (container) container.remove();
+        document.getElementById('lightbox').style.display = 'none';
+      }
+    }
+
+    document.addEventListener('keydown', (e) => {
+      const lightbox = document.getElementById('lightbox');
+      if (lightbox.style.display !== 'flex') return;
+
+      if (e.key === 'ArrowLeft') changeImage(-1);
+      else if (e.key === 'ArrowRight') changeImage(1);
+      else if (e.key === 'Escape') {
+        const video = document.getElementById('lightbox-video');
+        if (video) {
+          video.pause();
+          video.remove();
+        }
+        const container = document.getElementById('side-by-side');
+        if (container) container.remove();
+        lightbox.style.display = 'none';
+      }
+    });
+  </script>
+
+</body>
+</html>
