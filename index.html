@@ -676,7 +676,8 @@
       "sus-clapping_vww6zEH.mp3",
       "sus-clap.mp3",
       "sus-clap-3-0-make-it-to-end-hear.mp3",
-      "clapping-not-sus.mp3"
+      "clapping-not-sus.mp3",
+      "alvin-and-the-chimpunks-backshots.mp3"   // ← added
     ];
 
     const eggplantSounds = [
@@ -763,7 +764,6 @@
     }
 
     // ===== JUMPSCARE SYSTEM =====
-    // Normal jumpscares (weight 4.75 each) + special one (weight 1) = total 20
     const jumpscarePool = [
       { src: "hohoho.png", special: false },
       { src: "hohoho2.png", special: false },
@@ -831,7 +831,6 @@
       // 15% chance of jumpscare
       if (Math.random() < 0.15) {
         triggerJumpscare();
-        // Open lightbox after a short delay (only if not the long special one)
         setTimeout(() => openLightbox(index), 1500);
       } else {
         openLightbox(index);
