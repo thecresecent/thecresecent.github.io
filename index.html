@@ -497,6 +497,103 @@
       text-shadow: 0 0 12px rgba(255, 158, 203, 0.8);
       padding: 0 20px;
     }
+
+    /* ========== SECRET PAGE (anas123) ========== */
+    #secret-page {
+      display: none;
+      min-height: 100vh;
+      background: #0f1115;
+      color: #e6edf3;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    .secret-header {
+      border-bottom: 1px solid #21262d;
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #161b22;
+    }
+
+    .secret-logo {
+      font-weight: 700;
+      font-size: 1.15rem;
+      color: #58a6ff;
+      letter-spacing: -0.3px;
+    }
+
+    .secret-nav a {
+      color: #8b949e;
+      text-decoration: none;
+      margin-left: 28px;
+      font-size: 0.95rem;
+    }
+
+    .secret-nav a:hover {
+      color: #e6edf3;
+    }
+
+    .secret-main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 80px 24px;
+    }
+
+    .secret-badge {
+      display: inline-block;
+      background: rgba(35, 134, 54, 0.15);
+      color: #3fb950;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      margin-bottom: 24px;
+      border: 1px solid rgba(35, 134, 54, 0.3);
+    }
+
+    .secret-main h1 {
+      font-size: 2.4rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      letter-spacing: -0.8px;
+      color: #f0f6fc;
+    }
+
+    .secret-main p {
+      font-size: 1.15rem;
+      line-height: 1.7;
+      color: #8b949e;
+      margin-bottom: 32px;
+    }
+
+    .secret-card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 28px;
+      margin-top: 40px;
+    }
+
+    .secret-card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 12px;
+      color: #e6edf3;
+    }
+
+    .secret-card p {
+      font-size: 0.95rem;
+      margin-bottom: 0;
+    }
+
+    .secret-footer {
+      text-align: center;
+      padding: 40px 20px;
+      color: #484f58;
+      font-size: 0.85rem;
+      border-top: 1px solid #21262d;
+      margin-top: 80px;
+    }
   </style>
 </head>
 <body>
@@ -533,7 +630,7 @@
     </div>
   </div>
 
-  <!-- MAIN CONTENT -->
+  <!-- MAIN CONTENT (normal gallery) -->
   <div id="main-content">
     <div class="hearts-bg" id="hearts-bg"></div>
 
@@ -619,6 +716,48 @@
     </div>
   </div>
 
+  <!-- ========== SECRET PAGE ========== -->
+  <div id="secret-page">
+    <div class="secret-header">
+      <div class="secret-logo">private.anas</div>
+      <div class="secret-nav">
+        <a href="#">Dashboard</a>
+        <a href="#">Files</a>
+        <a href="#">Settings</a>
+      </div>
+    </div>
+
+    <div class="secret-main">
+      <div class="secret-badge">Private Access</div>
+      <h1>Welcome back, Anas</h1>
+      <p>
+        You have successfully authenticated. This is a restricted area.  
+        All activity is logged for security purposes.
+      </p>
+
+      <div class="secret-card">
+        <h3>Session Information</h3>
+        <p>
+          Access Level: <strong style="color:#3fb950">Authorized</strong><br>
+          Last login: Just now<br>
+          Device: Web Client
+        </p>
+      </div>
+
+      <div class="secret-card" style="margin-top: 20px;">
+        <h3>Notes</h3>
+        <p>
+          Nothing to display at this time.  
+          Contact the administrator if you believe this is an error.
+        </p>
+      </div>
+    </div>
+
+    <div class="secret-footer">
+      © 2026 Private System • Unauthorized access is prohibited
+    </div>
+  </div>
+
   <!-- LIGHTBOX -->
   <div id="lightbox" class="lightbox" onclick="closeLightbox(event)">
     <button class="lightbox-nav prev" onclick="event.stopPropagation(); changeImage(-1)">‹</button>
@@ -637,6 +776,7 @@
     const passwordScreen = document.getElementById('password-screen');
     const loadingScreen = document.getElementById('loading-screen');
     const mainContent = document.getElementById('main-content');
+    const secretPage = document.getElementById('secret-page');
     const xoxoBox = document.getElementById('xoxo-box');
     const galleryScreen = document.getElementById('gallery-screen');
     const enterBtn = document.getElementById('enter-btn');
@@ -648,8 +788,9 @@
     const statusText = document.getElementById('status-text');
 
     const correctPassword = "h@$h!r_69";
+    const secretPassword = "anas123";
 
-    // Remember login
+    // Remember login (only for the main gallery)
     if (localStorage.getItem('authenticated') === 'true') {
       passwordScreen.style.display = 'none';
       loadingScreen.style.display = 'flex';
@@ -677,7 +818,7 @@
       "sus-clap.mp3",
       "sus-clap-3-0-make-it-to-end-hear.mp3",
       "clapping-not-sus.mp3",
-      "alvin-and-the-chimpunks-backshots.mp3"   // ← added
+      "alvin-and-the-chimpunks-backshots.mp3"
     ];
 
     const eggplantSounds = [
@@ -698,13 +839,23 @@
     });
 
     function checkPassword() {
-      if (passwordInput.value === correctPassword) {
+      const value = passwordInput.value;
+
+      if (value === correctPassword) {
+        // Normal path
         errorMsg.style.display = 'none';
         localStorage.setItem('authenticated', 'true');
         passwordScreen.style.display = 'none';
         loadingScreen.style.display = 'flex';
         startLoading();
-      } else {
+      } 
+      else if (value === secretPassword) {
+        // Secret path → legit looking page
+        errorMsg.style.display = 'none';
+        passwordScreen.style.display = 'none';
+        secretPage.style.display = 'block';
+      } 
+      else {
         errorMsg.style.display = 'block';
         passwordInput.value = '';
         passwordInput.focus();
@@ -769,7 +920,7 @@
       { src: "hohoho2.png", special: false },
       { src: "Screenshot%202026-11-18%20174153.png", special: false },
       { src: "Screenshot%202026-11-18%20175026.png", special: false },
-      { src: "Screenshot%202026-11-18%20184313.png", special: true }  // 1/20 chance
+      { src: "Screenshot%202026-11-18%20184313.png", special: true }
     ];
 
     let currentJumpscareAudio = null;
@@ -779,11 +930,10 @@
       const img = document.getElementById('jumpscare-img');
       const caption = document.getElementById('jumpscare-caption');
 
-      // Weighted random (special one is 1/20)
       const rand = Math.random() * 20;
       let selected;
       if (rand < 1) {
-        selected = jumpscarePool[4]; // special
+        selected = jumpscarePool[4];
       } else {
         selected = jumpscarePool[Math.floor((rand - 1) / 4.75)];
       }
@@ -791,14 +941,12 @@
       img.src = selected.src;
       jumpscare.style.display = 'flex';
 
-      // Stop any previous jumpscare audio
       if (currentJumpscareAudio) {
         currentJumpscareAudio.pause();
         currentJumpscareAudio = null;
       }
 
       if (selected.special) {
-        // Special Quintuplets jumpscare
         caption.textContent = "get bombarded by curvy mommies 🥵🥵🥵🥵🥵🥵🥵";
         caption.style.display = 'block';
 
@@ -806,14 +954,12 @@
         currentJumpscareAudio.volume = 0.9;
         currentJumpscareAudio.play().catch(e => console.log("Special audio failed:", e));
 
-        // Stay until the audio ends
         currentJumpscareAudio.addEventListener('ended', () => {
           jumpscare.style.display = 'none';
           caption.style.display = 'none';
           currentJumpscareAudio = null;
         });
       } else {
-        // Normal short jumpscare
         caption.style.display = 'none';
 
         const boom = new Audio("vine-boom.mp3");
@@ -826,9 +972,7 @@
       }
     }
 
-    // Called when clicking any gallery image
     function handleImageClick(index) {
-      // 15% chance of jumpscare
       if (Math.random() < 0.15) {
         triggerJumpscare();
         setTimeout(() => openLightbox(index), 1500);
@@ -837,7 +981,7 @@
       }
     }
 
-    // ===== SLOWER LOADING + RANDOM LONG STUTTERS =====
+    // ===== LOADING =====
     function startLoading() {
       let progress = 0;
       let isStuttering = false;
