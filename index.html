@@ -953,7 +953,6 @@
       { src: "Screenshot%202026-11-18%20175026.png", isHashir: false }
     ];
     let currentJumpscareAudio = null;
-    let hashirClickCount = 0;
 
     function triggerJumpscare() {
       const jumpscare = document.getElementById('jumpscare');
@@ -964,7 +963,6 @@
       img.src = selected.src;
       caption.style.display = 'none';
 
-      // stop previous audio
       if (currentJumpscareAudio) {
         currentJumpscareAudio.pause();
         currentJumpscareAudio = null;
@@ -976,12 +974,11 @@
       jumpscare.classList.add('show');
 
       if (selected.isHashir) {
-        // Hashir jumpscare - longer + Hava Nagila
+        // Hashir - longer + Hava Nagila
         currentJumpscareAudio = new Audio("Hava Nagila Original.mp3");
         currentJumpscareAudio.volume = 0.85;
         currentJumpscareAudio.play().catch(() => {});
 
-        // Longer duration (play most of the song or at least 6-7 seconds)
         setTimeout(() => {
           jumpscare.classList.add('fade-out');
           setTimeout(() => {
@@ -994,7 +991,6 @@
           }, 700);
         }, 6500);
       } else {
-        // Normal short jumpscare
         const boom = new Audio("vine-boom.mp3");
         boom.volume = 1;
         boom.play().catch(() => {});
@@ -1017,53 +1013,60 @@
       }
     }
 
-    // ===== LOADING (midway eggplant entry) =====
+    // ===== LOADING (goes in near the end) =====
     function startLoading() {
       let progress = 0;
-      let phase = 1; // 1 = normal, 2 = inside peach
+      let phase = 1; // 1 = traveling, 2 = inside peach
 
       const interval = setInterval(() => {
         if (phase === 1) {
-          progress += 0.55 + Math.random() * 0.7;
-          if (progress >= 52) {
-            progress = 52;
+          progress += 0.65 + Math.random() * 0.75;
+
+          if (progress >= 78) {
+            progress = 78;
             phase = 2;
-            // Eggplant goes in
+
+            // Eggplant quickly goes inside
             eggplantWrapper.classList.add('inside');
             peachTarget.classList.add('shake');
-            // Water droplets
             spawnParticles(peachTarget, ['💧','💦','💧','💦','💦'], 18);
-            statusText.textContent = "Almost...";
+            statusText.textContent = "Right there...";
           }
         } else {
-          // Slow finish after going inside
-          progress += 0.25 + Math.random() * 0.35;
+          // After going inside → finish fast
+          progress += 1.1 + Math.random() * 0.9;
         }
 
         if (progress > 100) progress = 100;
         progressBar.style.width = progress + '%';
-        if (phase === 1) eggplantWrapper.style.left = progress + '%';
 
-        if (progress < 25) statusText.textContent = "Warming up...";
-        else if (progress < 50) statusText.textContent = "Getting closer...";
-        else if (progress < 85) statusText.textContent = "Deeper...";
+        if (phase === 1) {
+          eggplantWrapper.style.left = progress + '%';
+        }
+
+        if (progress < 30) statusText.textContent = "Warming up...";
+        else if (progress < 55) statusText.textContent = "Getting closer...";
+        else if (progress < 78) statusText.textContent = "Almost at the peach...";
+        else if (progress < 95) statusText.textContent = "Going in...";
         else if (progress < 100) statusText.textContent = "Final stretch...";
         else {
           statusText.textContent = "Done 🍑";
           clearInterval(interval);
           peachTarget.classList.remove('shake');
           peachTarget.classList.add('react');
+
           setTimeout(() => {
             loadingScreen.style.display = 'none';
             mainContent.style.display = 'block';
             createHearts();
+
             setTimeout(() => {
               xoxoBox.classList.add('slide-up');
               setTimeout(() => galleryScreen.classList.add('show'), 850);
             }, 900);
           }, 700);
         }
-      }, 60);
+      }, 55);
     }
 
     function createHearts() {
