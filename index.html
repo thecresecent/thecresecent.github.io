@@ -14,7 +14,7 @@
       overflow-x: hidden;
     }
 
-    /* ========== PASSWORD ========== */
+    /* PASSWORD */
     #password-screen {
       height: 100vh; display: flex; justify-content: center; align-items: center;
       text-align: center; padding: 24px; background: #0d1117;
@@ -35,7 +35,7 @@
     #enter-btn:hover { background: #2ea043; }
     .error-msg { color: #f85149; margin-top: 14px; display: none; }
 
-    /* ========== LOADING ========== */
+    /* LOADING */
     #loading-screen {
       display: none; height: 100vh; justify-content: center; align-items: center;
       text-align: center; padding: 24px; background: #ff9ecb; position: relative; overflow: hidden;
@@ -55,13 +55,13 @@
     }
     .eggplant-wrapper {
       position: absolute; top: 50%; left: 0%;
-      transform: translate(-50%, -50%); transition: left 0.1s linear;
+      transform: translate(-50%, -50%); transition: left 0.15s linear;
       z-index: 5; display: flex; align-items: center; gap: 6px; cursor: pointer;
     }
     .eggplant-wrapper.inside {
       left: calc(100% + 14px) !important;
-      transform: translate(-50%, -50%) scale(0.2); opacity: 0;
-      transition: left 0.38s cubic-bezier(0.34,1.45,0.64,1), transform 0.38s, opacity 0.22s ease 0.12s;
+      transform: translate(-50%, -50%) scale(0.15); opacity: 0;
+      transition: left 0.45s cubic-bezier(0.34,1.45,0.64,1), transform 0.45s, opacity 0.25s ease 0.15s;
       pointer-events: none;
     }
     .eggplant { font-size: 2.3rem; }
@@ -73,8 +73,14 @@
       position: absolute; top: 50%; right: -22px;
       transform: translateY(-50%); font-size: 2.9rem; z-index: 4; cursor: pointer;
     }
-    .peach-target.react { transform: translateY(-50%) scale(1.3); }
+    .peach-target.shake { animation: peach-shake 0.5s ease infinite; }
+    .peach-target.react { transform: translateY(-50%) scale(1.35); }
     .peach-target.jiggle { animation: peach-jiggle 0.55s ease; }
+    @keyframes peach-shake {
+      0%,100% { transform: translateY(-50%) rotate(0deg); }
+      25% { transform: translateY(-50%) rotate(-8deg) scale(1.1); }
+      75% { transform: translateY(-50%) rotate(8deg) scale(1.1); }
+    }
     @keyframes peach-jiggle {
       0% { transform: translateY(-50%) scale(1) rotate(0deg); }
       25% { transform: translateY(-50%) scale(1.25) rotate(-12deg); }
@@ -88,11 +94,11 @@
     }
     @keyframes particle-burst {
       0% { opacity: 1; transform: translate(0,0) scale(1); }
-      100% { opacity: 0; transform: translate(var(--dx),var(--dy)) scale(0.35); }
+      100% { opacity: 0; transform: translate(var(--dx),var(--dy)) scale(0.3); }
     }
     .status-text { margin-top: 32px; color: #fff; font-size: 1.1rem; font-weight: 600; }
 
-    /* ========== MAIN ========== */
+    /* MAIN */
     #main-content {
       display: none; position: relative; min-height: 100vh;
       background: #ff9ecb; padding-top: 120px; padding-bottom: 40px;
@@ -108,7 +114,7 @@
     }
     #xoxo-box {
       position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%);
-      z-index: 10; background: rgba(255,255,255,0.9); padding: 28px 40px;
+      z-index: 10; background: rgba(255,255,255,0.92); padding: 28px 40px;
       border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.15);
       text-align: center; transition: all 0.8s cubic-bezier(0.4,0,0.2,1);
     }
@@ -136,21 +142,21 @@
       display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px;
     }
     .photo-card {
-      background: rgba(255,255,255,0.85); border-radius: 12px; overflow: hidden;
-      cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
+      background: rgba(255,255,255,0.88); border-radius: 14px; overflow: hidden;
+      cursor: pointer; transition: transform 0.22s, box-shadow 0.22s;
     }
-    .photo-card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0,0,0,0.12); }
+    .photo-card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 18px 35px rgba(0,0,0,0.18); }
     .photo-card img { width: 100%; height: 520px; object-fit: cover; object-position: top; }
     .caption { padding: 12px 14px; font-size: 0.9rem; color: #9b2c5a; }
     .caption .number { font-weight: 700; margin-right: 6px; color: #c2255c; }
 
     /* Lightbox */
     .lightbox {
-      display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92);
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.93);
       z-index: 1000; justify-content: center; align-items: center; padding: 20px;
     }
     .lightbox img, .lightbox video {
-      max-width: 92%; max-height: 90%; border-radius: 8px;
+      max-width: 92%; max-height: 90%; border-radius: 10px;
     }
     .lightbox-nav {
       position: absolute; top: 50%; transform: translateY(-50%);
@@ -162,8 +168,8 @@
     .lightbox-nav.next { right: 24px; }
     .lightbox-counter {
       position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%);
-      color: rgba(255,255,255,0.8); background: rgba(0,0,0,0.4);
-      padding: 6px 14px; border-radius: 20px;
+      color: rgba(255,255,255,0.85); background: rgba(0,0,0,0.45);
+      padding: 6px 16px; border-radius: 20px;
     }
 
     /* Jumpscare */
@@ -171,10 +177,8 @@
       display: none; position: fixed; inset: 0; background: #000;
       z-index: 9999; justify-content: center; align-items: center; flex-direction: column;
     }
-    #jumpscare img { max-width: 95%; max-height: 85%; object-fit: contain; cursor: pointer; }
-    #jumpscare-caption {
-      color: #ff9ecb; font-size: 1.6rem; font-weight: 700; margin-top: 18px;
-      text-align: center; text-shadow: 0 0 12px rgba(255,158,203,0.8);
+    #jumpscare img {
+      max-width: 96%; max-height: 96%; object-fit: contain; cursor: pointer;
     }
 
     /* SECRET PAGE */
@@ -216,58 +220,52 @@
       border-bottom: 1px solid #21262d; font-size: 0.88rem;
     }
     .activity-time { color: #484f58; font-size: 0.8rem; }
+    .teto-btn {
+      background: #9b2c5a; border: none; color: white;
+      padding: 12px 20px; border-radius: 10px; cursor: pointer;
+      font-size: 1rem; margin-top: 12px; display: flex; align-items: center; gap: 10px;
+    }
+    .teto-btn img { width: 42px; height: 42px; border-radius: 8px; object-fit: cover; }
 
-    /* ========== BOSS FIGHT (Canvas style) ========== */
+    /* BOSS FIGHT */
     #boss-fight {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: #000;
-      z-index: 10000;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Courier New', monospace;
+      display: none; position: fixed; inset: 0; background: #000;
+      z-index: 10000; color: white; font-family: 'Courier New', monospace;
+      flex-direction: column; align-items: center; justify-content: center;
     }
     #boss-canvas {
-      width: 100%;
-      max-width: 640px;
-      aspect-ratio: 4/3;
-      background: #0a0a12;
-      border: 4px solid #fff;
-      image-rendering: pixelated;
+      width: 100%; max-width: 720px; aspect-ratio: 4/3;
+      background: #0a0a12; border: 4px solid #fff; image-rendering: pixelated;
+    }
+    #boss-ui {
+      width: 100%; max-width: 720px; margin-top: 12px;
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+    }
+    #boss-dialogue {
+      background: #111; border: 3px solid #fff; padding: 10px 16px;
+      min-height: 48px; width: 100%; text-align: center; font-size: 1.05rem;
     }
     #boss-menu {
-      display: flex;
-      gap: 14px;
-      margin-top: 16px;
-      flex-wrap: wrap;
-      justify-content: center;
-      min-height: 50px;
+      display: flex; gap: 14px; flex-wrap: wrap; justify-content: center;
     }
     .boss-btn {
+      background: #000; border: 3px solid #fff; color: #fff;
+      padding: 10px 20px; font-size: 1.05rem; cursor: pointer;
       font-family: 'Courier New', monospace;
-      font-size: 15px;
-      background: #111;
-      color: #fff;
-      border: 3px solid #fff;
-      padding: 12px 18px;
-      cursor: pointer;
     }
-    .boss-btn:hover {
-      background: #fff;
-      color: #000;
+    .boss-btn:hover { background: #fff; color: #000; }
+    .boss-btn:disabled { opacity: 0.4; pointer-events: none; }
+    #sub-menu {
+      display: none; gap: 12px; margin-top: 6px;
     }
-    .boss-btn:disabled {
-      opacity: 0.35;
-      pointer-events: none;
+
+    /* Fullscreen ending */
+    #ending-overlay {
+      display: none; position: fixed; inset: 0; background: #000;
+      z-index: 50000; justify-content: center; align-items: center;
     }
-    #boss-hint {
-      color: #aaa;
-      font-size: 12px;
-      margin-top: 10px;
-      text-align: center;
-      max-width: 560px;
+    #ending-overlay video {
+      width: 100%; height: 100%; object-fit: cover;
     }
   </style>
 </head>
@@ -292,7 +290,7 @@
       <div class="progress-container">
         <div class="progress-bar" id="progress-bar"></div>
         <div class="eggplant-wrapper" id="eggplant-wrapper">
-          <img src="image.jpg" class="pfp-next-to-eggplant">
+          <img src="image.jpg" class="pfp-next-to-eggplant" alt="pfp">
           <div class="eggplant">🍆</div>
         </div>
         <div class="peach-target" id="peach-target">🍑</div>
@@ -372,22 +370,36 @@
       <div class="secret-badge">Secure Session Active</div>
       <h1>Welcome back, Anas</h1>
       <p class="secret-subtitle">Authenticated • Session started <span id="session-time">just now</span></p>
+
       <div class="secret-grid">
         <div class="secret-card">
           <h3>Session Info</h3>
-          <p>Access Level: <strong style="color:#3fb950">Authorized</strong><br>
-          Last activity: <span id="last-activity">now</span></p>
+          <p>
+            Access Level: <strong style="color:#3fb950">Authorized</strong><br>
+            Device: Web Client<br>
+            Last activity: <span id="last-activity">now</span>
+          </p>
         </div>
         <div class="secret-card">
           <h3>Quick Actions</h3>
-          <button class="secret-btn primary" onclick="alert('Private files')">View Private Files</button><br>
-          <button class="secret-btn" onclick="alert('Logs exported')">Export Logs</button><br>
-          <button class="secret-btn" onclick="changeEmail()">Security Settings</button>
+          <button class="secret-btn primary" onclick="logActivity('Viewed Private Files');alert('Private files (read-only)')">View Private Files</button><br>
+          <button class="secret-btn" onclick="logActivity('Exported logs');alert('Scripts exported')">Export Logs</button><br>
+          <button class="secret-btn" onclick="openSecurity()">Security Settings</button>
         </div>
       </div>
+
       <div class="secret-card">
         <h3>Recent Activity</h3>
         <div id="activity-log"></div>
+      </div>
+
+      <div class="secret-card" style="margin-top:20px;">
+        <h3>Strange Button</h3>
+        <button class="teto-btn" id="teto-unlock-btn" onclick="unlockTeto()">
+          <img src="teto-no.bg.png" alt="teto" onerror="this.style.display='none'">
+          ???
+        </button>
+        <p id="teto-msg" style="margin-top:12px; color:#ff9ecb; display:none;">what does ts even do?? 😏😏🤔</p>
       </div>
     </div>
   </div>
@@ -395,14 +407,21 @@
   <!-- JUMPSCARE -->
   <div id="jumpscare">
     <img id="jumpscare-img" src="" alt="jumpscare">
-    <div id="jumpscare-caption"></div>
   </div>
 
   <!-- BOSS FIGHT -->
   <div id="boss-fight">
     <canvas id="boss-canvas" width="640" height="480"></canvas>
-    <div id="boss-menu"></div>
-    <p id="boss-hint">WASD / Arrow keys to move • Space to confirm attack timing • Blue soul has gravity</p>
+    <div id="boss-ui">
+      <div id="boss-dialogue">nahhh tryna look through my dms right cuh?</div>
+      <div id="boss-menu"></div>
+      <div id="sub-menu"></div>
+    </div>
+  </div>
+
+  <!-- FULLSCREEN ENDING -->
+  <div id="ending-overlay">
+    <video id="ending-video" autoplay></video>
   </div>
 
   <!-- LIGHTBOX -->
@@ -415,12 +434,16 @@
 
   <script>
     // ============================================================
-    // BASIC SITE CODE
+    // GLOBAL STATE
     // ============================================================
     let tetoUnlocked = false;
     let hashirClicks = 0;
     let usedJumpscares = [];
+    let currentJumpscareAudio = null;
 
+    // ============================================================
+    // PASSWORD + SECRET PAGE
+    // ============================================================
     document.getElementById('enter-btn').addEventListener('click', checkPassword);
     document.getElementById('password-input').addEventListener('keydown', e => {
       if (e.key === 'Enter') checkPassword();
@@ -445,6 +468,7 @@
     function logout() {
       document.getElementById('secret-page').style.display = 'none';
       document.getElementById('password-screen').style.display = 'flex';
+      document.getElementById('password-input').value = '';
     }
 
     function logActivity(txt) {
@@ -456,12 +480,22 @@
       log.insertBefore(item, log.firstChild);
     }
 
-    function changeEmail() {
-      const email = prompt("Current: islam.anas1966@gmail.com\nNew email:");
-      if (email) logActivity("Email changed");
+    function openSecurity() {
+      logActivity("Opened Security Settings");
+      const email = prompt("Current: islam.anas1966@gmail.com\nNew email:", "islam.anas1966@gmail.com");
+      if (email) logActivity("Email changed to " + email);
     }
 
-    // Loading + easter eggs
+    function unlockTeto() {
+      tetoUnlocked = true;
+      document.getElementById('teto-msg').style.display = 'block';
+      logActivity("Unlocked Teto");
+      alert("Teto attack unlocked for the boss fight");
+    }
+
+    // ============================================================
+    // LOADING + EASTER EGGS
+    // ============================================================
     const peachSounds = ["sus-clapping_vww6zEH.mp3","sus-clap.mp3","clapping-not-sus.mp3","alvin-and-the-chimpunks-backshots.mp3"];
     const eggplantSounds = ["fapping-masturbating-fapping-meat-your-jerking-therorshach27.mp3","asmr-hawk-tuah-longer.mp3"];
 
@@ -515,17 +549,17 @@
 
       const iv = setInterval(() => {
         if (phase === 1) {
-          progress += 0.7 + Math.random()*0.8;
+          progress += 0.65 + Math.random()*0.75;
           if (progress >= 78) {
             progress = 78;
             phase = 2;
             egg.classList.add('inside');
-            peach.classList.add('react');
-            spawnParticles(peach, ['💧','💦'], 18);
+            peach.classList.add('shake');
+            spawnParticles(peach, ['💧','💦','💧'], 18);
             status.textContent = "Right there...";
           }
         } else {
-          progress += 1.3 + Math.random();
+          progress += 1.2 + Math.random();
         }
         if (progress > 100) progress = 100;
         bar.style.width = progress + '%';
@@ -533,6 +567,8 @@
 
         if (progress >= 100) {
           clearInterval(iv);
+          peach.classList.remove('shake');
+          peach.classList.add('react');
           setTimeout(() => {
             document.getElementById('loading-screen').style.display = 'none';
             document.getElementById('main-content').style.display = 'block';
@@ -543,24 +579,26 @@
             }, 800);
           }, 600);
         }
-      }, 50);
+      }, 48);
     }
 
     function createHearts() {
       const c = document.getElementById('hearts-bg');
-      for (let i=0; i<45; i++) {
+      for (let i=0; i<50; i++) {
         const h = document.createElement('div');
         h.className = 'heart';
-        h.textContent = ['💖','💗','💕','❤️','💘'][Math.floor(Math.random()*5)];
+        h.textContent = ['💖','💗','💕','❤️','💘','💝'][Math.floor(Math.random()*6)];
         h.style.left = Math.random()*100+'%';
         h.style.top = Math.random()*100+'%';
-        h.style.fontSize = (1.2+Math.random()*1.6)+'rem';
-        h.style.animationDuration = (4+Math.random()*4)+'s';
+        h.style.fontSize = (1.2+Math.random()*1.7)+'rem';
+        h.style.animationDuration = (4+Math.random()*5)+'s';
         c.appendChild(h);
       }
     }
 
-    // Jumpscare + escalation
+    // ============================================================
+    // JUMPSCARES + ESCALATION TO BOSS
+    // ============================================================
     const jumpscarePool = [
       { src: "hohoho.png", isHashir: true },
       { src: "hohoho2.png", isHashir: false },
@@ -603,12 +641,13 @@
         }
       };
 
+      if (currentJumpscareAudio) currentJumpscareAudio.pause();
       sc.style.display = 'flex';
 
       if (selected.isHashir) {
-        const audio = new Audio("Hava Nagila Original.mp3");
-        audio.volume = 0.75;
-        audio.play().catch(()=>{});
+        currentJumpscareAudio = new Audio("Hava Nagila Original.mp3");
+        currentJumpscareAudio.volume = 0.8;
+        currentJumpscareAudio.play().catch(()=>{});
       } else {
         new Audio("vine-boom.mp3").play().catch(()=>{});
         setTimeout(() => sc.style.display = 'none', 1500);
@@ -616,7 +655,7 @@
     }
 
     function handleImageClick(i) {
-      if (Math.random() < 0.17) {
+      if (Math.random() < 0.16) {
         triggerJumpscare();
         setTimeout(() => openLightbox(i), 700);
       } else {
@@ -624,7 +663,9 @@
       }
     }
 
-    // Lightbox
+    // ============================================================
+    // LIGHTBOX (with special image 10)
+    // ============================================================
     const images = [
       "Screenshot%202026-11-16%20064113.png","Screenshot%202026-11-16%20064134.png",
       "Screenshot%202026-11-16%20064158.png","Screenshot%202026-11-16%20064206.png",
@@ -636,39 +677,103 @@
 
     function openLightbox(i) {
       currentIndex = i;
-      document.getElementById('lightbox-img').src = images[i];
-      document.getElementById('lightbox-counter').textContent = `${i+1} / 10`;
+      updateLightbox();
       document.getElementById('lightbox').style.display = 'flex';
     }
+
+    function updateLightbox() {
+      const lightbox = document.getElementById('lightbox');
+      const img = document.getElementById('lightbox-img');
+      const counter = document.getElementById('lightbox-counter');
+
+      // clean previous special content
+      const oldVideo = document.getElementById('lightbox-video');
+      if (oldVideo) oldVideo.remove();
+      const oldContainer = document.getElementById('side-by-side');
+      if (oldContainer) oldContainer.remove();
+
+      if (currentIndex === 9) {
+        // Special side-by-side for image 10
+        img.style.display = 'none';
+        const container = document.createElement('div');
+        container.id = 'side-by-side';
+        container.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:16px;max-width:95%;max-height:90%;';
+
+        const title = document.createElement('div');
+        title.textContent = 'how hashir feels:';
+        title.style.cssText = 'color:#ff9ecb;font-size:1.5rem;font-weight:600;margin-bottom:10px;text-shadow:0 2px 10px rgba(0,0,0,0.7);';
+        container.appendChild(title);
+
+        const row = document.createElement('div');
+        row.style.cssText = 'display:flex;gap:24px;align-items:center;justify-content:center;flex-wrap:wrap;';
+
+        const staticImg = document.createElement('img');
+        staticImg.src = images[9];
+        staticImg.style.cssText = 'max-width:420px;max-height:70vh;border-radius:10px;box-shadow:0 0 30px rgba(0,0,0,0.6);object-fit:contain;';
+        row.appendChild(staticImg);
+
+        const video = document.createElement('video');
+        video.id = 'lightbox-video';
+        video.src = '1117(1)%20(1).mp4';
+        video.controls = true;
+        video.autoplay = true;
+        video.loop = true;
+        video.style.cssText = 'max-width:420px;max-height:70vh;border-radius:10px;box-shadow:0 0 30px rgba(0,0,0,0.6);object-fit:cover;';
+        row.appendChild(video);
+
+        container.appendChild(row);
+        lightbox.insertBefore(container, img);
+      } else {
+        img.style.display = 'block';
+        img.src = images[currentIndex];
+      }
+      counter.textContent = `${currentIndex + 1} / 10`;
+    }
+
     function changeImage(d) {
       currentIndex = (currentIndex + d + 10) % 10;
-      document.getElementById('lightbox-img').src = images[currentIndex];
-      document.getElementById('lightbox-counter').textContent = `${currentIndex+1} / 10`;
+      updateLightbox();
     }
+
     function closeLightbox(e) {
-      if (e.target.id === 'lightbox') document.getElementById('lightbox').style.display = 'none';
+      if (e.target.id === 'lightbox') {
+        const video = document.getElementById('lightbox-video');
+        if (video) { video.pause(); video.remove(); }
+        const container = document.getElementById('side-by-side');
+        if (container) container.remove();
+        document.getElementById('lightbox').style.display = 'none';
+      }
     }
+
     document.addEventListener('keydown', e => {
       if (document.getElementById('lightbox').style.display !== 'flex') return;
       if (e.key === 'ArrowLeft') changeImage(-1);
       if (e.key === 'ArrowRight') changeImage(1);
-      if (e.key === 'Escape') document.getElementById('lightbox').style.display = 'none';
+      if (e.key === 'Escape') {
+        const video = document.getElementById('lightbox-video');
+        if (video) { video.pause(); video.remove(); }
+        const container = document.getElementById('side-by-side');
+        if (container) container.remove();
+        document.getElementById('lightbox').style.display = 'none';
+      }
     });
 
     // ============================================================
-    // BOSS FIGHT - Improved & toned down (inspired by Sir Crumbly)
+    // BOSS FIGHT ENGINE (improved)
     // ============================================================
     const Boss = (function() {
       const canvas = document.getElementById('boss-canvas');
       const ctx = canvas.getContext('2d');
-      const menu = document.getElementById('boss-menu');
+      const menuEl = document.getElementById('boss-menu');
+      const subMenuEl = document.getElementById('sub-menu');
+      const dialogueEl = document.getElementById('boss-dialogue');
 
-      const BOX = { x: 220, y: 250, w: 200, h: 140 };
-      const S = 14;
+      const BOX = { x: 200, y: 230, w: 240, h: 160 };
+      const S = 16;
 
-      let state = 'menu';
+      let active = false;
+      let state = 'menu';           // menu | aim | dodge | wait | over
       let playerHP = 92;
-      let bossHP = 1;
       let dodges = 0;
       let mercyCount = 0;
       let naan = 6;
@@ -678,59 +783,93 @@
       let soul = { x: 0, y: 0, vy: 0 };
       let objs = [];
       let t = 0;
-      let spawn = 0;
+      let spawnTimer = 0;
       let keys = {};
       let aim = { p: 0.5, d: 1 };
       let msg = '';
       let shown = 0;
       let over = null;
       let last = 0;
-      let atk = 0;
+      let atkType = 0;
       let turn = 0;
       let hava = null;
+      let animId = null;
 
       function centre() {
-        soul.x = BOX.x + BOX.w/2 - S/2;
-        soul.y = BOX.y + BOX.h/2 - S/2;
+        soul.x = BOX.x + BOX.w / 2 - S / 2;
+        soul.y = BOX.y + BOX.h / 2 - S / 2;
         soul.vy = 0;
       }
 
-      function say(m) {
-        msg = m;
+      function say(text) {
+        msg = text;
         shown = 0;
+        dialogueEl.textContent = text;
       }
 
-      function btn(label, fn, disabled = false) {
+      function clearMenus() {
+        menuEl.innerHTML = '';
+        subMenuEl.innerHTML = '';
+        subMenuEl.style.display = 'none';
+      }
+
+      function addBtn(label, fn, disabled = false) {
         const b = document.createElement('button');
         b.className = 'boss-btn';
         b.textContent = label;
         b.disabled = disabled;
         b.onclick = fn;
-        menu.appendChild(b);
         return b;
       }
 
-      function mainMenu() {
-        menu.innerHTML = '';
+      function showMainMenu() {
+        clearMenus();
         if (state !== 'menu') return;
-        btn('FIGHT', () => {
-          menu.innerHTML = '';
-          state = 'aim';
-          aim = { p: 0.5, d: 1 };
-          say("* Stop the bar near the middle!");
-        });
-        btn('HEAL', healMenu);
-        btn('MERCY', doMercy);
+
+        menuEl.appendChild(addBtn('FIGHT', () => {
+          clearMenus();
+          subMenuEl.style.display = 'flex';
+          subMenuEl.appendChild(addBtn('Circumcision', () => doAttack('circumcision')));
+          if (tetoUnlocked) {
+            subMenuEl.appendChild(addBtn('Teto', () => doAttack('teto')));
+          }
+          subMenuEl.appendChild(addBtn('Back', showMainMenu));
+        }));
+
+        menuEl.appendChild(addBtn('HEAL', () => {
+          clearMenus();
+          subMenuEl.style.display = 'flex';
+          subMenuEl.appendChild(addBtn(`Naan +40 ×${naan}`, () => useHeal('naan'), naan < 1));
+          subMenuEl.appendChild(addBtn(`Kebab FULL ×${kebab}`, () => useHeal('kebab'), kebab < 1));
+          subMenuEl.appendChild(addBtn('Back', showMainMenu));
+        }));
+
+        menuEl.appendChild(addBtn('MERCY', doMercy));
       }
 
-      function healMenu() {
-        menu.innerHTML = '';
-        btn(`Naan +40  ×${naan}`, () => useItem('naan'), naan < 1);
-        btn(`Kebab FULL ×${kebab}`, () => useItem('kebab'), kebab < 1);
-        btn('Back', mainMenu);
+      function doAttack(type) {
+        clearMenus();
+        if (type === 'teto') {
+          say("TETO OUT!!!");
+          setTimeout(() => endFight(true, true), 900);
+          return;
+        }
+
+        // Circumcision
+        dodges++;
+        if (dodges <= 20) {
+          say(`(dodged)  (${dodges}/20)`);
+          endPlayerTurn();
+          return;
+        }
+
+        // After 20 dodges → win
+        say("...");
+        setTimeout(() => endFight(true, false), 800);
       }
 
-      function useItem(type) {
+      function useHeal(type) {
+        clearMenus();
         if (type === 'naan' && naan > 0) {
           naan--;
           playerHP = Math.min(92, playerHP + 40);
@@ -744,345 +883,279 @@
       }
 
       function doMercy() {
+        clearMenus();
         mercyCount++;
         if (mercyCount >= 5) {
-          finish('mercyfail');
+          endFight(false, false, "i dont accept mercy/pity");
           return;
         }
-        say("* Hashir refuses. \"I dont accept mercy/pity\"");
+        say("mercy? ... nah.");
         endPlayerTurn();
       }
 
       function endPlayerTurn() {
-        menu.innerHTML = '';
         state = 'wait';
-        setTimeout(startAttack, 1100);
+        setTimeout(startEnemyTurn, 1100);
       }
 
-      function startAttack() {
-        if (over) return;
+      function startEnemyTurn() {
+        if (!active) return;
         state = 'dodge';
         t = 0;
-        spawn = 0;
+        spawnTimer = 0;
         objs = [];
         turn++;
-        atk = Math.floor(Math.random() * 5);
-        blue = (atk === 1 || atk === 3);
+        atkType = Math.floor(Math.random() * 4);
+        blue = (atkType === 1);
         if (!blue) centre();
         else {
-          soul.x = BOX.x + 20;
-          soul.y = BOX.y + BOX.h - S;
+          soul.x = BOX.x + 30;
+          soul.y = BOX.y + BOX.h - S - 4;
           soul.vy = 0;
         }
-        say("* Survive!");
+        say(randomQuote());
       }
 
-      function hurt(n) {
+      function randomQuote() {
+        const q = [
+          "The supreme art of war is to subdue the enemy without fighting.",
+          "Know yourself and you will win all battles.",
+          "In the midst of chaos, there is also opportunity.",
+          "you really thought that would work?",
+          "keep going then.",
+          "interesting."
+        ];
+        return q[Math.floor(Math.random() * q.length)];
+      }
+
+      function hurt(amount) {
         if (inv > 0) return;
-        playerHP -= n;
-        inv = 0.8;
+        playerHP -= amount;
+        inv = 0.75;
         if (playerHP <= 0) {
           playerHP = 0;
-          finish('lose');
+          endFight(false);
         }
       }
 
-      function finish(kind) {
-        over = kind;
-        state = 'over';
-        menu.innerHTML = '';
+      function endFight(won, usedTeto = false, customMsg = null) {
+        active = false;
+        if (animId) cancelAnimationFrame(animId);
         if (hava) { hava.pause(); hava = null; }
-
-        if (kind === 'win') {
-          say("* Hashir has been defeated.");
-          setTimeout(() => playEnding(false), 1200);
-        } else if (kind === 'teto') {
-          say("* TETO ONESHOT!");
-          setTimeout(() => playEnding(true), 900);
-        } else if (kind === 'mercyfail') {
-          document.getElementById('boss-fight').style.display = 'none';
-          document.getElementById('password-screen').style.display = 'flex';
-          document.getElementById('error-msg').style.display = 'block';
-          document.getElementById('error-msg').textContent = 'i dont accept mercy/pity';
-        } else {
-          document.getElementById('boss-fight').style.display = 'none';
-          document.getElementById('password-screen').style.display = 'flex';
-          document.getElementById('error-msg').style.display = 'block';
-          document.getElementById('error-msg').textContent = 'imagine losing, get rekt 😏🥀';
-        }
-      }
-
-      function playEnding(usedTeto) {
         document.getElementById('boss-fight').style.display = 'none';
-        const overlay = document.createElement('div');
-        overlay.style.cssText = 'position:fixed;inset:0;background:#000;z-index:30000;display:flex;justify-content:center;align-items:center;';
-        const video = document.createElement('video');
-        video.src = usedTeto ? 'ending 2.mp4' : 'ending 1.mp4';
-        video.controls = true;
-        video.autoplay = true;
-        video.style.maxWidth = '100%';
-        video.style.maxHeight = '100%';
-        overlay.appendChild(video);
-        document.body.appendChild(overlay);
+
+        if (!won) {
+          document.getElementById('password-screen').style.display = 'flex';
+          const err = document.getElementById('error-msg');
+          err.style.display = 'block';
+          err.textContent = customMsg || "imagine losing, get rekt 😏🥀";
+          return;
+        }
+
+        // Fullscreen ending
+        const overlay = document.getElementById('ending-overlay');
+        const video = document.getElementById('ending-video');
+        overlay.style.display = 'flex';
+        video.src = usedTeto ? "ending 2.mp4" : "ending 1.mp4";
+        video.play().catch(()=>{});
         video.onended = () => {
-          overlay.remove();
+          overlay.style.display = 'none';
           document.getElementById('password-screen').style.display = 'flex';
         };
       }
 
       // Input
-      window.addEventListener('keydown', e => {
+      function onKeyDown(e) {
         keys[e.key.toLowerCase()] = true;
-        if (['arrowup','arrowdown','arrowleft','arrowright',' '].includes(e.key.toLowerCase())) e.preventDefault();
-
-        if (e.key === ' ' && state === 'aim') {
-          // Timing attack
-          const accuracy = 1 - Math.abs(aim.p - 0.5) * 2;
-          const dmg = Math.round(8 + accuracy * 20);
-
-          if (dodges < 20) {
-            dodges++;
-            say(`* Hashir dodged! (${dodges}/20)`);
-            if (dodges === 20) {
-              say("* Hashir is getting tired...");
-            }
-            endPlayerTurn();
-            return;
-          }
-
-          // After 20 dodges he can be hit
-          bossHP = 0;
-          finish('win');
+        if (['arrowup','arrowdown','arrowleft','arrowright',' '].includes(e.key.toLowerCase())) {
+          e.preventDefault();
         }
-      });
-      window.addEventListener('keyup', e => keys[e.key.toLowerCase()] = false);
+      }
+      function onKeyUp(e) {
+        keys[e.key.toLowerCase()] = false;
+      }
 
-      // Attack patterns (toned down)
-      function spawnAtk() {
-        if (spawn > 0 || t > 5.5) return;
-        const D = 0.85 + turn * 0.04; // slower difficulty ramp
+      // Spawning (toned down)
+      function spawnAttack() {
+        if (spawnTimer > 0 || t > 5.8) return;
+        const speed = 0.9 + turn * 0.03;
 
-        if (atk === 0) { // falling kababs
-          spawn = 0.22 / D;
-          objs.push({ k: 'kabab', x: BOX.x + Math.random() * (BOX.w - 20), y: BOX.y - 40, w: 18, h: 55, vy: 160 * D });
-        }
-        else if (atk === 1) { // blue soul platforming
-          spawn = 0.9 / D;
-          objs.push({ k: 'bar', x: BOX.x + BOX.w, y: BOX.y + BOX.h - 28, w: 16, h: 28, vx: -140 * D });
-        }
-        else if (atk === 2) { // side kababs
-          spawn = 0.55 / D;
-          const fromLeft = Math.random() < 0.5;
+        if (atkType === 0) { // falling kababs
+          spawnTimer = 0.28 / speed;
           objs.push({
-            k: 'kabab',
-            x: fromLeft ? BOX.x - 30 : BOX.x + BOX.w + 10,
-            y: BOX.y + 20 + Math.random() * (BOX.h - 60),
-            w: 18, h: 55,
-            vx: fromLeft ? 130 * D : -130 * D
+            type: 'kabab',
+            x: BOX.x + 10 + Math.random() * (BOX.w - 40),
+            y: BOX.y - 50,
+            w: 20, h: 60,
+            vy: 150 * speed
           });
-        }
-        else if (atk === 3) { // blue soul + crumbs
-          spawn = 0.45 / D;
-          objs.push({ k: 'crumb', x: BOX.x + Math.random() * (BOX.w - 10), y: BOX.y - 15, w: 10, h: 10, vy: 180 * D });
-        }
-        else { // simple blaster warning
-          spawn = 1.4 / D;
+        } else if (atkType === 1) { // blue soul bars
+          spawnTimer = 0.95 / speed;
+          objs.push({
+            type: 'bar',
+            x: BOX.x + BOX.w + 10,
+            y: BOX.y + BOX.h - 32,
+            w: 18, h: 32,
+            vx: -130 * speed
+          });
+        } else if (atkType === 2) { // side kababs
+          spawnTimer = 0.6 / speed;
+          const left = Math.random() < 0.5;
+          objs.push({
+            type: 'kabab',
+            x: left ? BOX.x - 40 : BOX.x + BOX.w + 20,
+            y: BOX.y + 20 + Math.random() * (BOX.h - 80),
+            w: 20, h: 60,
+            vx: left ? 120 * speed : -120 * speed
+          });
+        } else { // simple blaster warning
+          spawnTimer = 1.5 / speed;
           const side = Math.floor(Math.random() * 4);
           let bx, by;
-          if (side === 0) { bx = BOX.x - 40; by = BOX.y + Math.random() * BOX.h; }
-          if (side === 1) { bx = BOX.x + BOX.w + 40; by = BOX.y + Math.random() * BOX.h; }
-          if (side === 2) { bx = BOX.x + Math.random() * BOX.w; by = BOX.y - 40; }
-          if (side === 3) { bx = BOX.x + Math.random() * BOX.w; by = BOX.y + BOX.h + 40; }
-          objs.push({ k: 'blast', x: bx, y: by, t: 0, life: 0.7, fire: 0.35 });
+          if (side === 0) { bx = BOX.x - 50; by = BOX.y + Math.random() * BOX.h; }
+          if (side === 1) { bx = BOX.x + BOX.w + 50; by = BOX.y + Math.random() * BOX.h; }
+          if (side === 2) { bx = BOX.x + Math.random() * BOX.w; by = BOX.y - 50; }
+          if (side === 3) { bx = BOX.x + Math.random() * BOX.w; by = BOX.y + BOX.h + 50; }
+          objs.push({ type: 'blast', x: bx, y: by, t: 0, charge: 0.65, fire: 0.3 });
         }
       }
 
       function update(dt) {
         if (inv > 0) inv -= dt;
-        if (state === 'aim') {
-          aim.p += aim.d * dt * 1.6;
-          if (aim.p > 1) { aim.p = 1; aim.d = -1; }
-          if (aim.p < 0) { aim.p = 0; aim.d = 1; }
-        }
-        if (state !== 'dodge') return;
 
-        t += dt;
-        spawn -= dt;
+        if (state === 'dodge') {
+          t += dt;
+          spawnTimer -= dt;
 
-        const sp = 155 * dt;
-        if (keys.a || keys.arrowleft) soul.x -= sp;
-        if (keys.d || keys.arrowright) soul.x += sp;
+          const speed = 160 * dt;
+          if (keys['a'] || keys['arrowleft'])  soul.x -= speed;
+          if (keys['d'] || keys['arrowright']) soul.x += speed;
 
-        if (blue) {
-          const ground = BOX.y + BOX.h - S;
-          soul.vy += 750 * dt;
-          if ((keys.w || keys.arrowup) && soul.y >= ground - 2) soul.vy = -310;
-          soul.y += soul.vy * dt;
-          if (soul.y > ground) { soul.y = ground; soul.vy = 0; }
-        } else {
-          if (keys.w || keys.arrowup) soul.y -= sp;
-          if (keys.s || keys.arrowdown) soul.y += sp;
-        }
-
-        soul.x = Math.max(BOX.x, Math.min(BOX.x + BOX.w - S, soul.x));
-        soul.y = Math.max(BOX.y, Math.min(BOX.y + BOX.h - S, soul.y));
-
-        spawnAtk();
-
-        // collisions
-        const sr = { x: soul.x + 2, y: soul.y + 2, w: S - 4, h: S - 4 };
-        for (const o of objs) {
-          if (o.k === 'kabab') {
-            if (o.vy) o.y += o.vy * dt;
-            if (o.vx) o.x += o.vx * dt;
-            if (rect(sr, o)) hurt(5);
+          if (blue) {
+            const ground = BOX.y + BOX.h - S;
+            soul.vy += 780 * dt;
+            if ((keys['w'] || keys['arrowup']) && soul.y >= ground - 3) soul.vy = -320;
+            soul.y += soul.vy * dt;
+            if (soul.y > ground) { soul.y = ground; soul.vy = 0; }
+          } else {
+            if (keys['w'] || keys['arrowup']) soul.y -= speed;
+            if (keys['s'] || keys['arrowdown']) soul.y += speed;
           }
-          if (o.k === 'bar') {
-            o.x += o.vx * dt;
-            if (rect(sr, o)) hurt(6);
-          }
-          if (o.k === 'crumb') {
-            o.y += o.vy * dt;
-            if (rect(sr, o)) hurt(4);
-          }
-          if (o.k === 'blast') {
-            o.t += dt;
-            if (o.t > o.charge && o.t < o.charge + o.fire) {
-              // simple beam hit
-              const dx = (soul.x + S/2) - o.x;
-              const dy = (soul.y + S/2) - o.y;
-              if (Math.abs(dx) < 18 || Math.abs(dy) < 18) hurt(7);
+
+          soul.x = Math.max(BOX.x + 2, Math.min(BOX.x + BOX.w - S - 2, soul.x));
+          soul.y = Math.max(BOX.y + 2, Math.min(BOX.y + BOX.h - S - 2, soul.y));
+
+          spawnAttack();
+
+          // collisions
+          const sr = { x: soul.x + 2, y: soul.y + 2, w: S - 4, h: S - 4 };
+          for (const o of objs) {
+            if (o.type === 'kabab') {
+              if (o.vy) o.y += o.vy * dt;
+              if (o.vx) o.x += o.vx * dt;
+              if (rectsOverlap(sr, o)) hurt(5);
+            }
+            if (o.type === 'bar') {
+              o.x += o.vx * dt;
+              if (rectsOverlap(sr, o)) hurt(6);
+            }
+            if (o.type === 'blast') {
+              o.t += dt;
+              if (o.t > o.charge && o.t < o.charge + o.fire) {
+                const dx = Math.abs((soul.x + S/2) - o.x);
+                const dy = Math.abs((soul.y + S/2) - o.y);
+                if (dx < 22 || dy < 22) hurt(7);
+              }
             }
           }
-        }
 
-        objs = objs.filter(o => {
-          if (o.k === 'kabab' && (o.y > BOX.y + BOX.h + 40 || o.x < BOX.x - 50 || o.x > BOX.x + BOX.w + 50)) return false;
-          if (o.k === 'bar' && o.x < BOX.x - 30) return false;
-          if (o.k === 'crumb' && o.y > BOX.y + BOX.h) return false;
-          if (o.k === 'blast' && o.t > o.charge + o.fire + 0.2) return false;
-          return true;
-        });
+          objs = objs.filter(o => {
+            if (o.type === 'kabab' && (o.y > 500 || o.x < -50 || o.x > 700)) return false;
+            if (o.type === 'bar' && o.x < BOX.x - 40) return false;
+            if (o.type === 'blast' && o.t > o.charge + o.fire + 0.15) return false;
+            return true;
+          });
 
-        if (t > 6.2) {
-          state = 'menu';
-          blue = false;
-          objs = [];
-          centre();
-          say("* Your turn.");
-          mainMenu();
+          if (t > 6.0) {
+            state = 'menu';
+            blue = false;
+            objs = [];
+            centre();
+            say("* Your turn.");
+            showMainMenu();
+          }
         }
       }
 
-      function rect(a, b) {
+      function rectsOverlap(a, b) {
         return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
       }
 
       function draw() {
         ctx.clearRect(0, 0, 640, 480);
 
-        // Boss
+        // Header
         ctx.fillStyle = '#fff';
-        ctx.font = '16px Courier New';
-        ctx.fillText('HOHOHO   1 / 1', 250, 36);
+        ctx.font = '18px Courier New';
+        ctx.fillText('HOHOHO   1 / 1', 240, 36);
 
-        // simple boss representation
-        ctx.fillStyle = '#ddd';
-        ctx.fillRect(280, 60, 80, 90);
+        // Boss body (simple)
+        ctx.fillStyle = '#e8e8e8';
+        ctx.fillRect(270, 55, 100, 110);
         ctx.fillStyle = '#111';
-        ctx.fillRect(295, 80, 12, 12);
-        ctx.fillRect(333, 80, 12, 12);
+        ctx.fillRect(290, 80, 14, 14);
+        ctx.fillRect(336, 80, 14, 14);
         ctx.fillStyle = '#c00';
-        ctx.fillRect(300, 105, 40, 8);
+        ctx.fillRect(295, 110, 50, 10);
 
-        // Battle box
+        // Box
         ctx.strokeStyle = '#fff';
         ctx.lineWidth = 4;
         ctx.strokeRect(BOX.x, BOX.y, BOX.w, BOX.h);
 
         // Objects
         for (const o of objs) {
-          if (o.k === 'kabab') {
+          if (o.type === 'kabab') {
             ctx.fillStyle = '#c47a3a';
             ctx.fillRect(o.x, o.y, o.w, o.h);
           }
-          if (o.k === 'bar') {
+          if (o.type === 'bar') {
             ctx.fillStyle = '#eee';
             ctx.fillRect(o.x, o.y, o.w, o.h);
           }
-          if (o.k === 'crumb') {
-            ctx.fillStyle = '#f2b84b';
-            ctx.fillRect(o.x, o.y, o.w, o.h);
-          }
-          if (o.k === 'blast') {
-            ctx.fillStyle = o.t < o.charge ? 'rgba(255,80,80,0.5)' : '#fff';
+          if (o.type === 'blast') {
+            ctx.fillStyle = o.t < o.charge ? 'rgba(255,80,80,0.55)' : '#fff';
             ctx.beginPath();
-            ctx.arc(o.x, o.y, 16, 0, Math.PI * 2);
+            ctx.arc(o.x, o.y, 18, 0, Math.PI * 2);
             ctx.fill();
           }
         }
 
         // Soul
-        if (state !== 'over' || over !== 'lose') {
-          ctx.globalAlpha = inv > 0 && Math.floor(inv * 10) % 2 ? 0.35 : 1;
-          ctx.fillStyle = blue ? '#4aa3ff' : '#e63b5a';
-          ctx.fillRect(soul.x, soul.y, S, S);
-          ctx.globalAlpha = 1;
-        }
+        ctx.globalAlpha = inv > 0 && Math.floor(inv * 12) % 2 ? 0.3 : 1;
+        ctx.fillStyle = blue ? '#4aa3ff' : '#e63b5a';
+        ctx.fillRect(soul.x, soul.y, S, S);
+        ctx.globalAlpha = 1;
 
-        // Aim bar
-        if (state === 'aim') {
-          ctx.fillStyle = '#111';
-          ctx.fillRect(BOX.x + 10, BOX.y + 50, BOX.w - 20, 28);
-          ctx.fillStyle = '#f2b84b';
-          ctx.fillRect(BOX.x + 10 + (BOX.w - 20) * 0.42, BOX.y + 50, (BOX.w - 20) * 0.16, 28);
-          ctx.fillStyle = '#fff';
-          ctx.fillRect(BOX.x + 10 + (BOX.w - 26) * aim.p, BOX.y + 45, 6, 38);
-        }
-
-        // Message
-        shown = Math.min(msg.length, shown + 0.6);
+        // HP bar
         ctx.fillStyle = '#fff';
         ctx.font = '13px Courier New';
-        const text = msg.slice(0, Math.floor(shown));
-        wrapText(text, 30, 430, 580, 18);
-
-        // HP
-        ctx.fillStyle = '#fff';
-        ctx.font = '12px Courier New';
-        ctx.fillText('YOU', 30, 468);
+        ctx.fillText('YOU', 30, 465);
         ctx.fillStyle = '#333';
-        ctx.fillRect(70, 456, 140, 14);
+        ctx.fillRect(70, 452, 160, 16);
         ctx.fillStyle = '#0f0';
-        ctx.fillRect(70, 456, 140 * (playerHP / 92), 14);
+        ctx.fillRect(70, 452, 160 * (playerHP / 92), 16);
         ctx.fillStyle = '#fff';
-        ctx.fillText(playerHP + '/92', 220, 468);
-      }
-
-      function wrapText(text, x, y, maxWidth, lineHeight) {
-        const words = text.split(' ');
-        let line = '';
-        for (let n = 0; n < words.length; n++) {
-          const test = line + words[n] + ' ';
-          if (ctx.measureText(test).width > maxWidth && n > 0) {
-            ctx.fillText(line, x, y);
-            line = words[n] + ' ';
-            y += lineHeight;
-          } else {
-            line = test;
-          }
-        }
-        ctx.fillText(line, x, y);
+        ctx.fillText(Math.max(0, Math.floor(playerHP)) + ' / 92', 240, 465);
       }
 
       function loop(ts) {
+        if (!active) return;
         const dt = Math.min(0.05, (ts - last) / 1000 || 0);
         last = ts;
         update(dt);
         draw();
-        if (document.getElementById('boss-fight').style.display !== 'none') {
-          requestAnimationFrame(loop);
-        }
+        animId = requestAnimationFrame(loop);
       }
 
       function start() {
@@ -1091,9 +1164,10 @@
           return;
         }
 
+        active = true;
         document.getElementById('boss-fight').style.display = 'flex';
+
         playerHP = 92;
-        bossHP = 1;
         dodges = 0;
         mercyCount = 0;
         naan = 6;
@@ -1104,9 +1178,9 @@
         over = null;
         turn = 0;
         centre();
-        say("* Hashir blocks the way.");
+        say("nahhh tryna look through my dms right cuh?");
         state = 'menu';
-        mainMenu();
+        showMainMenu();
 
         try {
           hava = new Audio("Hava Nagila Original.mp3");
@@ -1115,8 +1189,11 @@
           hava.play().catch(()=>{});
         } catch(e) {}
 
+        window.addEventListener('keydown', onKeyDown);
+        window.addEventListener('keyup', onKeyUp);
+
         last = performance.now();
-        requestAnimationFrame(loop);
+        animId = requestAnimationFrame(loop);
       }
 
       return { start };
