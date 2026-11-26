@@ -1233,6 +1233,705 @@
         lightbox.style.display = 'none';
       }
     });
+    <!-- ============================================================
+     BOSS FIGHT - FULL VERSION
+     ============================================================ -->
+<div id="boss-fight" style="display:none; position:fixed; inset:0; background:#000; z-index:10000; color:white; font-family:'Courier New', monospace; overflow:hidden; user-select:none;">
+
+  <!-- Top Hashir HP -->
+  <div id="boss-hp-display" style="position:absolute; top:18px; left:50%; transform:translateX(-50%); font-size:1.5rem; letter-spacing:2px; z-index:20;">
+    HOHOHO &nbsp;&nbsp; <span style="color:#ff4444; font-weight:bold;">1 / 1</span>
+  </div>
+
+  <!-- Boss Sprite + Dialogue -->
+  <div style="position:absolute; top:70px; left:50%; transform:translateX(-50%); text-align:center; z-index:15;">
+    <img id="boss-sprite" src="hohoho.png" style="width:170px; height:170px; object-fit:contain; transition:opacity 0.4s;">
+    <div id="boss-dialogue" style="background:#0a0a0a; border:3px solid #ffffff; padding:12px 18px; margin-top:14px; max-width:520px; font-size:1.1rem; line-height:1.4; min-height:60px; display:flex; align-items:center; justify-content:center;">
+      nahhh tryna look through my dms right cuh?
+    </div>
+  </div>
+
+  <!-- Battle Box -->
+  <div id="battle-box" style="position:absolute; top:52%; left:50%; transform:translate(-50%,-50%); width:340px; height:260px; border:5px solid #ffffff; background:#000000; overflow:hidden; z-index:10;">
+    <img id="player-soul" src="epstein(red-soul).png" style="width:38px; height:38px; position:absolute; left:151px; top:111px; transition: filter 0.2s;">
+  </div>
+
+  <!-- Player HP Bar -->
+  <div style="position:absolute; bottom:155px; left:50%; transform:translateX(-50%); text-align:center; z-index:20;">
+    <div style="width:240px; height:20px; background:#222; border:2px solid #fff; margin:0 auto; position:relative;">
+      <div id="hp-fill" style="height:100%; width:100%; background:linear-gradient(90deg,#00ff00,#88ff00); transition:width 0.25s;"></div>
+    </div>
+    <div style="margin-top:7px; font-size:1.05rem;">HP <span id="hp-text">92</span> / 92</div>
+  </div>
+
+  <!-- Main Menu -->
+  <div id="menu-bar" style="position:absolute; bottom:35px; left:50%; transform:translateX(-50%); display:flex; gap:22px; z-index:30;">
+    <button class="menu-btn" id="btn-fight" onclick="openFightMenu()">FIGHT</button>
+    <button class="menu-btn" id="btn-mercy" onclick="useMercy()">MERCY</button>
+    <button class="menu-btn" id="btn-heal" onclick="openHealMenu()">HEAL</button>
+  </div>
+
+  <!-- Fight Sub Menu -->
+  <div id="fight-menu" style="display:none; position:absolute; bottom:105px; left:50%; transform:translateX(-50%); background:#111; border:3px solid #fff; padding:14px 18px; gap:14px; z-index:40;">
+    <button class="menu-btn" onclick="playerAttack('circumcision')">Circumcision</button>
+    <button class="menu-btn" id="teto-option" onclick="playerAttack('teto')" style="display:none; background:#5c1a5c;">Teto</button>
+  </div>
+
+  <!-- Heal Sub Menu -->
+  <div id="heal-menu" style="display:none; position:absolute; bottom:105px; left:50%; transform:translateX(-50%); background:#111; border:3px solid #fff; padding:16px 20px; text-align:center; z-index:40; min-width:280px;">
+    <div style="margin-bottom:12px; display:flex; align-items:center; justify-content:center; gap:10px;">
+      <img src="naan(heal).png" style="width:48px; height:48px; object-fit:contain;">
+      <button class="menu-btn" onclick="useHeal('naan')">Naan (+40) × <span id="naan-count">6</span></button>
+    </div>
+    <div style="display:flex; align-items:center; justify-content:center; gap:10px;">
+      <img src="kebab(heal).png" style="width:48px; height:48px; object-fit:contain;">
+      <button class="menu-btn" onclick="useHeal('kebab')">Kebab (FULL) × <span id="kebab-count">2</span></button>
+    </div>
+  </div>
+
+  <!-- Attack layer (for bones / blasters) -->
+  <div id="attack-layer" style="position:absolute; top:52%; left:50%; transform:translate(-50%,-50%); width:340px; height:260px; pointer-events:none; z-index:12;"></div>
+</div>
+
+<style>
+  .menu-btn {
+    background: #000;
+    border: 3px solid #ffffff;
+    color: #ffffff;
+    padding: 11px 24px;
+    font-size: 1.15rem;
+    cursor: pointer;
+    font-family: 'Courier New', monospace;
+    transition: all 0.15s;
+  }
+  .menu-btn:hover {
+    background: #ffffff;
+    color: #000000;
+  }
+  .menu-btn:active {
+    transform: scale(0.95);
+  }
+  .kabab-bone {
+    position: absolute;
+    width: 28px;
+    height: 90px;
+    object-fit: contain;
+    pointer-events: none;
+  }
+  .gaster-blaster {
+    position: absolute;
+    width: 70px;
+    height: 70px;
+    object-fit: contain;
+    pointer-events: none;
+  }
+  .beam {
+    position: absolute;
+    background: #ffffff;
+    pointer-events: none;
+    box-shadow: 0 0 12px #fff, 0 0 25px #aaf;
+  }
+</style>
+
+<script>
+/* ============================================================
+   BOSS FIGHT ENGINE - FULL VERSION
+   ============================================================ */
+
+const BossFight = (function() {
+  // -------------------- STATE --------------------
+  let active = false;
+  let playerHP = 92;
+  const maxHP = 92;
+  let attackCount = 0;
+  let mercyCount = 0;
+  let naanCount = 6;
+  let kebabCount = 2;
+  let isBlueSoul = false;
+  let playerX = 151;
+  let playerY = 111;
+  let keys = {};
+  let hashirAsleep = false;
+  let currentTurn = "hashir"; // "hashir" | "player"
+  let havaAudio = null;
+  let animationId = null;
+  let attackTimeouts = [];
+  let collisionCheckId = null;
+
+  // -------------------- DOM REFS --------------------
+  const els = {};
+  function cacheElements() {
+    els.fight = document.getElementById('boss-fight');
+    els.sprite = document.getElementById('boss-sprite');
+    els.dialogue = document.getElementById('boss-dialogue');
+    els.box = document.getElementById('battle-box');
+    els.soul = document.getElementById('player-soul');
+    els.hpFill = document.getElementById('hp-fill');
+    els.hpText = document.getElementById('hp-text');
+    els.fightMenu = document.getElementById('fight-menu');
+    els.healMenu = document.getElementById('heal-menu');
+    els.attackLayer = document.getElementById('attack-layer');
+    els.naanCount = document.getElementById('naan-count');
+    els.kebabCount = document.getElementById('kebab-count');
+    els.tetoOption = document.getElementById('teto-option');
+  }
+
+  // -------------------- QUOTES --------------------
+  const ancientQuotes = [
+    "The supreme art of war is to subdue the enemy without fighting. - Sun Tzu",
+    "Know yourself and you will win all battles. - Sun Tzu",
+    "In the midst of chaos, there is also opportunity. - Sun Tzu",
+    "He who is prudent and lies in wait for an enemy who is not, will be victorious.",
+    "Opportunities multiply as they are seized. - Sun Tzu",
+    "The greatest victory is that which requires no battle.",
+    "Appear weak when you are strong, and strong when you are weak.",
+    "All warfare is based on deception.",
+    "If you know the enemy and know yourself, you need not fear the result of a hundred battles.",
+    "Victory comes from finding opportunities in problems.",
+    "you really thought this would be easy?",
+    "keep dodging... if you can.",
+    "interesting strategy.",
+    "is that all?"
+  ];
+
+  // -------------------- UTILS --------------------
+  function randomQuote() {
+    return ancientQuotes[Math.floor(Math.random() * ancientQuotes.length)];
+  }
+
+  function clearAttackLayer() {
+    if (els.attackLayer) els.attackLayer.innerHTML = '';
+  }
+
+  function clearTimeouts() {
+    attackTimeouts.forEach(t => clearTimeout(t));
+    attackTimeouts = [];
+  }
+
+  function setDialogue(text) {
+    if (els.dialogue) els.dialogue.textContent = text;
+  }
+
+  function updateHP() {
+    const pct = Math.max(0, (playerHP / maxHP) * 100);
+    if (els.hpFill) els.hpFill.style.width = pct + '%';
+    if (els.hpText) els.hpText.textContent = Math.max(0, Math.floor(playerHP));
+  }
+
+  function updateItemCounts() {
+    if (els.naanCount) els.naanCount.textContent = naanCount;
+    if (els.kebabCount) els.kebabCount.textContent = kebabCount;
+  }
+
+  function damagePlayer(amount) {
+    playerHP -= amount;
+    updateHP();
+    // flash
+    if (els.soul) {
+      els.soul.style.filter = 'brightness(3) sepia(1) hue-rotate(-50deg)';
+      setTimeout(() => {
+        if (els.soul) els.soul.style.filter = '';
+      }, 120);
+    }
+    if (playerHP <= 0) {
+      endFight(false);
+    }
+  }
+
+  // -------------------- MOVEMENT --------------------
+  function onKeyDown(e) {
+    keys[e.key.toLowerCase()] = true;
+    if (['arrowup','arrowdown','arrowleft','arrowright','w','a','s','d'].includes(e.key.toLowerCase())) {
+      e.preventDefault();
+    }
+  }
+  function onKeyUp(e) {
+    keys[e.key.toLowerCase()] = false;
+  }
+
+  function movementLoop() {
+    if (!active) return;
+
+    const speed = 4.8;
+    if (keys['a'] || keys['arrowleft'])  playerX -= speed;
+    if (keys['d'] || keys['arrowright']) playerX += speed;
+    if (keys['w'] || keys['arrowup'])    playerY -= speed;
+    if (keys['s'] || keys['arrowdown'])  playerY += speed;
+
+    // Blue soul gravity
+    if (isBlueSoul) {
+      playerY += 4.2;
+    }
+
+    // Clamp inside box
+    playerX = Math.max(4, Math.min(298, playerX));
+    playerY = Math.max(4, Math.min(218, playerY));
+
+    if (els.soul) {
+      els.soul.style.left = playerX + 'px';
+      els.soul.style.top = playerY + 'px';
+      els.soul.src = isBlueSoul ? "epstein(blue-soul).png" : "epstein(red-soul).png";
+    }
+
+    animationId = requestAnimationFrame(movementLoop);
+  }
+
+  // -------------------- COLLISION --------------------
+  function checkCollisions() {
+    if (!active || currentTurn !== "hashir") return;
+
+    const soulRect = {
+      x: playerX,
+      y: playerY,
+      w: 38,
+      h: 38
+    };
+
+    // Check kababs
+    document.querySelectorAll('.kabab-bone').forEach(bone => {
+      const bx = parseFloat(bone.style.left) || 0;
+      const by = parseFloat(bone.style.top) || 0;
+      if (rectsOverlap(soulRect, {x: bx, y: by, w: 28, h: 90})) {
+        bone.remove();
+        damagePlayer(5);
+      }
+    });
+
+    // Check beams
+    document.querySelectorAll('.beam').forEach(beam => {
+      const bx = parseFloat(beam.style.left) || 0;
+      const by = parseFloat(beam.style.top) || 0;
+      const bw = parseFloat(beam.style.width) || 0;
+      const bh = parseFloat(beam.style.height) || 0;
+      if (rectsOverlap(soulRect, {x: bx, y: by, w: bw, h: bh})) {
+        beam.remove();
+        damagePlayer(7);
+      }
+    });
+  }
+
+  function rectsOverlap(a, b) {
+    return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
+  }
+
+  // -------------------- MENU --------------------
+  function openFightMenu() {
+    if (currentTurn !== "player" || hashirAsleep) return;
+    els.fightMenu.style.display = 'flex';
+    els.healMenu.style.display = 'none';
+  }
+
+  function openHealMenu() {
+    if (currentTurn !== "player") return;
+    els.healMenu.style.display = 'block';
+    els.fightMenu.style.display = 'none';
+  }
+
+  function closeMenus() {
+    els.fightMenu.style.display = 'none';
+    els.healMenu.style.display = 'none';
+  }
+
+  // -------------------- PLAYER ACTIONS --------------------
+  function useMercy() {
+    if (currentTurn !== "player") return;
+    closeMenus();
+    mercyCount++;
+
+    if (mercyCount >= 5) {
+      endFight(false, "i dont accept mercy/pity");
+      return;
+    }
+
+    setDialogue("mercy? ... nah.");
+    currentTurn = "hashir";
+    setTimeout(hashirTurn, 1000);
+  }
+
+  function useHeal(type) {
+    if (currentTurn !== "player") return;
+
+    if (type === "naan") {
+      if (naanCount <= 0) return;
+      naanCount--;
+      playerHP = Math.min(maxHP, playerHP + 40);
+      setDialogue("* You ate the Naan. +40 HP");
+    } else if (type === "kebab") {
+      if (kebabCount <= 0) return;
+      kebabCount--;
+      playerHP = maxHP;
+      setDialogue("* You ate the Kebab. HP fully restored.");
+    } else {
+      return;
+    }
+
+    updateHP();
+    updateItemCounts();
+    closeMenus();
+
+    // Heal skips attack → Hashir turn
+    currentTurn = "hashir";
+    setTimeout(hashirTurn, 1100);
+  }
+
+  function playerAttack(type) {
+    if (currentTurn !== "player") return;
+    closeMenus();
+
+    attackCount++;
+
+    // TETO - oneshot
+    if (type === "teto") {
+      setDialogue("TETO OUT!!!");
+      setTimeout(() => endFight(true, null, true), 900);
+      return;
+    }
+
+    // First 20 attacks are dodged
+    if (attackCount <= 20) {
+      setDialogue("(dodged)");
+      currentTurn = "hashir";
+      setTimeout(hashirTurn, 950);
+      return;
+    }
+
+    // 21st attack → Hashir falls asleep
+    if (attackCount === 21) {
+      hashirAsleep = true;
+      setDialogue("zzzz");
+      if (els.sprite) els.sprite.style.opacity = "0.55";
+      // Next Circumcision will finish him
+      currentTurn = "player";
+      return;
+    }
+
+    // After asleep, Circumcision finishes
+    if (hashirAsleep && type === "circumcision") {
+      setDialogue("...");
+      setTimeout(() => endFight(true), 700);
+      return;
+    }
+
+    // Normal case after 21
+    currentTurn = "hashir";
+    setTimeout(hashirTurn, 900);
+  }
+
+  // -------------------- HASHIR TURN --------------------
+  function hashirTurn() {
+    if (!active || hashirAsleep) return;
+
+    currentTurn = "hashir";
+    clearAttackLayer();
+    clearTimeouts();
+
+    setDialogue(randomQuote());
+
+    // Choose attack
+    const r = Math.random();
+    if (r < 0.38) {
+      attackKababBones();
+    } else if (r < 0.58) {
+      attackSoulSwitch();
+    } else {
+      attackGasterBlasters();
+    }
+  }
+
+  // ---------- ATTACK 1: KABAB BONES ----------
+  function attackKababBones() {
+    const patterns = [
+      // vertical falling
+      () => {
+        for (let i = 0; i < 7; i++) {
+          const t = setTimeout(() => {
+            spawnKabab(20 + i * 45, -100, 0, 6.5);
+          }, i * 180);
+          attackTimeouts.push(t);
+        }
+      },
+      // from bottom up
+      () => {
+        for (let i = 0; i < 6; i++) {
+          const t = setTimeout(() => {
+            spawnKabab(30 + i * 48, 280, 0, -6.2);
+          }, i * 160);
+          attackTimeouts.push(t);
+        }
+      },
+      // alternating sides
+      () => {
+        for (let i = 0; i < 8; i++) {
+          const t = setTimeout(() => {
+            const fromLeft = i % 2 === 0;
+            spawnKabab(fromLeft ? -40 : 360, 30 + (i * 25), fromLeft ? 5.5 : -5.5, 0);
+          }, i * 200);
+          attackTimeouts.push(t);
+        }
+      }
+    ];
+
+    const chosen = patterns[Math.floor(Math.random() * patterns.length)];
+    chosen();
+
+    // End turn after pattern
+    const endT = setTimeout(() => {
+      clearAttackLayer();
+      currentTurn = "player";
+    }, 3200);
+    attackTimeouts.push(endT);
+  }
+
+  function spawnKabab(x, y, vx, vy) {
+    const img = document.createElement('img');
+    img.src = "kabab(bone atk).png";
+    img.className = "kabab-bone";
+    img.style.left = x + "px";
+    img.style.top = y + "px";
+    els.attackLayer.appendChild(img);
+
+    let cx = x, cy = y;
+    function move() {
+      if (!active) return;
+      cx += vx;
+      cy += vy;
+      img.style.left = cx + "px";
+      img.style.top = cy + "px";
+
+      if (cy > 300 || cy < -120 || cx < -60 || cx > 400) {
+        img.remove();
+        return;
+      }
+      requestAnimationFrame(move);
+    }
+    requestAnimationFrame(move);
+  }
+
+  // ---------- ATTACK 2: SOUL SWITCH ----------
+  function attackSoulSwitch() {
+    isBlueSoul = !isBlueSoul;
+    setDialogue(randomQuote() + (isBlueSoul ? "  [BLUE SOUL]" : "  [RED SOUL]"));
+
+    const t = setTimeout(() => {
+      currentTurn = "player";
+    }, 1600);
+    attackTimeouts.push(t);
+  }
+
+  // ---------- ATTACK 3: GASTER BLASTERS ----------
+  function attackGasterBlasters() {
+    const r = Math.random();
+    if (r < 0.5) {
+      // 360 spam style
+      gaster360();
+    } else {
+      // 2-4 directional
+      gasterDirectional();
+    }
+  }
+
+  function gaster360() {
+    // Spawn blasters around and fire beams toward center-ish
+    const positions = [
+      {x: -80, y: 30}, {x: 350, y: 30},
+      {x: -80, y: 160}, {x: 350, y: 160},
+      {x: 120, y: -80}, {x: 120, y: 280}
+    ];
+
+    positions.forEach((pos, i) => {
+      const t = setTimeout(() => {
+        spawnBlaster(pos.x, pos.y, 170, 110);
+      }, i * 220);
+      attackTimeouts.push(t);
+    });
+
+    const endT = setTimeout(() => {
+      clearAttackLayer();
+      currentTurn = "player";
+    }, 3800);
+    attackTimeouts.push(endT);
+  }
+
+  function gasterDirectional() {
+    const count = 2 + Math.floor(Math.random() * 3); // 2-4
+    for (let i = 0; i < count; i++) {
+      const t = setTimeout(() => {
+        const side = Math.floor(Math.random() * 4);
+        let bx, by, tx, ty;
+        if (side === 0) { bx = -90; by = 40 + Math.random()*140; tx = 400; ty = by; }
+        if (side === 1) { bx = 360; by = 40 + Math.random()*140; tx = -50; ty = by; }
+        if (side === 2) { bx = 40 + Math.random()*220; by = -90; tx = bx; ty = 300; }
+        if (side === 3) { bx = 40 + Math.random()*220; by = 280; tx = bx; ty = -50; }
+        spawnBlaster(bx, by, tx, ty);
+      }, i * 380);
+      attackTimeouts.push(t);
+    }
+
+    const endT = setTimeout(() => {
+      clearAttackLayer();
+      currentTurn = "player";
+    }, 3500);
+    attackTimeouts.push(endT);
+  }
+
+  function spawnBlaster(x, y, targetX, targetY) {
+    const img = document.createElement('img');
+    img.src = "eggpl@nt-gasterblaster.png";
+    img.className = "gaster-blaster";
+    img.style.left = x + "px";
+    img.style.top = y + "px";
+    els.attackLayer.appendChild(img);
+
+    // Charge then fire
+    setTimeout(() => {
+      // Create beam
+      const beam = document.createElement('div');
+      beam.className = "beam";
+
+      const dx = targetX - x;
+      const dy = targetY - y;
+      const length = Math.sqrt(dx*dx + dy*dy);
+      const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+
+      beam.style.width = length + "px";
+      beam.style.height = "14px";
+      beam.style.left = (x + 35) + "px";
+      beam.style.top = (y + 28) + "px";
+      beam.style.transformOrigin = "0 50%";
+      beam.style.transform = `rotate(${angle}deg)`;
+      els.attackLayer.appendChild(beam);
+
+      // Remove after short time
+      setTimeout(() => {
+        beam.remove();
+        img.remove();
+      }, 450);
+    }, 380);
+  }
+
+  // -------------------- START / END --------------------
+  function start() {
+    // Mobile block
+    if (/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+      alert("this easter egg isnt available on mobile because budget cuts");
+      return;
+    }
+
+    cacheElements();
+    active = true;
+    els.fight.style.display = "block";
+
+    // Reset state
+    playerHP = 92;
+    attackCount = 0;
+    mercyCount = 0;
+    naanCount = 6;
+    kebabCount = 2;
+    isBlueSoul = false;
+    playerX = 151;
+    playerY = 111;
+    hashirAsleep = false;
+    currentTurn = "hashir";
+    keys = {};
+
+    if (els.sprite) {
+      els.sprite.src = "hohoho.png";
+      els.sprite.style.opacity = "1";
+    }
+    setDialogue("nahhh tryna look through my dms right cuh?");
+    updateHP();
+    updateItemCounts();
+    clearAttackLayer();
+
+    // Show Teto if unlocked
+    if (typeof tetoUnlocked !== "undefined" && tetoUnlocked) {
+      els.tetoOption.style.display = "inline-block";
+    } else {
+      els.tetoOption.style.display = "none";
+    }
+
+    // Music
+    try {
+      havaAudio = new Audio("Hava Nagila Original.mp3");
+      havaAudio.loop = true;
+      havaAudio.volume = 0.55;
+      havaAudio.play().catch(()=>{});
+    } catch(e) {}
+
+    // Events
+    window.addEventListener("keydown", onKeyDown);
+    window.addEventListener("keyup", onKeyUp);
+
+    // Start loops
+    animationId = requestAnimationFrame(movementLoop);
+    collisionCheckId = setInterval(checkCollisions, 40);
+
+    // Hashir speaks then attacks
+    setTimeout(() => {
+      hashirTurn();
+    }, 1400);
+  }
+
+  function endFight(won, customMessage = null, usedTeto = false) {
+    active = false;
+    clearTimeouts();
+    clearAttackLayer();
+    if (animationId) cancelAnimationFrame(animationId);
+    if (collisionCheckId) clearInterval(collisionCheckId);
+
+    window.removeEventListener("keydown", onKeyDown);
+    window.removeEventListener("keyup", onKeyUp);
+
+    if (havaAudio) {
+      havaAudio.pause();
+      havaAudio = null;
+    }
+
+    els.fight.style.display = "none";
+
+    // Death
+    if (!won) {
+      const passScreen = document.getElementById("password-screen");
+      const err = document.getElementById("error-msg");
+      if (passScreen) passScreen.style.display = "flex";
+      if (err) {
+        err.style.display = "block";
+        err.textContent = customMessage || "imagine losing, get rekt 😏🥀";
+      }
+      return;
+    }
+
+    // Victory → ending video
+    const overlay = document.createElement("div");
+    overlay.style.cssText = "position:fixed;inset:0;background:#000;z-index:30000;display:flex;justify-content:center;align-items:center;";
+    const video = document.createElement("video");
+    video.src = usedTeto ? "ending 2.mp4" : "ending 1.mp4";
+    video.controls = true;
+    video.autoplay = true;
+    video.style.maxWidth = "100%";
+    video.style.maxHeight = "100%";
+    overlay.appendChild(video);
+    document.body.appendChild(overlay);
+
+    video.onended = () => {
+      overlay.remove();
+      const passScreen = document.getElementById("password-screen");
+      if (passScreen) passScreen.style.display = "flex";
+    };
+  }
+
+  // Public API
+  return {
+    start,
+    // expose for external escalation
+    isActive: () => active
+  };
+})();
+
+// Helper so you can call it easily
+function startBossFight() {
+  BossFight.start();
+}
   </script>
 </body>
 </html>
