@@ -37,8 +37,9 @@
       color: #e6edf3;
       outline: none;
       margin-bottom: 16px;
+      transition: border-color 0.2s, transform 0.15s;
     }
-    #password-input:focus { border-color: #58a6ff; }
+    #password-input:focus { border-color: #58a6ff; transform: scale(1.02); }
     #enter-btn {
       width: 100%;
       padding: 14px;
@@ -49,8 +50,10 @@
       border: none;
       border-radius: 10px;
       cursor: pointer;
+      transition: all 0.2s;
     }
-    #enter-btn:hover { background: #2ea043; }
+    #enter-btn:hover { background: #2ea043; transform: scale(1.03); }
+    #enter-btn:active { transform: scale(0.97); }
     .error-msg { color: #f85149; margin-top: 14px; font-size: 0.9rem; display: none; }
 
     /* ========== LOADING SCREEN ========== */
@@ -66,7 +69,7 @@
       overflow: hidden;
     }
     #loading-screen .box { width: 100%; max-width: 520px; position: relative; z-index: 2; }
-    #loading-screen h2 { color: #ffffff; margin-bottom: 12px; font-size: 1.8rem; font-weight: 700; }
+    #loading-screen h2 { color: #fff; margin-bottom: 12px; font-size: 1.8rem; font-weight: 700; }
     .loading-sub { color: rgba(255,255,255,0.9); font-size: 1rem; margin-bottom: 48px; }
     .progress-container {
       position: relative;
@@ -89,7 +92,7 @@
       top: 50%;
       left: 0%;
       transform: translate(-50%, -50%);
-      transition: left 0.1s linear;
+      transition: left 0.15s linear;
       z-index: 5;
       display: flex;
       align-items: center;
@@ -98,17 +101,18 @@
     }
     .eggplant-wrapper.inside {
       left: calc(100% + 14px) !important;
-      transform: translate(-50%, -50%) scale(0.2);
+      transform: translate(-50%, -50%) scale(0.15);
       opacity: 0;
-      transition: left 0.38s cubic-bezier(0.34, 1.45, 0.64, 1),
-                  transform 0.38s cubic-bezier(0.34, 1.45, 0.64, 1),
-                  opacity 0.22s ease 0.12s;
+      transition: left 0.45s cubic-bezier(0.34, 1.45, 0.64, 1),
+                  transform 0.45s cubic-bezier(0.34, 1.45, 0.64, 1),
+                  opacity 0.25s ease 0.15s;
       pointer-events: none;
     }
-    .eggplant { font-size: 2.3rem; }
+    .eggplant { font-size: 2.3rem; transition: transform 0.15s; }
+    .eggplant-wrapper:active .eggplant { transform: scale(0.85); }
     .pfp-next-to-eggplant {
       width: 36px; height: 36px; border-radius: 50%;
-      border: 2.5px solid #ffffff; object-fit: cover;
+      border: 2.5px solid #fff; object-fit: cover;
     }
     .peach-target {
       position: absolute;
@@ -118,17 +122,25 @@
       font-size: 2.9rem;
       z-index: 4;
       cursor: pointer;
+      transition: transform 0.25s;
     }
-    .peach-target.react { transform: translateY(-50%) scale(1.3); }
-    .peach-target.jiggle { animation: peach-jiggle 0.55s ease; }
+    .peach-target.react { transform: translateY(-50%) scale(1.35); }
+    .peach-target.jiggle { animation: peach-jiggle 0.6s ease; }
+    .peach-target.shake {
+      animation: peach-shake 0.5s ease infinite;
+    }
     @keyframes peach-jiggle {
       0% { transform: translateY(-50%) scale(1) rotate(0deg); }
-      15% { transform: translateY(-50%) scale(1.25) rotate(-12deg); }
-      30% { transform: translateY(-50%) scale(1.15) rotate(10deg); }
-      45% { transform: translateY(-50%) scale(1.28) rotate(-8deg); }
-      60% { transform: translateY(-50%) scale(1.1) rotate(6deg); }
-      75% { transform: translateY(-50%) scale(1.2) rotate(-4deg); }
+      20% { transform: translateY(-50%) scale(1.3) rotate(-14deg); }
+      40% { transform: translateY(-50%) scale(1.15) rotate(12deg); }
+      60% { transform: translateY(-50%) scale(1.28) rotate(-9deg); }
+      80% { transform: translateY(-50%) scale(1.1) rotate(6deg); }
       100% { transform: translateY(-50%) scale(1) rotate(0deg); }
+    }
+    @keyframes peach-shake {
+      0%, 100% { transform: translateY(-50%) rotate(0deg); }
+      25% { transform: translateY(-50%) rotate(-8deg) scale(1.1); }
+      75% { transform: translateY(-50%) rotate(8deg) scale(1.1); }
     }
     .particle {
       position: absolute;
@@ -139,10 +151,10 @@
       font-size: 1.25rem;
     }
     @keyframes particle-burst {
-      0% { opacity: 1; transform: translate(0, 0) scale(1) rotate(0deg); }
-      100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.35) rotate(var(--rot)); }
+      0% { opacity: 1; transform: translate(0,0) scale(1) rotate(0deg); }
+      100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.3) rotate(var(--rot)); }
     }
-    .status-text { margin-top: 32px; color: #ffffff; font-size: 1.1rem; font-weight: 600; }
+    .status-text { margin-top: 32px; color: #fff; font-size: 1.1rem; font-weight: 600; }
 
     /* ========== MAIN CONTENT ========== */
     #main-content {
@@ -170,7 +182,7 @@
       left: 50%;
       transform: translate(-50%, -50%);
       z-index: 10;
-      background: rgba(255, 255, 255, 0.9);
+      background: rgba(255,255,255,0.92);
       padding: 28px 40px;
       border-radius: 20px;
       box-shadow: 0 10px 40px rgba(0,0,0,0.15);
@@ -190,6 +202,7 @@
       white-space: nowrap;
     }
     #xoxo-box.slide-up .final-message { font-size: 1.15rem; }
+
     #gallery-screen {
       position: relative;
       z-index: 5;
@@ -216,29 +229,35 @@
       padding: 8px 16px;
       border-radius: 8px;
       background: rgba(255,255,255,0.4);
+      transition: all 0.2s;
     }
-    nav a.active, nav a:hover {
-      color: #ffffff;
-      background-color: #d63384;
+    nav a:hover, nav a.active {
+      color: #fff;
+      background: #d63384;
+      transform: scale(1.05);
     }
     #gallery-screen h1 { color: #c2255c; margin-bottom: 8px; font-size: 2rem; }
     p.hint { color: #9b2c5a; font-size: 0.95rem; margin-bottom: 32px; }
+
     .gallery {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 24px;
     }
     .photo-card {
-      background-color: rgba(255, 255, 255, 0.85);
+      background: rgba(255,255,255,0.88);
       border: 1px solid rgba(0,0,0,0.08);
-      border-radius: 12px;
+      border-radius: 14px;
       overflow: hidden;
       cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
+      transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.22s;
     }
     .photo-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 18px 35px rgba(0,0,0,0.18);
+    }
+    .photo-card:active {
+      transform: translateY(-2px) scale(0.98);
     }
     .photo-card img {
       width: 100%;
@@ -246,7 +265,9 @@
       object-fit: cover;
       object-position: top;
       display: block;
+      transition: transform 0.3s;
     }
+    .photo-card:hover img { transform: scale(1.03); }
     .caption {
       padding: 12px 14px;
       font-size: 0.9rem;
@@ -260,21 +281,26 @@
     .lightbox {
       display: none;
       position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background-color: rgba(0, 0, 0, 0.92);
+      inset: 0;
+      background: rgba(0,0,0,0.93);
       z-index: 1000;
       justify-content: center;
       align-items: center;
       padding: 20px;
       cursor: zoom-out;
+      opacity: 0;
+      transition: opacity 0.3s ease;
     }
+    .lightbox.show { opacity: 1; }
     .lightbox img, .lightbox video {
       max-width: 92%;
       max-height: 90%;
-      border-radius: 8px;
-      box-shadow: 0 0 40px rgba(0, 0, 0, 0.7);
+      border-radius: 10px;
+      box-shadow: 0 0 50px rgba(0,0,0,0.7);
+      transform: scale(0.92);
+      transition: transform 0.3s cubic-bezier(0.34, 1.4, 0.64, 1);
     }
+    .lightbox.show img, .lightbox.show video { transform: scale(1); }
     .lightbox-nav {
       position: absolute;
       top: 50%;
@@ -283,16 +309,16 @@
       border: none;
       color: white;
       font-size: 2.2rem;
-      width: 54px;
-      height: 54px;
+      width: 54px; height: 54px;
       border-radius: 50%;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       z-index: 1001;
+      transition: all 0.2s;
     }
-    .lightbox-nav:hover { background: rgba(255,255,255,0.3); }
+    .lightbox-nav:hover { background: rgba(255,255,255,0.3); transform: translateY(-50%) scale(1.1); }
     .lightbox-nav.prev { left: 24px; }
     .lightbox-nav.next { right: 24px; }
     .lightbox-counter {
@@ -300,14 +326,14 @@
       bottom: 28px;
       left: 50%;
       transform: translateX(-50%);
-      color: rgba(255,255,255,0.8);
+      color: rgba(255,255,255,0.85);
       font-size: 0.95rem;
-      background: rgba(0,0,0,0.4);
-      padding: 6px 14px;
+      background: rgba(0,0,0,0.45);
+      padding: 6px 16px;
       border-radius: 20px;
     }
 
-    /* Jumpscare */
+    /* ========== JUMPSCARE ========== */
     #jumpscare {
       display: none;
       position: fixed;
@@ -317,16 +343,30 @@
       justify-content: center;
       align-items: center;
       flex-direction: column;
+      opacity: 0;
+      transition: opacity 0.25s ease;
     }
-    #jumpscare img { max-width: 95%; max-height: 85%; object-fit: contain; }
+    #jumpscare.show { opacity: 1; }
+    #jumpscare.fade-out { opacity: 0; transition: opacity 0.7s ease; }
+    #jumpscare img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      transform: scale(0.85);
+      transition: transform 0.4s cubic-bezier(0.34, 1.4, 0.64, 1);
+    }
+    #jumpscare.show img { transform: scale(1); }
     #jumpscare-caption {
       color: #ff9ecb;
-      font-size: 1.6rem;
+      font-size: 1.5rem;
       font-weight: 700;
-      margin-top: 18px;
+      margin-top: 16px;
       text-align: center;
-      text-shadow: 0 0 12px rgba(255, 158, 203, 0.8);
+      text-shadow: 0 0 15px rgba(255,158,203,0.7);
+      opacity: 0;
+      transition: opacity 0.4s;
     }
+    #jumpscare.show #jumpscare-caption { opacity: 1; }
 
     /* ========== SECRET PAGE ========== */
     #secret-page {
@@ -358,6 +398,7 @@
       cursor: pointer;
       padding: 6px 12px;
       border-radius: 6px;
+      transition: all 0.15s;
     }
     .secret-nav a:hover, .secret-nav button:hover {
       color: #e6edf3;
@@ -375,14 +416,14 @@
     }
     .secret-badge {
       display: inline-block;
-      background: rgba(35, 134, 54, 0.15);
+      background: rgba(35,134,54,0.15);
       color: #3fb950;
       font-size: 0.78rem;
       font-weight: 600;
       padding: 4px 10px;
       border-radius: 20px;
       margin-bottom: 20px;
-      border: 1px solid rgba(35, 134, 54, 0.3);
+      border: 1px solid rgba(35,134,54,0.3);
     }
     .secret-main h1 {
       font-size: 2.1rem;
@@ -401,9 +442,7 @@
       gap: 20px;
       margin-bottom: 32px;
     }
-    @media (max-width: 700px) {
-      .secret-grid { grid-template-columns: 1fr; }
-    }
+    @media (max-width: 700px) { .secret-grid { grid-template-columns: 1fr; } }
     .secret-card {
       background: #161b22;
       border: 1px solid #30363d;
@@ -450,7 +489,9 @@
     .secret-btn:hover {
       background: #30363d;
       border-color: #484f58;
+      transform: scale(1.03);
     }
+    .secret-btn:active { transform: scale(0.97); }
     .secret-btn.primary {
       background: #238636;
       border-color: #238636;
@@ -470,7 +511,7 @@
       margin-top: 40px;
     }
 
-    /* ========== MODALS ========== */
+    /* Modals */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -491,11 +532,7 @@
       overflow-y: auto;
       padding: 24px;
     }
-    .modal h2 {
-      font-size: 1.3rem;
-      margin-bottom: 16px;
-      color: #f0f6fc;
-    }
+    .modal h2 { font-size: 1.3rem; margin-bottom: 16px; color: #f0f6fc; }
     .modal-close {
       float: right;
       background: none;
@@ -505,10 +542,7 @@
       cursor: pointer;
     }
     .modal-close:hover { color: #e6edf3; }
-    .file-list, .script-list {
-      list-style: none;
-      margin-top: 12px;
-    }
+    .file-list, .script-list { list-style: none; margin-top: 12px; }
     .file-list li, .script-list li {
       padding: 8px 12px;
       background: #0d1117;
@@ -578,7 +612,7 @@
         <a href="about.html">About Me</a>
       </nav>
       <h1>Screenshots</h1>
-      <p class="hint">Click any screenshot to view the full uncropped image • Use ← → arrow keys to navigate</p>
+      <p class="hint">Click any screenshot • Use ← → arrow keys</p>
       <div class="gallery">
         <div class="photo-card" onclick="handleImageClick(0)">
           <img src="Screenshot%202026-11-16%20064113.png" alt="1">
@@ -638,125 +672,88 @@
         <button class="logout-btn" onclick="logout()">Logout</button>
       </div>
     </div>
-
     <div class="secret-main">
-      <div class="secret-badge">
-        <span class="status-dot"></span> Secure Session Active
-      </div>
-      
+      <div class="secret-badge"><span class="status-dot"></span> Secure Session Active</div>
       <h1>Welcome back, Anas</h1>
-      <p class="secret-subtitle">
-        Authenticated • Session started <span id="session-time" class="live-time">just now</span>
-      </p>
-
+      <p class="secret-subtitle">Authenticated • Session started <span id="session-time" class="live-time">just now</span></p>
       <div class="secret-grid">
         <div class="secret-card">
           <h3>Session Info</h3>
           <p>
             Access Level: <strong style="color:#3fb950">Authorized</strong><br>
             Device: Web Client<br>
-            IP: 192.168.1.•••<br>
             Last activity: <span id="last-activity">now</span>
           </p>
           <div class="secret-actions">
             <button class="secret-btn" onclick="refreshSession()">Refresh Session</button>
           </div>
         </div>
-
         <div class="secret-card">
           <h3>Quick Actions</h3>
-          <div class="secret-actions" style="flex-direction: column; align-items: flex-start;">
+          <div class="secret-actions" style="flex-direction:column;align-items:flex-start;">
             <button class="secret-btn primary" onclick="openPrivateFiles()">View Private Files</button>
             <button class="secret-btn" onclick="openExportLogs()">Export Logs</button>
             <button class="secret-btn" onclick="openSecuritySettings()">Security Settings</button>
           </div>
         </div>
       </div>
-
       <div class="secret-card">
         <h3>Recent Activity</h3>
-        <div id="activity-log">
-          <!-- filled by JS -->
-        </div>
+        <div id="activity-log"></div>
       </div>
-
-      <div class="secret-card" style="margin-top: 20px;">
+      <div class="secret-card" style="margin-top:20px;">
         <h3>System Notes</h3>
-        <p>
-          This is a restricted private area. All actions are logged.  
-          Do not share this access link or password with anyone.
-        </p>
+        <p>This is a restricted private area. All actions are logged.</p>
       </div>
     </div>
-
-    <div class="secret-footer">
-      © 2026 Private System • Unauthorized access is prohibited • Session expires on tab close
-    </div>
+    <div class="secret-footer">© 2026 Private System • Session expires on tab close</div>
   </div>
 
-  <!-- ========== MODALS ========== -->
-
-  <!-- Private Files Modal -->
+  <!-- MODALS -->
   <div class="modal-overlay" id="files-modal">
     <div class="modal">
       <button class="modal-close" onclick="closeModal('files-modal')">×</button>
       <h2>Private Files</h2>
-      <p style="color:#8b949e; font-size:0.9rem; margin-bottom:12px;">Read-only access. Files cannot be opened or downloaded.</p>
+      <p style="color:#8b949e;font-size:0.9rem;margin-bottom:12px;">Read-only. Files cannot be opened.</p>
       <ul class="file-list" id="file-list"></ul>
     </div>
   </div>
 
-  <!-- Export Logs Modal -->
   <div class="modal-overlay" id="logs-modal">
     <div class="modal">
       <button class="modal-close" onclick="closeModal('logs-modal')">×</button>
-      <h2>Exported Scripts / Functions</h2>
-      <p style="color:#8b949e; font-size:0.9rem; margin-bottom:12px;">Main scripts currently loaded in the application:</p>
+      <h2>Exported Scripts</h2>
       <ul class="script-list">
         <li>checkPassword()</li>
         <li>startLoading()</li>
         <li>handleImageClick()</li>
         <li>triggerJumpscare()</li>
-        <li>openLightbox() / updateLightbox()</li>
+        <li>openLightbox()</li>
         <li>playRandomSound()</li>
         <li>spawnParticles()</li>
-        <li>createHearts()</li>
-        <li>startSecretSession()</li>
-        <li>logout() / refreshSession()</li>
-        <li>openPrivateFiles() / openExportLogs() / openSecuritySettings()</li>
       </ul>
     </div>
   </div>
 
-  <!-- Security Settings Modal -->
   <div class="modal-overlay" id="security-modal">
     <div class="modal">
       <button class="modal-close" onclick="closeModal('security-modal')">×</button>
       <h2>Security Settings</h2>
-      
-      <p style="margin-top:16px; color:#8b949e; font-size:0.9rem;">Primary Password</p>
-      <div style="background:#0d1117; padding:10px 14px; border-radius:6px; border:1px solid #30363d; margin:8px 0 20px; font-family:monospace; color:#8b949e;">
-        ••••••••••••••
-      </div>
-
-      <p style="color:#8b949e; font-size:0.9rem;">Recovery Email</p>
+      <p style="margin-top:16px;color:#8b949e;font-size:0.9rem;">Primary Password</p>
+      <div style="background:#0d1117;padding:10px 14px;border-radius:6px;border:1px solid #30363d;margin:8px 0 20px;font-family:monospace;color:#8b949e;">••••••••••••••</div>
+      <p style="color:#8b949e;font-size:0.9rem;">Recovery Email</p>
       <div class="email-row">
         <div class="email-display" id="current-email">islam.anas1966@gmail.com</div>
-        <button class="secret-btn" onclick="changeEmail()">Change email address</button>
+        <button class="secret-btn" onclick="changeEmail()">Change email</button>
       </div>
-
-      <p style="margin-top:24px; color:#8b949e; font-size:0.85rem;">
-        Last password change: Never<br>
-        2FA: Not enabled
-      </p>
     </div>
   </div>
 
   <!-- LIGHTBOX -->
   <div id="lightbox" class="lightbox" onclick="closeLightbox(event)">
-    <button class="lightbox-nav prev" onclick="event.stopPropagation(); changeImage(-1)">‹</button>
-    <img id="lightbox-img" src="" alt="Full Size">
-    <button class="lightbox-nav next" onclick="event.stopPropagation(); changeImage(1)">›</button>
+    <button class="lightbox-nav prev" onclick="event.stopPropagation();changeImage(-1)">‹</button>
+    <img id="lightbox-img" src="" alt="Full">
+    <button class="lightbox-nav next" onclick="event.stopPropagation();changeImage(1)">›</button>
     <div class="lightbox-counter" id="lightbox-counter"></div>
   </div>
 
@@ -767,7 +764,6 @@
   </div>
 
   <script>
-    // Elements
     const passwordScreen = document.getElementById('password-screen');
     const loadingScreen = document.getElementById('loading-screen');
     const mainContent = document.getElementById('main-content');
@@ -789,22 +785,12 @@
     function logActivity(action) {
       const log = document.getElementById('activity-log');
       if (!log) return;
-
-      const now = new Date();
-      const timeStr = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'});
-
+      const timeStr = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit', second:'2-digit'});
       const item = document.createElement('div');
       item.className = 'activity-item';
       item.innerHTML = `<span>${action}</span><span class="activity-time">${timeStr}</span>`;
-      
       log.insertBefore(item, log.firstChild);
-
-      // Keep only last 12 entries
-      while (log.children.length > 12) {
-        log.removeChild(log.lastChild);
-      }
-
-      // Update last activity
+      while (log.children.length > 12) log.removeChild(log.lastChild);
       const lastAct = document.getElementById('last-activity');
       if (lastAct) lastAct.textContent = 'just now';
     }
@@ -812,50 +798,39 @@
     // ===== PASSWORD =====
     function checkPassword() {
       const value = passwordInput.value.trim();
-
       if (value === correctPassword) {
         errorMsg.style.display = 'none';
         passwordScreen.style.display = 'none';
         loadingScreen.style.display = 'flex';
         startLoading();
-      } 
-      else if (value === secretPassword) {
+      } else if (value === secretPassword) {
         errorMsg.style.display = 'none';
         passwordScreen.style.display = 'none';
         secretPage.style.display = 'block';
         startSecretSession();
         logActivity('Successful login with secret password');
-      } 
-      else {
+      } else {
         errorMsg.style.display = 'block';
         passwordInput.value = '';
         passwordInput.focus();
         logActivity('Failed login attempt');
       }
     }
-
     enterBtn.addEventListener('click', checkPassword);
-    passwordInput.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        checkPassword();
-      }
+    passwordInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter') { e.preventDefault(); checkPassword(); }
     });
 
     // ===== SECRET PAGE =====
     function startSecretSession() {
-      const now = new Date();
-      document.getElementById('session-time').textContent = now.toLocaleTimeString();
+      document.getElementById('session-time').textContent = new Date().toLocaleTimeString();
       document.getElementById('last-activity').textContent = 'just now';
-      
-      // Clear and seed activity log
       const log = document.getElementById('activity-log');
       log.innerHTML = '';
       logActivity('Session token generated');
       logActivity('Device fingerprint recorded');
       logActivity('Successful login');
     }
-
     function logout() {
       logActivity('User logged out');
       secretPage.style.display = 'none';
@@ -863,23 +838,16 @@
       passwordInput.value = '';
       passwordInput.focus();
     }
-
     function refreshSession() {
       logActivity('Session refreshed');
       showToast('Session refreshed');
     }
-
-    function showToast(message) {
-      const toast = document.createElement('div');
-      toast.textContent = message;
-      toast.style.cssText = `
-        position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-        background: #238636; color: white; padding: 12px 24px;
-        border-radius: 8px; font-size: 0.95rem; z-index: 9999;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-      `;
-      document.body.appendChild(toast);
-      setTimeout(() => toast.remove(), 2200);
+    function showToast(msg) {
+      const t = document.createElement('div');
+      t.textContent = msg;
+      t.style.cssText = `position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#238636;color:#fff;padding:12px 24px;border-radius:8px;z-index:9999;`;
+      document.body.appendChild(t);
+      setTimeout(() => t.remove(), 2200);
     }
 
     // ===== MODALS =====
@@ -887,233 +855,204 @@
       logActivity('Viewed Private Files');
       const list = document.getElementById('file-list');
       list.innerHTML = '';
-
       const files = [
-        "Screenshot 2026-11-16 064113.png",
-        "Screenshot 2026-11-16 064134.png",
-        "Screenshot 2026-11-16 064158.png",
-        "Screenshot 2026-11-16 064206.png",
-        "Screenshot 2026-11-16 064215.png",
-        "Screenshot 2026-11-16 064224.png",
-        "Screenshot 2026-11-16 064236.png",
-        "Screenshot 2026-11-16 064259.png",
-        "Screenshot 2026-11-16 064310.png",
-        "Screenshot 2026-11-17 184602.png",
-        "Screenshot 2026-11-18 174153.png",
-        "Screenshot 2026-11-18 175026.png",
-        "Screenshot 2026-11-18 184313.png",
-        "hohoho.png",
-        "hohoho2.png",
-        "image.jpg",
-        "1117(1) (1).mp4",
-        "vine-boom.mp3",
-        "my-mommy-said-no-more-skibidi-toilet.mp3",
-        "sus-clapping_vww6zEH.mp3",
-        "sus-clap.mp3",
-        "sus-clap-3-0-make-it-to-end-hear.mp3",
-        "clapping-not-sus.mp3",
-        "alvin-and-the-chimpunks-backshots.mp3",
-        "fapping-masturbating-fapping-meat-your-jerking-therorshach27.mp3",
-        "asmr-hawk-tuah-longer.mp3"
+        "Screenshot 2026-11-16 064113.png","Screenshot 2026-11-16 064134.png","Screenshot 2026-11-16 064158.png",
+        "Screenshot 2026-11-16 064206.png","Screenshot 2026-11-16 064215.png","Screenshot 2026-11-16 064224.png",
+        "Screenshot 2026-11-16 064236.png","Screenshot 2026-11-16 064259.png","Screenshot 2026-11-16 064310.png",
+        "Screenshot 2026-11-17 184602.png","hohoho.png","hohoho2.png","image.jpg","1117(1) (1).mp4",
+        "vine-boom.mp3","Hava Nagila Original.mp3","im-very-angry-goku.mp3","bop.m4a",
+        "sus-clapping_vww6zEH.mp3","sus-clap.mp3","clapping-not-sus.mp3","alvin-and-the-chimpunks-backshots.mp3"
       ];
-
       files.forEach(f => {
         const li = document.createElement('li');
         li.textContent = f;
         list.appendChild(li);
       });
-
       document.getElementById('files-modal').style.display = 'flex';
     }
-
     function openExportLogs() {
-      logActivity('Exported system logs / scripts');
+      logActivity('Exported system logs');
       document.getElementById('logs-modal').style.display = 'flex';
     }
-
     function openSecuritySettings() {
       logActivity('Opened Security Settings');
       document.getElementById('security-modal').style.display = 'flex';
     }
-
-    function closeModal(id) {
-      document.getElementById(id).style.display = 'none';
-    }
-
+    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
     function changeEmail() {
-      const newEmail = prompt("Enter new recovery email address:", document.getElementById('current-email').textContent);
-      if (newEmail && newEmail.trim() !== "") {
+      const newEmail = prompt("Enter new recovery email:", document.getElementById('current-email').textContent);
+      if (newEmail && newEmail.trim()) {
         document.getElementById('current-email').textContent = newEmail.trim();
-        logActivity('Recovery email changed to: ' + newEmail.trim());
-        showToast('Email updated successfully');
+        logActivity('Recovery email changed');
+        showToast('Email updated');
       }
     }
-
-    // Close modals when clicking outside
-    document.querySelectorAll('.modal-overlay').forEach(overlay => {
-      overlay.addEventListener('click', (e) => {
-        if (e.target === overlay) overlay.style.display = 'none';
-      });
+    document.querySelectorAll('.modal-overlay').forEach(o => {
+      o.addEventListener('click', e => { if (e.target === o) o.style.display = 'none'; });
     });
 
-    // ===== SOUNDS & EASTER EGGS =====
+    // ===== SOUNDS =====
     const peachSounds = [
-      "sus-clapping_vww6zEH.mp3",
-      "sus-clap.mp3",
-      "sus-clap-3-0-make-it-to-end-hear.mp3",
-      "clapping-not-sus.mp3",
-      "alvin-and-the-chimpunks-backshots.mp3"
+      "sus-clapping_vww6zEH.mp3","sus-clap.mp3","sus-clap-3-0-make-it-to-end-hear.mp3",
+      "clapping-not-sus.mp3","alvin-and-the-chimpunks-backshots.mp3"
     ];
     const eggplantSounds = [
-      "fapping-masturbating-fapping-meat-your-jerking-therorshach27.mp3",
-      "asmr-hawk-tuah-longer.mp3"
+      "fapping-masturbating-fapping-meat-your-jerking-therorshach27.mp3","asmr-hawk-tuah-longer.mp3"
     ];
-
-    function playRandomSound(soundList) {
-      const file = soundList[Math.floor(Math.random() * soundList.length)];
-      const audio = new Audio(file);
+    function playRandomSound(list) {
+      const audio = new Audio(list[Math.floor(Math.random() * list.length)]);
       audio.volume = 0.7;
       audio.play().catch(() => {});
     }
 
+    // ===== PARTICLES =====
     function spawnParticles(originEl, emojis, count = 10) {
       const container = document.querySelector('.progress-container');
       if (!container) return;
       const rect = originEl.getBoundingClientRect();
-      const containerRect = container.getBoundingClientRect();
-      const originX = rect.left + rect.width / 2 - containerRect.left;
-      const originY = rect.top + rect.height / 2 - containerRect.top;
-
+      const cRect = container.getBoundingClientRect();
+      const ox = rect.left + rect.width/2 - cRect.left;
+      const oy = rect.top + rect.height/2 - cRect.top;
       for (let i = 0; i < count; i++) {
         const p = document.createElement('div');
         p.className = 'particle';
         p.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-        const angle = (Math.random() * 160 - 80) * (Math.PI / 180);
-        const distance = 30 + Math.random() * 90;
-        p.style.left = originX + 'px';
-        p.style.top = originY + 'px';
-        p.style.setProperty('--dx', (Math.sin(angle) * distance) + 'px');
-        p.style.setProperty('--dy', (-Math.cos(angle) * distance - 10) + 'px');
-        p.style.setProperty('--rot', (Math.random() * 70 - 35) + 'deg');
-        p.style.animationDelay = (i * 0.025) + 's';
+        const angle = (Math.random() * 160 - 80) * Math.PI/180;
+        const dist = 35 + Math.random() * 90;
+        p.style.left = ox + 'px';
+        p.style.top = oy + 'px';
+        p.style.setProperty('--dx', (Math.sin(angle)*dist) + 'px');
+        p.style.setProperty('--dy', (-Math.cos(angle)*dist - 15) + 'px');
+        p.style.setProperty('--rot', (Math.random()*70-35) + 'deg');
+        p.style.animationDelay = (i*0.03) + 's';
         container.appendChild(p);
         setTimeout(() => p.remove(), 1100);
       }
     }
 
-    eggplantWrapper.addEventListener('click', (e) => {
+    eggplantWrapper.addEventListener('click', e => {
       e.stopPropagation();
       if (eggplantWrapper.classList.contains('inside')) return;
       playRandomSound(eggplantSounds);
-      spawnParticles(eggplantWrapper, ['💧', '💦'], 12);
+      spawnParticles(eggplantWrapper, ['💧','💦'], 12);
     });
-
-    peachTarget.addEventListener('click', (e) => {
+    peachTarget.addEventListener('click', e => {
       e.stopPropagation();
       playRandomSound(peachSounds);
       peachTarget.classList.remove('jiggle');
       void peachTarget.offsetWidth;
       peachTarget.classList.add('jiggle');
-      spawnParticles(peachTarget, ['💖', '💗', '💕', '❤️', '💘', '💝'], 14);
+      spawnParticles(peachTarget, ['💖','💗','💕','❤️','💘'], 14);
     });
 
-    function spawnBurst() {
-      spawnParticles(peachTarget, ['💖', '💗', '💕', '❤️', '💘', '💝', '💧', '💦'], 12);
-    }
-
-    // ===== JUMPSCARE =====
+    // ===== JUMPSCARE SYSTEM =====
     const jumpscarePool = [
-      { src: "hohoho.png", special: false },
-      { src: "hohoho2.png", special: false },
-      { src: "Screenshot%202026-11-18%20174153.png", special: false },
-      { src: "Screenshot%202026-11-18%20175026.png", special: false },
-      { src: "Screenshot%202026-11-18%20184313.png", special: true }
+      { src: "hohoho.png", isHashir: true },
+      { src: "hohoho2.png", isHashir: false },
+      { src: "Screenshot%202026-11-18%20174153.png", isHashir: false },
+      { src: "Screenshot%202026-11-18%20175026.png", isHashir: false }
     ];
     let currentJumpscareAudio = null;
+    let hashirClickCount = 0;
 
     function triggerJumpscare() {
       const jumpscare = document.getElementById('jumpscare');
       const img = document.getElementById('jumpscare-img');
       const caption = document.getElementById('jumpscare-caption');
-      const rand = Math.random() * 20;
-      let selected = rand < 1 ? jumpscarePool[4] : jumpscarePool[Math.floor((rand - 1) / 4.75)];
 
+      const selected = jumpscarePool[Math.floor(Math.random() * jumpscarePool.length)];
       img.src = selected.src;
-      jumpscare.style.display = 'flex';
+      caption.style.display = 'none';
 
+      // stop previous audio
       if (currentJumpscareAudio) {
         currentJumpscareAudio.pause();
         currentJumpscareAudio = null;
       }
 
-      if (selected.special) {
-        caption.textContent = "get bombarded by curvy mommies 🥵🥵🥵🥵🥵🥵🥵";
-        caption.style.display = 'block';
-        currentJumpscareAudio = new Audio("my-mommy-said-no-more-skibidi-toilet.mp3");
-        currentJumpscareAudio.volume = 0.9;
+      jumpscare.style.display = 'flex';
+      jumpscare.classList.remove('fade-out');
+      void jumpscare.offsetWidth;
+      jumpscare.classList.add('show');
+
+      if (selected.isHashir) {
+        // Hashir jumpscare - longer + Hava Nagila
+        currentJumpscareAudio = new Audio("Hava Nagila Original.mp3");
+        currentJumpscareAudio.volume = 0.85;
         currentJumpscareAudio.play().catch(() => {});
-        currentJumpscareAudio.addEventListener('ended', () => {
-          jumpscare.style.display = 'none';
-          caption.style.display = 'none';
-          currentJumpscareAudio = null;
-        });
+
+        // Longer duration (play most of the song or at least 6-7 seconds)
+        setTimeout(() => {
+          jumpscare.classList.add('fade-out');
+          setTimeout(() => {
+            jumpscare.style.display = 'none';
+            jumpscare.classList.remove('show', 'fade-out');
+            if (currentJumpscareAudio) {
+              currentJumpscareAudio.pause();
+              currentJumpscareAudio = null;
+            }
+          }, 700);
+        }, 6500);
       } else {
-        caption.style.display = 'none';
+        // Normal short jumpscare
         const boom = new Audio("vine-boom.mp3");
-        boom.volume = 1.0;
+        boom.volume = 1;
         boom.play().catch(() => {});
-        setTimeout(() => jumpscare.style.display = 'none', 1300);
+        setTimeout(() => {
+          jumpscare.classList.add('fade-out');
+          setTimeout(() => {
+            jumpscare.style.display = 'none';
+            jumpscare.classList.remove('show', 'fade-out');
+          }, 700);
+        }, 1800);
       }
     }
 
     function handleImageClick(index) {
       if (Math.random() < 0.15) {
         triggerJumpscare();
-        setTimeout(() => openLightbox(index), 1500);
+        setTimeout(() => openLightbox(index), 1600);
       } else {
         openLightbox(index);
       }
     }
 
-    // ===== LOADING =====
+    // ===== LOADING (midway eggplant entry) =====
     function startLoading() {
       let progress = 0;
-      let isStuttering = false;
-      let stutterEnd = 0;
+      let phase = 1; // 1 = normal, 2 = inside peach
 
       const interval = setInterval(() => {
-        const now = Date.now();
-        if (!isStuttering && Math.random() < 0.045 && progress > 10 && progress < 88) {
-          isStuttering = true;
-          stutterEnd = now + (400 + Math.random() * 900);
-        }
-        if (isStuttering) {
-          if (now > stutterEnd) isStuttering = false;
-          else progress += (Math.random() * 0.15 - 0.08);
+        if (phase === 1) {
+          progress += 0.55 + Math.random() * 0.7;
+          if (progress >= 52) {
+            progress = 52;
+            phase = 2;
+            // Eggplant goes in
+            eggplantWrapper.classList.add('inside');
+            peachTarget.classList.add('shake');
+            // Water droplets
+            spawnParticles(peachTarget, ['💧','💦','💧','💦','💦'], 18);
+            statusText.textContent = "Almost...";
+          }
         } else {
-          if (Math.random() < 0.1 && progress > 8) progress -= (0.2 + Math.random() * 0.5);
-          else progress += (0.28 + Math.random() * 0.55);
+          // Slow finish after going inside
+          progress += 0.25 + Math.random() * 0.35;
         }
+
         if (progress > 100) progress = 100;
-        if (progress < 0) progress = 0;
-
         progressBar.style.width = progress + '%';
-        eggplantWrapper.style.left = progress + '%';
+        if (phase === 1) eggplantWrapper.style.left = progress + '%';
 
-        if (progress < 22) statusText.textContent = "Warming up...";
-        else if (progress < 48) statusText.textContent = "Almost there...";
-        else if (progress < 75) statusText.textContent = "Getting closer...";
-        else if (progress < 100) statusText.textContent = "Final approach...";
+        if (progress < 25) statusText.textContent = "Warming up...";
+        else if (progress < 50) statusText.textContent = "Getting closer...";
+        else if (progress < 85) statusText.textContent = "Deeper...";
+        else if (progress < 100) statusText.textContent = "Final stretch...";
         else {
           statusText.textContent = "Done 🍑";
           clearInterval(interval);
-          const pfp = eggplantWrapper.querySelector('.pfp-next-to-eggplant');
-          if (pfp) pfp.style.opacity = '0';
-          setTimeout(() => {
-            eggplantWrapper.classList.add('inside');
-            peachTarget.classList.add('react');
-            spawnBurst();
-          }, 60);
+          peachTarget.classList.remove('shake');
+          peachTarget.classList.add('react');
           setTimeout(() => {
             loadingScreen.style.display = 'none';
             mainContent.style.display = 'block';
@@ -1121,72 +1060,69 @@
             setTimeout(() => {
               xoxoBox.classList.add('slide-up');
               setTimeout(() => galleryScreen.classList.add('show'), 850);
-            }, 1100);
-          }, 900);
+            }, 900);
+          }, 700);
         }
-      }, 65);
+      }, 60);
     }
 
     function createHearts() {
       const container = document.getElementById('hearts-bg');
-      const heartEmojis = ['💖', '💗', '💓', '💕', '❤️', '💘', '💝'];
+      const emojis = ['💖','💗','💓','💕','❤️','💘','💝'];
       for (let i = 0; i < 50; i++) {
-        const heart = document.createElement('div');
-        heart.className = 'heart';
-        heart.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
-        heart.style.left = Math.random() * 100 + '%';
-        heart.style.top = Math.random() * 100 + '%';
-        heart.style.fontSize = (1.2 + Math.random() * 1.8) + 'rem';
-        heart.style.animationDuration = (4 + Math.random() * 5) + 's';
-        heart.style.animationDelay = (Math.random() * 3) + 's';
-        container.appendChild(heart);
+        const h = document.createElement('div');
+        h.className = 'heart';
+        h.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+        h.style.left = Math.random()*100 + '%';
+        h.style.top = Math.random()*100 + '%';
+        h.style.fontSize = (1.2 + Math.random()*1.8) + 'rem';
+        h.style.animationDuration = (4 + Math.random()*5) + 's';
+        h.style.animationDelay = Math.random()*3 + 's';
+        container.appendChild(h);
       }
     }
 
     // ===== LIGHTBOX =====
     const images = [
-      "Screenshot%202026-11-16%20064113.png",
-      "Screenshot%202026-11-16%20064134.png",
-      "Screenshot%202026-11-16%20064158.png",
-      "Screenshot%202026-11-16%20064206.png",
-      "Screenshot%202026-11-16%20064215.png",
-      "Screenshot%202026-11-16%20064224.png",
-      "Screenshot%202026-11-16%20064236.png",
-      "Screenshot%202026-11-16%20064259.png",
-      "Screenshot%202026-11-16%20064310.png",
-      "Screenshot%202026-11-17%20184602.png"
+      "Screenshot%202026-11-16%20064113.png","Screenshot%202026-11-16%20064134.png",
+      "Screenshot%202026-11-16%20064158.png","Screenshot%202026-11-16%20064206.png",
+      "Screenshot%202026-11-16%20064215.png","Screenshot%202026-11-16%20064224.png",
+      "Screenshot%202026-11-16%20064236.png","Screenshot%202026-11-16%20064259.png",
+      "Screenshot%202026-11-16%20064310.png","Screenshot%202026-11-17%20184602.png"
     ];
     let currentIndex = 0;
 
     function openLightbox(index) {
       currentIndex = index;
       updateLightbox();
-      document.getElementById('lightbox').style.display = 'flex';
+      const lb = document.getElementById('lightbox');
+      lb.style.display = 'flex';
+      void lb.offsetWidth;
+      lb.classList.add('show');
     }
-
     function updateLightbox() {
-      const lightbox = document.getElementById('lightbox');
+      const lb = document.getElementById('lightbox');
       const img = document.getElementById('lightbox-img');
       const counter = document.getElementById('lightbox-counter');
-      const oldVideo = document.getElementById('lightbox-video');
-      if (oldVideo) oldVideo.remove();
-      const oldContainer = document.getElementById('side-by-side');
-      if (oldContainer) oldContainer.remove();
+      const oldV = document.getElementById('lightbox-video');
+      if (oldV) oldV.remove();
+      const oldC = document.getElementById('side-by-side');
+      if (oldC) oldC.remove();
 
       if (currentIndex === 9) {
         img.style.display = 'none';
         const container = document.createElement('div');
         container.id = 'side-by-side';
-        container.style.cssText = `display:flex;flex-direction:column;align-items:center;gap:16px;max-width:95%;max-height:90%;`;
+        container.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:16px;max-width:95%;max-height:90%;';
         const title = document.createElement('div');
         title.textContent = 'how hashir feels:';
-        title.style.cssText = `color:#ff9ecb;font-size:1.5rem;font-weight:600;margin-bottom:10px;text-shadow:0 2px 10px rgba(0,0,0,0.7);`;
+        title.style.cssText = 'color:#ff9ecb;font-size:1.5rem;font-weight:600;text-shadow:0 2px 10px rgba(0,0,0,0.7);';
         container.appendChild(title);
         const row = document.createElement('div');
-        row.style.cssText = `display:flex;gap:24px;align-items:center;justify-content:center;flex-wrap:wrap;`;
+        row.style.cssText = 'display:flex;gap:24px;align-items:center;justify-content:center;flex-wrap:wrap;';
         const staticImg = document.createElement('img');
         staticImg.src = images[9];
-        staticImg.style.cssText = `max-width:420px;max-height:70vh;border-radius:10px;box-shadow:0 0 30px rgba(0,0,0,0.6);object-fit:contain;`;
+        staticImg.style.cssText = 'max-width:420px;max-height:70vh;border-radius:10px;box-shadow:0 0 30px rgba(0,0,0,0.6);object-fit:contain;';
         row.appendChild(staticImg);
         const video = document.createElement('video');
         video.id = 'lightbox-video';
@@ -1194,43 +1130,47 @@
         video.controls = true;
         video.autoplay = true;
         video.loop = true;
-        video.style.cssText = `max-width:420px;max-height:70vh;border-radius:10px;box-shadow:0 0 30px rgba(0,0,0,0.6);object-fit:cover;object-position:center 35%;`;
+        video.style.cssText = 'max-width:420px;max-height:70vh;border-radius:10px;box-shadow:0 0 30px rgba(0,0,0,0.6);object-fit:cover;object-position:center 35%;';
         row.appendChild(video);
         container.appendChild(row);
-        lightbox.insertBefore(container, img);
+        lb.insertBefore(container, img);
       } else {
         img.style.display = 'block';
         img.src = images[currentIndex];
       }
-      counter.textContent = `${currentIndex + 1} / ${images.length}`;
+      counter.textContent = `${currentIndex+1} / ${images.length}`;
     }
-
     function changeImage(dir) {
       currentIndex = (currentIndex + dir + images.length) % images.length;
       updateLightbox();
     }
-
     function closeLightbox(e) {
       if (e.target.id === 'lightbox' || e.target.classList.contains('lightbox')) {
-        const video = document.getElementById('lightbox-video');
-        if (video) { video.pause(); video.remove(); }
-        const container = document.getElementById('side-by-side');
-        if (container) container.remove();
-        document.getElementById('lightbox').style.display = 'none';
+        const lb = document.getElementById('lightbox');
+        lb.classList.remove('show');
+        setTimeout(() => {
+          const video = document.getElementById('lightbox-video');
+          if (video) { video.pause(); video.remove(); }
+          const c = document.getElementById('side-by-side');
+          if (c) c.remove();
+          lb.style.display = 'none';
+        }, 280);
       }
     }
-
-    document.addEventListener('keydown', (e) => {
-      const lightbox = document.getElementById('lightbox');
-      if (lightbox.style.display !== 'flex') return;
+    document.addEventListener('keydown', e => {
+      const lb = document.getElementById('lightbox');
+      if (lb.style.display !== 'flex') return;
       if (e.key === 'ArrowLeft') changeImage(-1);
       else if (e.key === 'ArrowRight') changeImage(1);
       else if (e.key === 'Escape') {
-        const video = document.getElementById('lightbox-video');
-        if (video) { video.pause(); video.remove(); }
-        const container = document.getElementById('side-by-side');
-        if (container) container.remove();
-        lightbox.style.display = 'none';
+        lb.classList.remove('show');
+        setTimeout(() => {
+          const video = document.getElementById('lightbox-video');
+          if (video) { video.pause(); video.remove(); }
+          const c = document.getElementById('side-by-side');
+          if (c) c.remove();
+          lb.style.display = 'none';
+        }, 280);
       }
     });
   </script>
