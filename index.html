@@ -256,7 +256,7 @@
     .boss-btn:hover { background: #fff; color: #000; }
     .boss-btn:disabled { opacity: 0.4; pointer-events: none; }
     #sub-menu {
-      display: none; gap: 12px; margin-top: 6px;
+      display: none; gap: 12px; margin-top: 6px; flex-wrap: wrap; justify-content: center;
     }
 
     /* Fullscreen ending */
@@ -597,7 +597,7 @@
     }
 
     // ============================================================
-    // JUMPSCARES + ESCALATION TO BOSS
+    // JUMPSCARES + ESCALATION
     // ============================================================
     const jumpscarePool = [
       { src: "hohoho.png", isHashir: true },
@@ -686,14 +686,12 @@
       const img = document.getElementById('lightbox-img');
       const counter = document.getElementById('lightbox-counter');
 
-      // clean previous special content
       const oldVideo = document.getElementById('lightbox-video');
       if (oldVideo) oldVideo.remove();
       const oldContainer = document.getElementById('side-by-side');
       if (oldContainer) oldContainer.remove();
 
       if (currentIndex === 9) {
-        // Special side-by-side for image 10
         img.style.display = 'none';
         const container = document.createElement('div');
         container.id = 'side-by-side';
@@ -759,7 +757,7 @@
     });
 
     // ============================================================
-    // BOSS FIGHT ENGINE (improved)
+    // BOSS FIGHT (the improved version you just gave)
     // ============================================================
     const Boss = (function() {
       const canvas = document.getElementById('boss-canvas');
@@ -772,8 +770,9 @@
       const S = 16;
 
       let active = false;
-      let state = 'menu';           // menu | aim | dodge | wait | over
+      let state = 'menu';
       let playerHP = 92;
+      let maxHP = 92;
       let dodges = 0;
       let mercyCount = 0;
       let naan = 6;
@@ -782,18 +781,16 @@
       let inv = 0;
       let soul = { x: 0, y: 0, vy: 0 };
       let objs = [];
+      let platforms = [];
       let t = 0;
       let spawnTimer = 0;
       let keys = {};
-      let aim = { p: 0.5, d: 1 };
-      let msg = '';
-      let shown = 0;
-      let over = null;
-      let last = 0;
-      let atkType = 0;
+      let aim = { p: 0.5, d: 1, active: false };
       let turn = 0;
       let hava = null;
       let animId = null;
+      let last = 0;
+      let atkType = 0;
 
       function centre() {
         soul.x = BOX.x + BOX.w / 2 - S / 2;
@@ -802,8 +799,6 @@
       }
 
       function say(text) {
-        msg = text;
-        shown = 0;
         dialogueEl.textContent = text;
       }
 
@@ -828,55 +823,52 @@
 
         menuEl.appendChild(addBtn('FIGHT', () => {
           clearMenus();
-          subMenuEl.style.display = 'flex';
-          subMenuEl.appendChild(addBtn('Circumcision', () => doAttack('circumcision')));
-          if (tetoUnlocked) {
-            subMenuEl.appendChild(addBtn('Teto', () => doAttack('teto')));
-          }
-          subMenuEl.appendChild(addBtn('Back', showMainMenu));
+          state = 'aim';
+          aim.p = 0.5;
+          aim.d = 1;
+          aim.active = true;
+          say("* You try to hit HOHOHO.");
         }));
 
-        menuEl.appendChild(addBtn('HEAL', () => {
+        menuEl.appendChild(addBtn('ITEM', () => {
           clearMenus();
           subMenuEl.style.display = 'flex';
-          subMenuEl.appendChild(addBtn(`Naan +40 ×${naan}`, () => useHeal('naan'), naan < 1));
+          subMenuEl.appendChild(addBtn(`Naan +40  ×${naan}`, () => useHeal('naan'), naan < 1));
           subMenuEl.appendChild(addBtn(`Kebab FULL ×${kebab}`, () => useHeal('kebab'), kebab < 1));
           subMenuEl.appendChild(addBtn('Back', showMainMenu));
         }));
 
         menuEl.appendChild(addBtn('MERCY', doMercy));
+
+        if (tetoUnlocked) {
+          menuEl.appendChild(addBtn('TETO', () => {
+            clearMenus();
+            say("TETO OUT!!!");
+            setTimeout(() => endFight(true, true), 900);
+          }));
+        }
       }
 
-      function doAttack(type) {
-        clearMenus();
-        if (type === 'teto') {
-          say("TETO OUT!!!");
-          setTimeout(() => endFight(true, true), 900);
-          return;
-        }
-
-        // Circumcision
+      function doAttack() {
         dodges++;
-        if (dodges <= 20) {
-          say(`(dodged)  (${dodges}/20)`);
-          endPlayerTurn();
+        if (dodges >= 15) {
+          say("...");
+          setTimeout(() => endFight(true, false), 900);
           return;
         }
-
-        // After 20 dodges → win
-        say("...");
-        setTimeout(() => endFight(true, false), 800);
+        say(`* Miss... (${dodges}/15)`);
+        endPlayerTurn();
       }
 
       function useHeal(type) {
         clearMenus();
         if (type === 'naan' && naan > 0) {
           naan--;
-          playerHP = Math.min(92, playerHP + 40);
+          playerHP = Math.min(maxHP, playerHP + 40);
           say("* You ate the Naan. +40 HP");
         } else if (type === 'kebab' && kebab > 0) {
           kebab--;
-          playerHP = 92;
+          playerHP = maxHP;
           say("* You ate the Kebab. Full heal!");
         }
         endPlayerTurn();
@@ -889,7 +881,13 @@
           endFight(false, false, "i dont accept mercy/pity");
           return;
         }
-        say("mercy? ... nah.");
+        const lines = [
+          "mercy? ... nah.",
+          "you're not getting off that easy.",
+          "try harder.",
+          "still no."
+        ];
+        say(lines[Math.min(mercyCount - 1, lines.length - 1)]);
         endPlayerTurn();
       }
 
@@ -904,12 +902,13 @@
         t = 0;
         spawnTimer = 0;
         objs = [];
+        platforms = [];
         turn++;
-        atkType = Math.floor(Math.random() * 4);
-        blue = (atkType === 1);
+        atkType = Math.floor(Math.random() * 5);
+        blue = (atkType === 1 || atkType === 4);
         if (!blue) centre();
         else {
-          soul.x = BOX.x + 30;
+          soul.x = BOX.x + 40;
           soul.y = BOX.y + BOX.h - S - 4;
           soul.vy = 0;
         }
@@ -918,12 +917,13 @@
 
       function randomQuote() {
         const q = [
-          "The supreme art of war is to subdue the enemy without fighting.",
-          "Know yourself and you will win all battles.",
-          "In the midst of chaos, there is also opportunity.",
-          "you really thought that would work?",
+          "you're gonna have a bad time.",
+          "heh heh heh...",
           "keep going then.",
-          "interesting."
+          "interesting.",
+          "you really thought that would work?",
+          "get dunked on.",
+          "don't you have anything better to do?"
         ];
         return q[Math.floor(Math.random() * q.length)];
       }
@@ -931,7 +931,7 @@
       function hurt(amount) {
         if (inv > 0) return;
         playerHP -= amount;
-        inv = 0.75;
+        inv = 0.9;
         if (playerHP <= 0) {
           playerHP = 0;
           endFight(false);
@@ -942,6 +942,8 @@
         active = false;
         if (animId) cancelAnimationFrame(animId);
         if (hava) { hava.pause(); hava = null; }
+        window.removeEventListener('keydown', onKeyDown);
+        window.removeEventListener('keyup', onKeyUp);
         document.getElementById('boss-fight').style.display = 'none';
 
         if (!won) {
@@ -952,7 +954,6 @@
           return;
         }
 
-        // Fullscreen ending
         const overlay = document.getElementById('ending-overlay');
         const video = document.getElementById('ending-video');
         overlay.style.display = 'flex';
@@ -964,77 +965,121 @@
         };
       }
 
-      // Input
       function onKeyDown(e) {
         keys[e.key.toLowerCase()] = true;
         if (['arrowup','arrowdown','arrowleft','arrowright',' '].includes(e.key.toLowerCase())) {
           e.preventDefault();
+        }
+        if (state === 'aim' && (e.key === ' ' || e.key === 'z' || e.key === 'Enter')) {
+          aim.active = false;
+          state = 'wait';
+          doAttack();
         }
       }
       function onKeyUp(e) {
         keys[e.key.toLowerCase()] = false;
       }
 
-      // Spawning (toned down)
       function spawnAttack() {
-        if (spawnTimer > 0 || t > 5.8) return;
-        const speed = 0.9 + turn * 0.03;
+        if (spawnTimer > 0 || t > 6.2) return;
+        const speed = 0.85 + turn * 0.04;
 
-        if (atkType === 0) { // falling kababs
-          spawnTimer = 0.28 / speed;
+        if (atkType === 0) {
+          spawnTimer = 0.32 / speed;
           objs.push({
-            type: 'kabab',
-            x: BOX.x + 10 + Math.random() * (BOX.w - 40),
-            y: BOX.y - 50,
-            w: 20, h: 60,
-            vy: 150 * speed
+            type: 'bone',
+            x: BOX.x + 15 + Math.random() * (BOX.w - 50),
+            y: BOX.y - 60,
+            w: 18, h: 70,
+            vy: 170 * speed
           });
-        } else if (atkType === 1) { // blue soul bars
-          spawnTimer = 0.95 / speed;
+        }
+        else if (atkType === 1) {
+          spawnTimer = 0.9 / speed;
+          if (Math.random() < 0.4) {
+            platforms.push({
+              x: BOX.x + 20 + Math.random() * 100,
+              y: BOX.y + 60 + Math.random() * 50,
+              w: 70, h: 10,
+              life: 3.5
+            });
+          }
           objs.push({
-            type: 'bar',
+            type: 'bone',
             x: BOX.x + BOX.w + 10,
-            y: BOX.y + BOX.h - 32,
-            w: 18, h: 32,
-            vx: -130 * speed
+            y: BOX.y + BOX.h - 40,
+            w: 16, h: 40,
+            vx: -140 * speed
           });
-        } else if (atkType === 2) { // side kababs
-          spawnTimer = 0.6 / speed;
+        }
+        else if (atkType === 2) {
+          spawnTimer = 0.55 / speed;
           const left = Math.random() < 0.5;
           objs.push({
-            type: 'kabab',
-            x: left ? BOX.x - 40 : BOX.x + BOX.w + 20,
+            type: 'bone',
+            x: left ? BOX.x - 50 : BOX.x + BOX.w + 20,
             y: BOX.y + 20 + Math.random() * (BOX.h - 80),
-            w: 20, h: 60,
-            vx: left ? 120 * speed : -120 * speed
+            w: 20, h: 55,
+            vx: left ? 130 * speed : -130 * speed
           });
-        } else { // simple blaster warning
-          spawnTimer = 1.5 / speed;
+        }
+        else if (atkType === 3) {
+          spawnTimer = 1.4 / speed;
           const side = Math.floor(Math.random() * 4);
           let bx, by;
-          if (side === 0) { bx = BOX.x - 50; by = BOX.y + Math.random() * BOX.h; }
-          if (side === 1) { bx = BOX.x + BOX.w + 50; by = BOX.y + Math.random() * BOX.h; }
-          if (side === 2) { bx = BOX.x + Math.random() * BOX.w; by = BOX.y - 50; }
-          if (side === 3) { bx = BOX.x + Math.random() * BOX.w; by = BOX.y + BOX.h + 50; }
-          objs.push({ type: 'blast', x: bx, y: by, t: 0, charge: 0.65, fire: 0.3 });
+          if (side === 0) { bx = BOX.x - 40; by = BOX.y + Math.random() * BOX.h; }
+          if (side === 1) { bx = BOX.x + BOX.w + 40; by = BOX.y + Math.random() * BOX.h; }
+          if (side === 2) { bx = BOX.x + Math.random() * BOX.w; by = BOX.y - 40; }
+          if (side === 3) { bx = BOX.x + Math.random() * BOX.w; by = BOX.y + BOX.h + 40; }
+          objs.push({ type: 'blast', x: bx, y: by, t: 0, charge: 0.7, fire: 0.35 });
+        }
+        else {
+          spawnTimer = 0.7 / speed;
+          objs.push({
+            type: 'bone',
+            x: BOX.x + 10 + Math.random() * (BOX.w - 40),
+            y: BOX.y - 50,
+            w: 16, h: 60,
+            vy: 160 * speed
+          });
         }
       }
 
       function update(dt) {
         if (inv > 0) inv -= dt;
 
+        if (state === 'aim' && aim.active) {
+          aim.p += aim.d * dt * 1.8;
+          if (aim.p >= 1) { aim.p = 1; aim.d = -1; }
+          if (aim.p <= 0) { aim.p = 0; aim.d = 1; }
+        }
+
         if (state === 'dodge') {
           t += dt;
           spawnTimer -= dt;
 
-          const speed = 160 * dt;
+          const speed = 165 * dt;
           if (keys['a'] || keys['arrowleft'])  soul.x -= speed;
           if (keys['d'] || keys['arrowright']) soul.x += speed;
 
           if (blue) {
             const ground = BOX.y + BOX.h - S;
-            soul.vy += 780 * dt;
-            if ((keys['w'] || keys['arrowup']) && soul.y >= ground - 3) soul.vy = -320;
+            soul.vy += 820 * dt;
+            if ((keys['w'] || keys['arrowup'] || keys[' ']) && soul.y >= ground - 4) {
+              soul.vy = -340;
+            }
+            for (const p of platforms) {
+              if (soul.vy > 0 &&
+                  soul.x + S > p.x && soul.x < p.x + p.w &&
+                  soul.y + S >= p.y && soul.y + S <= p.y + 12) {
+                soul.y = p.y - S;
+                soul.vy = 0;
+                if (keys['w'] || keys['arrowup'] || keys[' ']) soul.vy = -340;
+              }
+              p.life -= dt;
+            }
+            platforms = platforms.filter(p => p.life > 0);
+
             soul.y += soul.vy * dt;
             if (soul.y > ground) { soul.y = ground; soul.vy = 0; }
           } else {
@@ -1047,16 +1092,11 @@
 
           spawnAttack();
 
-          // collisions
           const sr = { x: soul.x + 2, y: soul.y + 2, w: S - 4, h: S - 4 };
           for (const o of objs) {
-            if (o.type === 'kabab') {
+            if (o.type === 'bone') {
               if (o.vy) o.y += o.vy * dt;
               if (o.vx) o.x += o.vx * dt;
-              if (rectsOverlap(sr, o)) hurt(5);
-            }
-            if (o.type === 'bar') {
-              o.x += o.vx * dt;
               if (rectsOverlap(sr, o)) hurt(6);
             }
             if (o.type === 'blast') {
@@ -1064,22 +1104,22 @@
               if (o.t > o.charge && o.t < o.charge + o.fire) {
                 const dx = Math.abs((soul.x + S/2) - o.x);
                 const dy = Math.abs((soul.y + S/2) - o.y);
-                if (dx < 22 || dy < 22) hurt(7);
+                if (dx < 24 || dy < 24) hurt(8);
               }
             }
           }
 
           objs = objs.filter(o => {
-            if (o.type === 'kabab' && (o.y > 500 || o.x < -50 || o.x > 700)) return false;
-            if (o.type === 'bar' && o.x < BOX.x - 40) return false;
-            if (o.type === 'blast' && o.t > o.charge + o.fire + 0.15) return false;
+            if (o.type === 'bone' && (o.y > 520 || o.x < -60 || o.x > 700)) return false;
+            if (o.type === 'blast' && o.t > o.charge + o.fire + 0.2) return false;
             return true;
           });
 
-          if (t > 6.0) {
+          if (t > 6.4) {
             state = 'menu';
             blue = false;
             objs = [];
+            platforms = [];
             centre();
             say("* Your turn.");
             showMainMenu();
@@ -1094,12 +1134,10 @@
       function draw() {
         ctx.clearRect(0, 0, 640, 480);
 
-        // Header
         ctx.fillStyle = '#fff';
-        ctx.font = '18px Courier New';
+        ctx.font = '18px "Courier New"';
         ctx.fillText('HOHOHO   1 / 1', 240, 36);
 
-        // Boss body (simple)
         ctx.fillStyle = '#e8e8e8';
         ctx.fillRect(270, 55, 100, 110);
         ctx.fillStyle = '#111';
@@ -1108,45 +1146,53 @@
         ctx.fillStyle = '#c00';
         ctx.fillRect(295, 110, 50, 10);
 
-        // Box
         ctx.strokeStyle = '#fff';
         ctx.lineWidth = 4;
         ctx.strokeRect(BOX.x, BOX.y, BOX.w, BOX.h);
 
-        // Objects
+        for (const p of platforms) {
+          ctx.fillStyle = '#aaa';
+          ctx.fillRect(p.x, p.y, p.w, p.h);
+        }
+
         for (const o of objs) {
-          if (o.type === 'kabab') {
-            ctx.fillStyle = '#c47a3a';
+          if (o.type === 'bone') {
+            ctx.fillStyle = '#ddd';
             ctx.fillRect(o.x, o.y, o.w, o.h);
-          }
-          if (o.type === 'bar') {
-            ctx.fillStyle = '#eee';
-            ctx.fillRect(o.x, o.y, o.w, o.h);
+            ctx.fillRect(o.x - 4, o.y, o.w + 8, 8);
+            ctx.fillRect(o.x - 4, o.y + o.h - 8, o.w + 8, 8);
           }
           if (o.type === 'blast') {
-            ctx.fillStyle = o.t < o.charge ? 'rgba(255,80,80,0.55)' : '#fff';
+            ctx.fillStyle = o.t < o.charge ? 'rgba(255,80,80,0.6)' : '#fff';
             ctx.beginPath();
-            ctx.arc(o.x, o.y, 18, 0, Math.PI * 2);
+            ctx.arc(o.x, o.y, 20, 0, Math.PI * 2);
             ctx.fill();
           }
         }
 
-        // Soul
-        ctx.globalAlpha = inv > 0 && Math.floor(inv * 12) % 2 ? 0.3 : 1;
+        if (state === 'aim') {
+          ctx.fillStyle = '#222';
+          ctx.fillRect(BOX.x, BOX.y + BOX.h + 20, BOX.w, 18);
+          ctx.fillStyle = '#0f0';
+          ctx.fillRect(BOX.x + BOX.w * 0.35, BOX.y + BOX.h + 20, BOX.w * 0.3, 18);
+          ctx.fillStyle = '#fff';
+          ctx.fillRect(BOX.x + aim.p * BOX.w - 3, BOX.y + BOX.h + 16, 6, 26);
+        }
+
+        ctx.globalAlpha = inv > 0 && Math.floor(inv * 12) % 2 ? 0.35 : 1;
         ctx.fillStyle = blue ? '#4aa3ff' : '#e63b5a';
         ctx.fillRect(soul.x, soul.y, S, S);
         ctx.globalAlpha = 1;
 
-        // HP bar
         ctx.fillStyle = '#fff';
-        ctx.font = '13px Courier New';
+        ctx.font = '13px "Courier New"';
         ctx.fillText('YOU', 30, 465);
         ctx.fillStyle = '#333';
         ctx.fillRect(70, 452, 160, 16);
         ctx.fillStyle = '#0f0';
-        ctx.fillRect(70, 452, 160 * (playerHP / 92), 16);
+        ctx.fillRect(70, 452, 160 * (playerHP / maxHP), 16);
         ctx.fillStyle = '#fff';
-        ctx.fillText(Math.max(0, Math.floor(playerHP)) + ' / 92', 240, 465);
+        ctx.fillText(Math.max(0, Math.floor(playerHP)) + ' / ' + maxHP, 240, 465);
       }
 
       function loop(ts) {
@@ -1170,38 +1216,3 @@
         playerHP = 92;
         dodges = 0;
         mercyCount = 0;
-        naan = 6;
-        kebab = 2;
-        blue = false;
-        inv = 0;
-        objs = [];
-        over = null;
-        turn = 0;
-        centre();
-        say("nahhh tryna look through my dms right cuh?");
-        state = 'menu';
-        showMainMenu();
-
-        try {
-          hava = new Audio("Hava Nagila Original.mp3");
-          hava.loop = true;
-          hava.volume = 0.5;
-          hava.play().catch(()=>{});
-        } catch(e) {}
-
-        window.addEventListener('keydown', onKeyDown);
-        window.addEventListener('keyup', onKeyUp);
-
-        last = performance.now();
-        animId = requestAnimationFrame(loop);
-      }
-
-      return { start };
-    })();
-
-    function startBossFight() {
-      Boss.start();
-    }
-  </script>
-</body>
-</html>
