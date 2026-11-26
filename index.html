@@ -14,7 +14,7 @@
       overflow-x: hidden;
     }
 
-    /* ========== PASSWORD ========== */
+    /* PASSWORD */
     #password-screen {
       height: 100vh; display: flex; justify-content: center; align-items: center;
       text-align: center; padding: 24px; background: #0d1117;
@@ -35,7 +35,7 @@
     #enter-btn:hover { background: #2ea043; }
     .error-msg { color: #f85149; margin-top: 14px; display: none; }
 
-    /* ========== LOADING ========== */
+    /* LOADING */
     #loading-screen {
       display: none; height: 100vh; justify-content: center; align-items: center;
       text-align: center; padding: 24px; background: #ff9ecb; position: relative; overflow: hidden;
@@ -75,10 +75,18 @@
     }
     .peach-target.shake { animation: peach-shake 0.5s ease infinite; }
     .peach-target.react { transform: translateY(-50%) scale(1.35); }
+    .peach-target.jiggle { animation: peach-jiggle 0.55s ease; }
     @keyframes peach-shake {
       0%,100% { transform: translateY(-50%) rotate(0deg); }
       25% { transform: translateY(-50%) rotate(-8deg) scale(1.1); }
       75% { transform: translateY(-50%) rotate(8deg) scale(1.1); }
+    }
+    @keyframes peach-jiggle {
+      0% { transform: translateY(-50%) scale(1) rotate(0deg); }
+      25% { transform: translateY(-50%) scale(1.25) rotate(-12deg); }
+      50% { transform: translateY(-50%) scale(1.15) rotate(10deg); }
+      75% { transform: translateY(-50%) scale(1.2) rotate(-6deg); }
+      100% { transform: translateY(-50%) scale(1) rotate(0deg); }
     }
     .particle {
       position: absolute; pointer-events: none; z-index: 6; opacity: 0;
@@ -90,7 +98,7 @@
     }
     .status-text { margin-top: 32px; color: #fff; font-size: 1.1rem; font-weight: 600; }
 
-    /* ========== MAIN ========== */
+    /* MAIN */
     #main-content {
       display: none; position: relative; min-height: 100vh;
       background: #ff9ecb; padding-top: 120px; padding-bottom: 40px;
@@ -151,7 +159,6 @@
     .lightbox.show { opacity: 1; }
     .lightbox img, .lightbox video {
       max-width: 92%; max-height: 90%; border-radius: 10px;
-      box-shadow: 0 0 50px rgba(0,0,0,0.7);
     }
     .lightbox-nav {
       position: absolute; top: 50%; transform: translateY(-50%);
@@ -176,12 +183,10 @@
     #jumpscare.show { opacity: 1; }
     #jumpscare.fade-out { opacity: 0; transition: opacity 0.6s; }
     #jumpscare img {
-      max-width: 100%; max-height: 100%; object-fit: contain;
-      cursor: pointer; transition: transform 0.3s;
+      max-width: 96%; max-height: 96%; object-fit: contain; cursor: pointer;
     }
-    #jumpscare img:active { transform: scale(0.97); }
 
-    /* ========== SECRET PAGE ========== */
+    /* SECRET PAGE */
     #secret-page {
       display: none; min-height: 100vh; background: #0f1115; color: #e6edf3;
     }
@@ -212,10 +217,15 @@
     .secret-card h3 { font-size: 0.95rem; margin-bottom: 14px; }
     .secret-btn {
       background: #21262d; border: 1px solid #30363d; color: #e6edf3;
-      padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 0.9rem;
+      padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; margin: 4px 0;
     }
     .secret-btn.primary { background: #238636; border-color: #238636; }
     .secret-btn:hover { filter: brightness(1.15); }
+    .activity-item {
+      display: flex; justify-content: space-between; padding: 8px 0;
+      border-bottom: 1px solid #21262d; font-size: 0.88rem;
+    }
+    .activity-time { color: #484f58; font-size: 0.8rem; }
     .teto-btn {
       background: #9b2c5a; border: none; color: white;
       padding: 12px 20px; border-radius: 10px; cursor: pointer;
@@ -223,7 +233,7 @@
     }
     .teto-btn img { width: 42px; height: 42px; border-radius: 8px; object-fit: cover; }
 
-    /* ========== BOSS FIGHT ========== */
+    /* BOSS FIGHT */
     #boss-fight {
       display: none; position: fixed; inset: 0; background: #000;
       z-index: 10000; color: white; font-family: 'Courier New', monospace;
@@ -232,12 +242,10 @@
       width: 100%; height: 100%; display: flex; flex-direction: column;
       align-items: center; justify-content: center; position: relative;
     }
-    .boss-sprite {
-      width: 180px; height: 180px; object-fit: contain; margin-bottom: 20px;
-    }
+    .boss-sprite { width: 180px; height: 180px; object-fit: contain; margin-bottom: 16px; }
     .boss-dialogue {
       background: #111; border: 3px solid #fff; padding: 12px 18px;
-      max-width: 500px; margin-bottom: 20px; font-size: 1.1rem; text-align: center;
+      max-width: 520px; margin-bottom: 18px; font-size: 1.05rem; text-align: center;
     }
     .battle-box {
       width: 320px; height: 240px; border: 4px solid #fff;
@@ -245,41 +253,20 @@
     }
     .player-soul {
       width: 36px; height: 36px; position: absolute;
-      transition: top 0.05s linear, left 0.05s linear;
     }
-    .player-soul.blue { filter: hue-rotate(180deg) brightness(1.1); }
-    .menu-bar {
-      display: flex; gap: 12px; margin-top: 24px;
-    }
+    .menu-bar { display: flex; gap: 12px; margin-top: 22px; flex-wrap: wrap; justify-content: center; }
     .menu-btn {
       background: #000; border: 3px solid #fff; color: #fff;
-      padding: 10px 22px; font-size: 1.1rem; cursor: pointer;
+      padding: 10px 20px; font-size: 1.05rem; cursor: pointer;
       font-family: 'Courier New', monospace;
     }
     .menu-btn:hover { background: #fff; color: #000; }
-    .menu-btn.disabled { opacity: 0.4; pointer-events: none; }
     .hp-bar {
-      width: 200px; height: 18px; background: #333; border: 2px solid #fff;
-      margin-top: 12px; position: relative;
+      width: 200px; height: 18px; background: #333; border: 2px solid #fff; margin-top: 12px;
     }
-    .hp-fill {
-      height: 100%; background: #0f0; transition: width 0.2s;
-    }
+    .hp-fill { height: 100%; background: #0f0; transition: width 0.2s; }
     .hp-text { margin-top: 6px; font-size: 0.95rem; }
-    .mobile-controls {
-      display: none; position: absolute; bottom: 20px; left: 0; right: 0;
-      justify-content: center; gap: 20px;
-    }
-    @media (max-width: 700px) {
-      .mobile-controls { display: flex; }
-    }
-    .mobile-btn {
-      width: 60px; height: 60px; background: rgba(255,255,255,0.15);
-      border: 2px solid #fff; border-radius: 12px; font-size: 1.5rem;
-      display: flex; align-items: center; justify-content: center; color: #fff;
-    }
 
-    /* Ending videos */
     #ending-overlay {
       display: none; position: fixed; inset: 0; background: #000;
       z-index: 20000; justify-content: center; align-items: center;
@@ -308,7 +295,7 @@
       <div class="progress-container">
         <div class="progress-bar" id="progress-bar"></div>
         <div class="eggplant-wrapper" id="eggplant-wrapper">
-          <img src="image.jpg" class="pfp-next-to-eggplant">
+          <img src="image.jpg" class="pfp-next-to-eggplant" alt="pfp">
           <div class="eggplant">🍆</div>
         </div>
         <div class="peach-target" id="peach-target">🍑</div>
@@ -375,12 +362,14 @@
     </div>
   </div>
 
-  <!-- SECRET PAGE -->
+  <!-- SECRET PAGE (FULL) -->
   <div id="secret-page">
     <div class="secret-header">
       <div class="secret-logo">private.anas</div>
       <div class="secret-nav">
         <a href="#">Dashboard</a>
+        <a href="#">Files</a>
+        <a href="#">Activity</a>
         <button class="logout-btn" onclick="logout()">Logout</button>
       </div>
     </div>
@@ -392,22 +381,31 @@
       <div class="secret-grid">
         <div class="secret-card">
           <h3>Session Info</h3>
-          <p>Access Level: <strong style="color:#3fb950">Authorized</strong><br>
-          Last activity: <span id="last-activity">now</span></p>
+          <p>
+            Access Level: <strong style="color:#3fb950">Authorized</strong><br>
+            Device: Web Client<br>
+            Last activity: <span id="last-activity">now</span>
+          </p>
+          <button class="secret-btn" onclick="refreshSession()">Refresh Session</button>
         </div>
         <div class="secret-card">
           <h3>Quick Actions</h3>
-          <button class="secret-btn primary" onclick="openPrivateFiles()">View Private Files</button>
-          <button class="secret-btn" onclick="openExportLogs()">Export Logs</button>
+          <button class="secret-btn primary" onclick="openPrivateFiles()">View Private Files</button><br>
+          <button class="secret-btn" onclick="openExportLogs()">Export Logs</button><br>
           <button class="secret-btn" onclick="openSecuritySettings()">Security Settings</button>
         </div>
       </div>
 
-      <!-- TETO UNLOCK BUTTON -->
+      <div class="secret-card">
+        <h3>Recent Activity</h3>
+        <div id="activity-log"></div>
+      </div>
+
+      <!-- TETO UNLOCK -->
       <div class="secret-card" style="margin-top:20px;">
         <h3>Strange Button</h3>
         <button class="teto-btn" id="teto-unlock-btn" onclick="unlockTeto()">
-          <img src="teto-no.bg.png" alt="teto">
+          <img src="teto-no.bg.png" alt="teto" onerror="this.style.display='none'">
           ???
         </button>
         <p id="teto-msg" style="margin-top:12px; color:#ff9ecb; display:none;">what does ts even do?? 😏😏🤔</p>
@@ -425,33 +423,23 @@
     <div class="boss-container">
       <img id="boss-sprite" class="boss-sprite" src="hohoho.png">
       <div class="boss-dialogue" id="boss-dialogue">nahhh tryna look through my dms right cuh?</div>
-      
       <div class="battle-box" id="battle-box">
-        <img id="player-soul" class="player-soul" src="epstein(red-soul).png">
+        <img id="player-soul" class="player-soul" src="epstein(red-soul).png" style="left:142px; top:100px;">
       </div>
-
       <div class="hp-bar"><div class="hp-fill" id="hp-fill" style="width:100%"></div></div>
       <div class="hp-text">HP <span id="hp-text">92</span> / 92</div>
-
-      <div class="menu-bar" id="menu-bar">
-        <button class="menu-btn" onclick="playerAttack('circumcision')">FIGHT</button>
+      <div class="menu-bar">
+        <button class="menu-btn" onclick="playerAttack('normal')">FIGHT</button>
         <button class="menu-btn" id="teto-btn" style="display:none" onclick="playerAttack('teto')">TETO</button>
-        <button class="menu-btn" onclick="openItems()">ITEM</button>
+        <button class="menu-btn" onclick="useItem()">ITEM</button>
         <button class="menu-btn" onclick="tryMercy()">MERCY</button>
-      </div>
-
-      <div class="mobile-controls">
-        <div class="mobile-btn" ontouchstart="move('left')">←</div>
-        <div class="mobile-btn" ontouchstart="move('up')">↑</div>
-        <div class="mobile-btn" ontouchstart="move('down')">↓</div>
-        <div class="mobile-btn" ontouchstart="move('right')">→</div>
       </div>
     </div>
   </div>
 
   <!-- ENDING -->
   <div id="ending-overlay">
-    <video id="ending-video" controls autoplay></video>
+    <video id="ending-video" controls></video>
   </div>
 
   <!-- LIGHTBOX -->
@@ -468,31 +456,20 @@
     let hashirClicks = 0;
     let usedJumpscares = [];
     let currentJumpscareAudio = null;
+    let inBossFight = false;
+    let playerHP = 92;
+    let attackCount = 0;
+    let havaAudio = null;
 
     const jumpscarePool = [
       { src: "hohoho.png", isHashir: true },
       { src: "hohoho2.png", isHashir: false },
       { src: "Screenshot%202026-11-18%20174153.png", isHashir: false },
       { src: "Screenshot%202026-11-18%20175026.png", isHashir: false },
-      { src: "Screenshot%202026-11-18%20184313.png", isHashir: false } // quintuplets
+      { src: "Screenshot%202026-11-18%20184313.png", isHashir: false }
     ];
 
-    // Boss fight state
-    let inBossFight = false;
-    let playerHP = 92;
-    let maxHP = 92;
-    let attackCount = 0;
-    let isBlueSoul = false;
-    let playerX = 142;
-    let playerY = 100;
-    let gravity = 0;
-    let keys = {};
-    let havaAudio = null;
-
     // ========== PASSWORD ==========
-    const correctPassword = "h@$h!r_69";
-    const secretPassword = "anas123";
-
     document.getElementById('enter-btn').addEventListener('click', checkPassword);
     document.getElementById('password-input').addEventListener('keydown', e => {
       if (e.key === 'Enter') checkPassword();
@@ -500,14 +477,15 @@
 
     function checkPassword() {
       const val = document.getElementById('password-input').value.trim();
-      if (val === correctPassword) {
+      if (val === "h@$h!r_69") {
         document.getElementById('password-screen').style.display = 'none';
         document.getElementById('loading-screen').style.display = 'flex';
         startLoading();
-      } else if (val === secretPassword) {
+      } else if (val === "anas123") {
         document.getElementById('password-screen').style.display = 'none';
         document.getElementById('secret-page').style.display = 'block';
         document.getElementById('session-time').textContent = new Date().toLocaleTimeString();
+        logActivity("Successful login");
       } else {
         document.getElementById('error-msg').style.display = 'block';
       }
@@ -519,41 +497,109 @@
       document.getElementById('password-input').value = '';
     }
 
-    // ========== TETO UNLOCK ==========
+    // ========== SECRET PAGE ==========
+    function logActivity(txt) {
+      const log = document.getElementById('activity-log');
+      const item = document.createElement('div');
+      item.className = 'activity-item';
+      item.innerHTML = `<span>${txt}</span><span class="activity-time">${new Date().toLocaleTimeString()}</span>`;
+      log.insertBefore(item, log.firstChild);
+    }
+    function refreshSession() {
+      logActivity("Session refreshed");
+      alert("Session refreshed");
+    }
+    function openPrivateFiles() {
+      logActivity("Viewed Private Files");
+      alert("Private files (read-only):\n\nAll screenshots, audio files, hohoho.png, possessed versions, domain expansion, epstein souls, teto, naan, kabab, etc.");
+    }
+    function openExportLogs() {
+      logActivity("Exported logs");
+      alert("Scripts exported:\ncheckPassword, startLoading, triggerJumpscare, escalateToBoss, startBossFight...");
+    }
+    function openSecuritySettings() {
+      logActivity("Opened Security Settings");
+      const email = prompt("Current email: islam.anas1966@gmail.com\n\nEnter new email:", "islam.anas1966@gmail.com");
+      if (email) logActivity("Email changed to " + email);
+    }
     function unlockTeto() {
       tetoUnlocked = true;
       document.getElementById('teto-msg').style.display = 'block';
-      document.getElementById('teto-unlock-btn').style.opacity = '0.6';
+      logActivity("Unlocked strange button (Teto)");
     }
 
-    // ========== LOADING ==========
+    // ========== LOADING + EASTER EGGS ==========
+    const peachSounds = ["sus-clapping_vww6zEH.mp3","sus-clap.mp3","clapping-not-sus.mp3","alvin-and-the-chimpunks-backshots.mp3"];
+    const eggplantSounds = ["fapping-masturbating-fapping-meat-your-jerking-therorshach27.mp3","asmr-hawk-tuah-longer.mp3"];
+
+    function playRandom(list) {
+      const a = new Audio(list[Math.floor(Math.random()*list.length)]);
+      a.volume = 0.7;
+      a.play().catch(()=>{});
+    }
+
+    function spawnParticles(el, emojis, count=12) {
+      const cont = document.querySelector('.progress-container');
+      if (!cont) return;
+      const r = el.getBoundingClientRect();
+      const cr = cont.getBoundingClientRect();
+      for (let i=0; i<count; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        p.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+        p.style.left = (r.left + r.width/2 - cr.left) + 'px';
+        p.style.top = (r.top + r.height/2 - cr.top) + 'px';
+        p.style.setProperty('--dx', (Math.random()*140-70)+'px');
+        p.style.setProperty('--dy', (-40-Math.random()*90)+'px');
+        cont.appendChild(p);
+        setTimeout(()=>p.remove(), 1000);
+      }
+    }
+
+    document.getElementById('eggplant-wrapper').addEventListener('click', e => {
+      e.stopPropagation();
+      if (document.getElementById('eggplant-wrapper').classList.contains('inside')) return;
+      playRandom(eggplantSounds);
+      spawnParticles(document.getElementById('eggplant-wrapper'), ['💧','💦']);
+    });
+
+    document.getElementById('peach-target').addEventListener('click', e => {
+      e.stopPropagation();
+      playRandom(peachSounds);
+      const peach = document.getElementById('peach-target');
+      peach.classList.remove('jiggle');
+      void peach.offsetWidth;
+      peach.classList.add('jiggle');
+      spawnParticles(peach, ['💖','💗','💕','❤️','💘']);
+    });
+
     function startLoading() {
-      let progress = 0;
-      let phase = 1;
+      let progress = 0, phase = 1;
       const bar = document.getElementById('progress-bar');
       const egg = document.getElementById('eggplant-wrapper');
       const peach = document.getElementById('peach-target');
       const status = document.getElementById('status-text');
 
-      const interval = setInterval(() => {
+      const iv = setInterval(() => {
         if (phase === 1) {
-          progress += 0.7 + Math.random() * 0.8;
+          progress += 0.7 + Math.random()*0.8;
           if (progress >= 78) {
             progress = 78;
             phase = 2;
             egg.classList.add('inside');
             peach.classList.add('shake');
-            spawnParticles(peach, ['💧','💦'], 16);
+            spawnParticles(peach, ['💧','💦','💧'], 18);
+            status.textContent = "Right there...";
           }
         } else {
-          progress += 1.2 + Math.random();
+          progress += 1.3 + Math.random();
         }
         if (progress > 100) progress = 100;
         bar.style.width = progress + '%';
         if (phase === 1) egg.style.left = progress + '%';
 
         if (progress >= 100) {
-          clearInterval(interval);
+          clearInterval(iv);
           peach.classList.remove('shake');
           peach.classList.add('react');
           setTimeout(() => {
@@ -571,60 +617,43 @@
 
     function createHearts() {
       const c = document.getElementById('hearts-bg');
-      for (let i = 0; i < 40; i++) {
+      for (let i=0; i<45; i++) {
         const h = document.createElement('div');
         h.className = 'heart';
-        h.textContent = ['💖','💗','💕','❤️'][Math.floor(Math.random()*4)];
-        h.style.left = Math.random()*100 + '%';
-        h.style.top = Math.random()*100 + '%';
-        h.style.fontSize = (1.2 + Math.random()*1.6) + 'rem';
-        h.style.animationDuration = (4 + Math.random()*4) + 's';
+        h.textContent = ['💖','💗','💕','❤️','💘'][Math.floor(Math.random()*5)];
+        h.style.left = Math.random()*100+'%';
+        h.style.top = Math.random()*100+'%';
+        h.style.fontSize = (1.2+Math.random()*1.6)+'rem';
+        h.style.animationDuration = (4+Math.random()*4)+'s';
         c.appendChild(h);
-      }
-    }
-
-    function spawnParticles(el, emojis, count) {
-      const cont = document.querySelector('.progress-container');
-      if (!cont) return;
-      const r = el.getBoundingClientRect();
-      const cr = cont.getBoundingClientRect();
-      for (let i = 0; i < count; i++) {
-        const p = document.createElement('div');
-        p.className = 'particle';
-        p.textContent = emojis[Math.floor(Math.random()*emojis.length)];
-        p.style.left = (r.left + r.width/2 - cr.left) + 'px';
-        p.style.top = (r.top + r.height/2 - cr.top) + 'px';
-        p.style.setProperty('--dx', (Math.random()*120-60) + 'px');
-        p.style.setProperty('--dy', (-30 - Math.random()*80) + 'px');
-        cont.appendChild(p);
-        setTimeout(() => p.remove(), 1000);
       }
     }
 
     // ========== JUMPSCARES ==========
     function triggerJumpscare() {
-      const available = jumpscarePool.filter(j => !usedJumpscares.includes(j.src));
-      if (available.length === 0) usedJumpscares = [];
-
-      const pool = available.length ? available : jumpscarePool;
-      const selected = pool[Math.floor(Math.random() * pool.length)];
+      let available = jumpscarePool.filter(j => !usedJumpscares.includes(j.src));
+      if (available.length === 0) {
+        usedJumpscares = [];
+        available = jumpscarePool;
+      }
+      const selected = available[Math.floor(Math.random()*available.length)];
       usedJumpscares.push(selected.src);
 
       const sc = document.getElementById('jumpscare');
       const img = document.getElementById('jumpscare-img');
       img.src = selected.src;
+
+      // Make Hashir clickable for escalation
       img.onclick = () => {
-        if (selected.isHashir) {
-          hashirClicks++;
-          if (hashirClicks >= 3) {
-            escalateToBoss();
-          } else {
-            // switch to possessed briefly
-            img.src = "possessedhoho(no background).png";
-            const a = new Audio("mommy-asmr.mp3");
-            a.volume = 0.8;
-            a.play().catch(()=>{});
-          }
+        if (!selected.isHashir) return;
+        hashirClicks++;
+        if (hashirClicks === 1) {
+          img.src = "possessedhoho(no background).png";
+          const a = new Audio("mommy-asmr.mp3");
+          a.volume = 0.85;
+          a.play().catch(()=>{});
+        } else if (hashirClicks >= 2) {
+          escalateToBoss();
         }
       };
 
@@ -657,27 +686,25 @@
     }
 
     function handleImageClick(i) {
-      if (Math.random() < 0.18) {
+      if (Math.random() < 0.17) {
         triggerJumpscare();
-        setTimeout(() => openLightbox(i), 900);
+        setTimeout(() => openLightbox(i), 700);
       } else {
         openLightbox(i);
       }
     }
 
-    // ========== ESCALATION TO BOSS ==========
+    // ========== ESCALATION ==========
     function escalateToBoss() {
       const sc = document.getElementById('jumpscare');
       const img = document.getElementById('jumpscare-img');
 
-      // Possessed
       img.src = "possessedhoho(no background).png";
       const mom = new Audio("mommy-asmr.mp3");
       mom.volume = 0.85;
       mom.play().catch(()=>{});
 
       setTimeout(() => {
-        // Domain Expansion
         img.src = "domain expansion (b4 bossfight).png";
         const tenkai = new Audio("ryouiki-tenkai.mp3");
         tenkai.volume = 0.9;
@@ -686,8 +713,8 @@
         setTimeout(() => {
           sc.style.display = 'none';
           startBossFight();
-        }, 4200);
-      }, 2800);
+        }, 4000);
+      }, 2500);
     }
 
     // ========== BOSS FIGHT ==========
@@ -696,123 +723,49 @@
       document.getElementById('boss-fight').style.display = 'block';
       document.getElementById('boss-sprite').src = "hohoho.png";
       document.getElementById('boss-dialogue').textContent = "nahhh tryna look through my dms right cuh?";
-      
-      if (tetoUnlocked) {
-        document.getElementById('teto-btn').style.display = 'inline-block';
-      }
+      if (tetoUnlocked) document.getElementById('teto-btn').style.display = 'inline-block';
 
-      // Start Hava Nagila loop
       havaAudio = new Audio("Hava Nagila Original.mp3");
       havaAudio.loop = true;
-      havaAudio.volume = 0.7;
+      havaAudio.volume = 0.65;
       havaAudio.play().catch(()=>{});
 
       playerHP = 92;
       attackCount = 0;
       updateHP();
-      resetSoul();
-
-      // Movement
-      window.addEventListener('keydown', bossKeyDown);
-      window.addEventListener('keyup', bossKeyUp);
-      requestAnimationFrame(bossLoop);
-    }
-
-    function bossKeyDown(e) {
-      keys[e.key.toLowerCase()] = true;
-    }
-    function bossKeyUp(e) {
-      keys[e.key.toLowerCase()] = false;
-    }
-
-    function move(dir) {
-      if (dir === 'left') keys['a'] = true;
-      if (dir === 'right') keys['d'] = true;
-      if (dir === 'up') keys['w'] = true;
-      if (dir === 'down') keys['s'] = true;
-      setTimeout(() => {
-        keys['a'] = keys['d'] = keys['w'] = keys['s'] = false;
-      }, 120);
-    }
-
-    function resetSoul() {
-      playerX = 142;
-      playerY = 100;
-      isBlueSoul = false;
-      document.getElementById('player-soul').src = "epstein(red-soul).png";
-      document.getElementById('player-soul').classList.remove('blue');
-    }
-
-    function bossLoop() {
-      if (!inBossFight) return;
-
-      const speed = 4.2;
-      if (keys['a'] || keys['arrowleft']) playerX -= speed;
-      if (keys['d'] || keys['arrowright']) playerX += speed;
-      if (keys['w'] || keys['arrowup']) playerY -= speed;
-      if (keys['s'] || keys['arrowdown']) playerY += speed;
-
-      // Gravity for blue soul
-      if (isBlueSoul) {
-        gravity += 0.35;
-        playerY += gravity;
-        if (playerY > 200) {
-          playerY = 200;
-          gravity = 0;
-        }
-      }
-
-      // Bounds
-      playerX = Math.max(0, Math.min(284, playerX));
-      playerY = Math.max(0, Math.min(204, playerY));
-
-      const soul = document.getElementById('player-soul');
-      soul.style.left = playerX + 'px';
-      soul.style.top = playerY + 'px';
-
-      requestAnimationFrame(bossLoop);
     }
 
     function updateHP() {
-      document.getElementById('hp-fill').style.width = (playerHP / maxHP * 100) + '%';
+      document.getElementById('hp-fill').style.width = (playerHP/92*100) + '%';
       document.getElementById('hp-text').textContent = Math.max(0, Math.floor(playerHP));
     }
 
     function playerAttack(type) {
       attackCount++;
-      document.getElementById('boss-dialogue').textContent = getRandomQuote();
-
       if (type === 'teto' && tetoUnlocked) {
-        // Oneshot
-        endBossFight(true, true);
+        endBoss(true, true);
         return;
       }
-
+      document.getElementById('boss-dialogue').textContent = getQuote();
       if (attackCount >= 24) {
-        endBossFight(true, false);
+        endBoss(true, false);
         return;
       }
-
       if (attackCount === 13) {
-        document.getElementById('boss-dialogue').textContent = "somewhere in there... i can feel it. there's a glimmer of a good person inside of you. i'll give you mercy.";
+        document.getElementById('boss-dialogue').textContent = "somewhere in there... i can feel it. there's a glimmer of a good person inside of you.";
       }
-
-      // Simple damage to player sometimes
-      if (Math.random() < 0.4) {
-        playerHP -= 8 + Math.random() * 12;
+      if (Math.random() < 0.35) {
+        playerHP -= 7 + Math.random()*14;
         updateHP();
-        if (playerHP <= 0) {
-          endBossFight(false);
-        }
+        if (playerHP <= 0) endBoss(false);
       }
     }
 
-    function openItems() {
-      const choice = confirm("Use Naan? (40-60 HP)\nCancel = use Kabab (full heal)");
-      if (choice) {
-        playerHP = Math.min(maxHP, playerHP + 40 + Math.floor(Math.random()*21));
+    function useItem() {
+      if (confirm("Use Naan (40-60 HP)?\nCancel = Kabab (full heal)")) {
+        playerHP = Math.min(92, playerHP + 40 + Math.floor(Math.random()*21));
       } else {
-        playerHP = maxHP;
+        playerHP = 92;
       }
       updateHP();
       document.getElementById('boss-dialogue').textContent = "* You recovered HP.";
@@ -827,36 +780,31 @@
       document.getElementById('error-msg').textContent = "mercy my ahh 🥀";
     }
 
-    function getRandomQuote() {
-      const quotes = [
+    function getQuote() {
+      const q = [
         "The supreme art of war is to subdue the enemy without fighting. - Sun Tzu",
-        "Know yourself and you will win all battles. - Sun Tzu",
-        "He who knows when he can fight and when he cannot will be victorious.",
+        "Know yourself and you will win all battles.",
         "In the midst of chaos, there is also opportunity.",
-        "Opportunities multiply as they are seized.",
-        "you really thought mercy was an option huh",
-        "keep going then. see what happens."
+        "you really thought that would work?",
+        "keep going then."
       ];
-      return quotes[Math.floor(Math.random() * quotes.length)];
+      return q[Math.floor(Math.random()*q.length)];
     }
 
-    function endBossFight(won, usedTeto = false) {
+    function endBoss(won, usedTeto) {
       inBossFight = false;
       if (havaAudio) havaAudio.pause();
       document.getElementById('boss-fight').style.display = 'none';
 
+      if (!won) {
+        document.getElementById('password-screen').style.display = 'flex';
+        return;
+      }
+
       const overlay = document.getElementById('ending-overlay');
       const vid = document.getElementById('ending-video');
       overlay.style.display = 'flex';
-
-      if (won) {
-        vid.src = usedTeto ? "ending 2.mp4" : "ending 1.mp4";
-      } else {
-        // death - just go back
-        overlay.style.display = 'none';
-        document.getElementById('password-screen').style.display = 'flex';
-      }
-
+      vid.src = usedTeto ? "ending 2.mp4" : "ending 1.mp4";
       vid.play().catch(()=>{});
       vid.onended = () => {
         overlay.style.display = 'none';
@@ -877,21 +825,20 @@
     function openLightbox(i) {
       currentIndex = i;
       document.getElementById('lightbox-img').src = images[i];
-      document.getElementById('lightbox-counter').textContent = `${i+1} / ${images.length}`;
+      document.getElementById('lightbox-counter').textContent = `${i+1} / 10`;
       const lb = document.getElementById('lightbox');
       lb.style.display = 'flex';
       setTimeout(() => lb.classList.add('show'), 10);
     }
     function changeImage(d) {
-      currentIndex = (currentIndex + d + images.length) % images.length;
+      currentIndex = (currentIndex + d + 10) % 10;
       document.getElementById('lightbox-img').src = images[currentIndex];
-      document.getElementById('lightbox-counter').textContent = `${currentIndex+1} / ${images.length}`;
+      document.getElementById('lightbox-counter').textContent = `${currentIndex+1} / 10`;
     }
     function closeLightbox(e) {
       if (e.target.id === 'lightbox') {
-        const lb = document.getElementById('lightbox');
-        lb.classList.remove('show');
-        setTimeout(() => lb.style.display = 'none', 300);
+        document.getElementById('lightbox').classList.remove('show');
+        setTimeout(() => document.getElementById('lightbox').style.display = 'none', 300);
       }
     }
     document.addEventListener('keydown', e => {
@@ -903,11 +850,6 @@
         setTimeout(() => document.getElementById('lightbox').style.display = 'none', 300);
       }
     });
-
-    // Placeholder functions for secret page
-    function openPrivateFiles() { alert("Private files listed (read-only)"); }
-    function openExportLogs() { alert("Scripts exported"); }
-    function openSecuritySettings() { alert("Security settings"); }
   </script>
 </body>
 </html>
