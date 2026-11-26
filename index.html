@@ -220,7 +220,6 @@
       padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; margin: 4px 0;
     }
     .secret-btn.primary { background: #238636; border-color: #238636; }
-    .secret-btn:hover { filter: brightness(1.15); }
     .activity-item {
       display: flex; justify-content: space-between; padding: 8px 0;
       border-bottom: 1px solid #21262d; font-size: 0.88rem;
@@ -362,7 +361,7 @@
     </div>
   </div>
 
-  <!-- SECRET PAGE (FULL) -->
+  <!-- SECRET PAGE -->
   <div id="secret-page">
     <div class="secret-header">
       <div class="secret-logo">private.anas</div>
@@ -401,7 +400,6 @@
         <div id="activity-log"></div>
       </div>
 
-      <!-- TETO UNLOCK -->
       <div class="secret-card" style="margin-top:20px;">
         <h3>Strange Button</h3>
         <button class="teto-btn" id="teto-unlock-btn" onclick="unlockTeto()">
@@ -461,8 +459,22 @@
     let attackCount = 0;
     let havaAudio = null;
 
+    // Correct filenames (URL encoded where needed)
+    const FILE = {
+      hohoho: "hohoho.png",
+      possessed: "possessedhoho(no%20background).png",
+      domain: "domain%20expansion%20(b4%20bossfight).png",
+      mommy: "mommy-asmr.mp3",
+      tenkai: "ryouiki-tenkai.mp3",
+      hava: "Hava%20Nagila%20Original.mp3",
+      epsteinRed: "epstein(red-soul).png",
+      teto: "teto-no.bg.png",
+      ending1: "ending%201.mp4",
+      ending2: "ending%202.mp4"
+    };
+
     const jumpscarePool = [
-      { src: "hohoho.png", isHashir: true },
+      { src: FILE.hohoho, isHashir: true },
       { src: "hohoho2.png", isHashir: false },
       { src: "Screenshot%202026-11-18%20174153.png", isHashir: false },
       { src: "Screenshot%202026-11-18%20175026.png", isHashir: false },
@@ -511,21 +523,21 @@
     }
     function openPrivateFiles() {
       logActivity("Viewed Private Files");
-      alert("Private files (read-only):\n\nAll screenshots, audio files, hohoho.png, possessed versions, domain expansion, epstein souls, teto, naan, kabab, etc.");
+      alert("Private files (read-only):\nAll screenshots + audio + boss fight assets");
     }
     function openExportLogs() {
       logActivity("Exported logs");
-      alert("Scripts exported:\ncheckPassword, startLoading, triggerJumpscare, escalateToBoss, startBossFight...");
+      alert("Scripts exported");
     }
     function openSecuritySettings() {
       logActivity("Opened Security Settings");
-      const email = prompt("Current email: islam.anas1966@gmail.com\n\nEnter new email:", "islam.anas1966@gmail.com");
-      if (email) logActivity("Email changed to " + email);
+      const email = prompt("Current: islam.anas1966@gmail.com\nNew email:", "islam.anas1966@gmail.com");
+      if (email) logActivity("Email changed");
     }
     function unlockTeto() {
       tetoUnlocked = true;
       document.getElementById('teto-msg').style.display = 'block';
-      logActivity("Unlocked strange button (Teto)");
+      logActivity("Unlocked Teto");
     }
 
     // ========== LOADING + EASTER EGGS ==========
@@ -643,14 +655,13 @@
       const img = document.getElementById('jumpscare-img');
       img.src = selected.src;
 
-      // Make Hashir clickable for escalation
       img.onclick = () => {
         if (!selected.isHashir) return;
         hashirClicks++;
         if (hashirClicks === 1) {
-          img.src = "possessedhoho(no background).png";
-          const a = new Audio("mommy-asmr.mp3");
-          a.volume = 0.85;
+          img.src = FILE.possessed;
+          const a = new Audio(FILE.mommy);
+          a.volume = 0.9;
           a.play().catch(()=>{});
         } else if (hashirClicks >= 2) {
           escalateToBoss();
@@ -662,7 +673,7 @@
       sc.classList.add('show');
 
       if (selected.isHashir) {
-        currentJumpscareAudio = new Audio("Hava Nagila Original.mp3");
+        currentJumpscareAudio = new Audio(FILE.hava);
         currentJumpscareAudio.volume = 0.8;
         currentJumpscareAudio.play().catch(()=>{});
         setTimeout(() => fadeJumpscare(), 7000);
@@ -694,38 +705,43 @@
       }
     }
 
-    // ========== ESCALATION ==========
+    // ========== ESCALATION TO BOSS ==========
     function escalateToBoss() {
       const sc = document.getElementById('jumpscare');
       const img = document.getElementById('jumpscare-img');
 
-      img.src = "possessedhoho(no background).png";
-      const mom = new Audio("mommy-asmr.mp3");
-      mom.volume = 0.85;
+      // 1. Possessed + mommy asmr
+      img.src = FILE.possessed;
+      const mom = new Audio(FILE.mommy);
+      mom.volume = 0.9;
       mom.play().catch(()=>{});
 
       setTimeout(() => {
-        img.src = "domain expansion (b4 bossfight).png";
-        const tenkai = new Audio("ryouiki-tenkai.mp3");
+        // 2. Domain Expansion + ryouiki tenkai
+        img.src = FILE.domain;
+        const tenkai = new Audio(FILE.tenkai);
         tenkai.volume = 0.9;
         tenkai.play().catch(()=>{});
 
         setTimeout(() => {
           sc.style.display = 'none';
           startBossFight();
-        }, 4000);
-      }, 2500);
+        }, 4200);
+      }, 2800);
     }
 
     // ========== BOSS FIGHT ==========
     function startBossFight() {
       inBossFight = true;
       document.getElementById('boss-fight').style.display = 'block';
-      document.getElementById('boss-sprite').src = "hohoho.png";
+      document.getElementById('boss-sprite').src = FILE.hohoho;
       document.getElementById('boss-dialogue').textContent = "nahhh tryna look through my dms right cuh?";
-      if (tetoUnlocked) document.getElementById('teto-btn').style.display = 'inline-block';
+      
+      if (tetoUnlocked) {
+        document.getElementById('teto-btn').style.display = 'inline-block';
+      }
 
-      havaAudio = new Audio("Hava Nagila Original.mp3");
+      havaAudio = new Audio(FILE.hava);
       havaAudio.loop = true;
       havaAudio.volume = 0.65;
       havaAudio.play().catch(()=>{});
@@ -736,7 +752,7 @@
     }
 
     function updateHP() {
-      document.getElementById('hp-fill').style.width = (playerHP/92*100) + '%';
+      document.getElementById('hp-fill').style.width = (playerHP / 92 * 100) + '%';
       document.getElementById('hp-text').textContent = Math.max(0, Math.floor(playerHP));
     }
 
@@ -755,7 +771,7 @@
         document.getElementById('boss-dialogue').textContent = "somewhere in there... i can feel it. there's a glimmer of a good person inside of you.";
       }
       if (Math.random() < 0.35) {
-        playerHP -= 7 + Math.random()*14;
+        playerHP -= 7 + Math.random() * 14;
         updateHP();
         if (playerHP <= 0) endBoss(false);
       }
@@ -804,7 +820,7 @@
       const overlay = document.getElementById('ending-overlay');
       const vid = document.getElementById('ending-video');
       overlay.style.display = 'flex';
-      vid.src = usedTeto ? "ending 2.mp4" : "ending 1.mp4";
+      vid.src = usedTeto ? FILE.ending2 : FILE.ending1;
       vid.play().catch(()=>{});
       vid.onended = () => {
         overlay.style.display = 'none';
